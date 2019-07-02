@@ -1,10 +1,10 @@
 (* Wolfram Language package *)
 
-Get["CommonFunctions.m"];
+Get["Common/CommonFunctions.m"];
 
-Bpolynom[y0_, B0_, R0_] := 3*B0 - 3*B0*y0/R0 + B0*y0^2/R0^2
+Bpolynom[y0_, B0_, R0_] := 3*B0 - 3*B0*(R0+y0)/R0 + B0*(R0+y0)^2/R0^2
 BpolynomGrad[y0_, BRxB_, R0_, G1_, G2_] := 
- BRxB - G1*BRxB/R0*(y0 - R0) + G2*BRxB/R0^2*(y0 - R0)^2
+ BRxB - G1*BRxB/R0*(y0) + G2*BRxB/R0^2*(y0)^2
 
 B1overr[y0_, B0_, R_] := B0*R/y0
 B1overrWgW\[CapitalDelta]G[B0_, R0_, y0_, \[CapitalDelta]G1_] := 

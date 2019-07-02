@@ -1,6 +1,6 @@
 (* Wolfram Language package *)
 
-Get["CommonFunctions.m"];
+Get["Common/CommonFunctions.m"];
 
 ds[x_, r_] := Sqrt[1/(r^2 - x^2)]
 

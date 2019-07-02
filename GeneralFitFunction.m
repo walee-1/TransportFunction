@@ -5,15 +5,15 @@
 Get["Integrands.m"];
 
 
-IntegrandSelect[string_]=Which[
+(*IntegrandSelect[string_]=Which[
 		string=="DSimpleApertMC",
 		IntegrandDSimple[xi,x0,{b,...}]
-]
+]*)
 
 
 
 (* we need to give integrand (spectrum, drift (bfield), aperture, nbeam etc.) either directly or as option, integration coords + limits, *)
-(* x fix or integrated should be a flag*)
+(* x fix or integrated should be a flag, xTable*)
 
 Options[TransportIntegration]={Integrand->"DSimpleApertMC",xBinInt->True,PrecisionGoal->3,IntMethod->Automatic};
 

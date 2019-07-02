@@ -1,5 +1,7 @@
 (* Wolfram Language package *)
 
+\[Lambda]0 = -1.2724;
+\[Kappa]0=1.85;
 me = 510998; 
 c = 299792458;
 hq = 1.055*10^-34;
