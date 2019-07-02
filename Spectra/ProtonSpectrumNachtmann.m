@@ -34,9 +34,9 @@ dwdtNormed[T_, a_] := dwdt[T, a]/dwdtNorm[a]
 (* momentum *)
 
 
-ppmax = Reduce[TofP[p] == tpMax, p][[2, 2]]
+ppmax = Reduce[TofPClassical[p] == tpMax, p][[2, 2]]
 
-pmom[p_, a_] := dwdtNormed[TofP[p], a]*p/mp
+pmom[p_, a_] := dwdtNormed[TofPClassical[p], a]*p/mp
 
 pmomNorm[a_] := 
  pmomNorm[a] = 

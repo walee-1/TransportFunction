@@ -1,7 +1,7 @@
 (* Wolfram Language package *)
 
 Get["ProtonSpectrumNachtmann.m"];
-Needs["Constants.m"];
+Needs["Common/Constants.m"];
 
 Tn0 = 4*10^-3;
 
