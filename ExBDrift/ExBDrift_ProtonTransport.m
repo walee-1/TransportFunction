@@ -7,6 +7,7 @@ Get["Bfield+Drift/Bfields.m"]
 Get["Bfield+Drift/DetectorGyrationWeighting.m"];
 Get["Bfield+Drift/Drifts.m"];
 Get["Common/CommonFunctions.m"];
+Get["Aperture/ArithApert.m"];
 
 
 k[p_, scale_] := scale*(20 - 6.5*p/pmax)/50
@@ -38,14 +39,11 @@ Integrand2DExB[
     
     (*D1stSimple[p,alpha,BRxB,th0,rRxB]*)
     
-    x0fromExB[k[p, kscale], xD, yD, 
-     rG[p, theta2[th0, rD], rD*BRxB/rRxB], 
-     phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]],
+    x0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]],
     
-    y0fromExB[k[p, kscale], xD, yD, 
-     rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi],
+    y0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi],
     
-    theta2[th0, rA], p, BRxB, prec]
+    theta2[th0, rA], p, rA*BRxB/rRxB, prec]
   ]
   
   
@@ -64,35 +62,46 @@ Integrand2DExB[
     
     (*D1stSimple[p,alpha,BRxB,th0,rRxB]*)
     
-    x0fromExB[k[p, kscale], xD, yD, 
-     rG[p, theta2[th0, rD], rD*BRxB/rRxB], 
-     phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]],
+    x0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]],
     
-    y0fromExB[k[p, kscale], xD, yD, 
-     rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi],
+    y0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi],
     
-    theta2[th0, rA], p, BRxB, MCSteps]
+    theta2[th0, rA], p, rA*BRxB/rRxB, MCSteps]
+  ]
+  
+  Integrand2DExBArith[
+  a_?NumericQ, {xD_?NumericQ, yD_?NumericQ, phi_?NumericQ, p_?NumericQ, th0_?NumericQ, alpha_?NumericQ, BRxB_?NumericQ, 
+   rRxB_?NumericQ, rD_?NumericQ}, {xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ, yOff_?NumericQ, rA_?NumericQ}, 
+  kscale_?NumericQ] :=
+ Re[
+  
+  pmomNormed[p, a]*
+   Sin[th0]*
+   
+   ArithApert[xA, yA, xOff, yOff,
+    
+    x0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]],
+    
+    y0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi],
+    
+    rG[ p, theta2[th0, rA], rA*BRxB/rRxB]
+    ]
   ]
   
   
-  pminExB[{xD_?NumericQ, yD_, phi_?NumericQ, th0_, alpha_, BRxB_, rRxB_,
-     rD_}, {xA_, yA_, xOff_, yOff_, rA_}, kscale_] = 
-  Solve[x0fromExB[k[p, kscale], xD, yD, 
-      rG[p, theta2[th0, rD], rD*BRxB/rRxB], 
-      phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]] ==
-     -xA/2 - rG[p, theta2[th0, rA], rA*BRxB/rRxB] + xOff, p][[3, 1, 
-    2]];
+  
+pminExB[{xD_?NumericQ, yD_, phi_?NumericQ, th0_, alpha_, BRxB_, rRxB_,rD_}, {xA_, yA_, xOff_, yOff_, rA_}, kscale_] = 
+  Solve[
+  	x0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]] ==
+     -xA/2 - rG[p, theta2[th0, rA], rA*BRxB/rRxB] + xOff, p][[3, 1, 2]];
     
     
-    pmaxExB[{xD_?NumericQ, yD_, phi_?NumericQ, th0_, alpha_, BRxB_, rRxB_,
-     rD_}, {xA_, yA_, xOff_, yOff_, rA_}, kscale_] = 
-  Solve[x0fromExB[k[p, kscale], xD, yD, 
-      rG[p, theta2[th0, rD], rD*BRxB/rRxB], 
-      phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]] ==
-     xA/2 + rG[p, theta2[th0, rA], rA*BRxB/rRxB] + xOff, p][[3, 1, 
-    2]];
+pmaxExB[{xD_?NumericQ, yD_, phi_?NumericQ, th0_, alpha_, BRxB_, rRxB_,rD_}, {xA_, yA_, xOff_, yOff_, rA_}, kscale_] = 
+  Solve[
+  	x0fromExB[k[p, kscale], xD, yD, rG[p, theta2[th0, rD], rD*BRxB/rRxB], phi, -D1stSimple[p, alpha, BRxB, th0, rRxB]] ==
+     xA/2 + rG[p, theta2[th0, rA], rA*BRxB/rRxB] + xOff, p][[3, 1, 2]];
     
-    pminExBCases[{xD_?NumericQ, yD_?NumericQ, phi_?NumericQ, 
+pminExBCases[{xD_?NumericQ, yD_?NumericQ, phi_?NumericQ, 
    th0_?NumericQ, alpha_?NumericQ, BRxB_?NumericQ, rRxB_?NumericQ, 
    rD_?NumericQ}, {xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ, 
    yOff_?NumericQ, rA_?NumericQ}, kscale_?NumericQ] := Piecewise[
@@ -105,9 +114,9 @@ Integrand2DExB[
    },
   pminExB[{xD, yD, phi, th0, alpha, BRxB, rRxB, rD}, {xA, yA, xOff, 
     yOff, rA}, kscale]
-  ]
+]
   
-  pmaxExBCases[{xD_?NumericQ, yD_?NumericQ, phi_?NumericQ, 
+pmaxExBCases[{xD_?NumericQ, yD_?NumericQ, phi_?NumericQ, 
    th0_?NumericQ, alpha_?NumericQ, BRxB_?NumericQ, rRxB_?NumericQ, 
    rD_?NumericQ}, {xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ, 
    yOff_?NumericQ, rA_?NumericQ}, kscale_?NumericQ] := Piecewise[
@@ -120,7 +129,7 @@ Integrand2DExB[
    },
   pmaxExB[{xD, yD, phi, th0, alpha, BRxB, rRxB, rD}, {xA, yA, xOff, 
     yOff, rA}, kscale]
-  ]
+]
   
   
   IntegrationExB[
@@ -169,5 +178,28 @@ Integrand2DExB[
    PrecisionGoal -> IntPrec
    ],
   {bin, 1, BinN}, Method -> "FinestGrained"]
+  
+  
+   IntegrationExBArith[
+  a_?NumericQ, {alpha_?NumericQ, BRxB_?NumericQ, rRxB_?NumericQ, rD_?NumericQ, rF_?NumericQ}, {xA_?NumericQ, yA_?NumericQ, 
+   xOff_?NumericQ, yOff_?NumericQ, rA_?NumericQ}, kscale_?NumericQ, BinN_?NumericQ, BinList_List,IntPrec_] :=
+ ParallelTable[
+  NIntegrate[
+   Integrand2DExBArith[
+    a,{BinList[[bin, 1]], BinList[[bin, 2]], phi, p, th0, alpha, 
+     BRxB, rRxB, rD}, {xA, yA, xOff, yOff, rA}, kscale],
+   {th0, 0, thetamax[rF]},
+   {phi, 0, 2*Pi},
+   {
+    p,
+    pminExBCases[{BinList[[bin, 1]], BinList[[bin, 2]], phi, th0, 
+      alpha, BRxB, rRxB, rD}, {xA, yA, xOff, yOff, rA}, kscale], 
+    pmaxExBCases[{BinList[[bin, 1]], BinList[[bin, 2]], phi, th0, 
+      alpha, BRxB, rRxB, rD}, {xA, yA, xOff, yOff, rA}, kscale]
+    },
+   PrecisionGoal -> IntPrec
+   ],
+  {bin, 1, BinN}, Method -> "FinestGrained"]
+  
   
   
