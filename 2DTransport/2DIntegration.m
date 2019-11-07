@@ -69,3 +69,105 @@ ParallelTable[
 	],
 	{bin,1,BinN},Method->"FinestGrained"
 ]
+
+
+
+(* ::Section:: *)
+(* with Bgradient*)
+
+
+
+IntTable2DArithBGrad[b_?NumericQ, {alpha_?NumericQ, BRxB_?NumericQ, rRxB_?NumericQ, rD_?NumericQ,rF_?NumericQ},
+	 {xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ, yOff_?NumericQ, rA_?NumericQ},{R0_?NumericQ,G1_?NumericQ,G2_?NumericQ},
+	 XYList_List,IntPrec_,kernels_]:=
+Block[{intresult},
+	LaunchKernels[kernels];
+	intresult=ParallelTable[
+	NIntegrate[
+	  Re[
+	   Integrand2DArithBGrad[b, {bin[[1]],bin[[2]],phi, p, th0, alpha, BRxB, rRxB, rD}, {xA, yA, xOff, yOff, rA},{R0,G1,G2}]
+	  ],
+	   
+	   {th0,0,thetamax[rF]},
+	   {phi,0,2*Pi},
+	   {p,
+	   	pmin2DBGradCases[{bin[[1]],bin[[2]], phi, th0, BRxB, alpha, rA, rRxB, rD}, {xA,xOff},{R0,G1,G2}],
+	   	pmax2DBGradCases[{bin[[1]],bin[[2]], phi, th0, BRxB, alpha, rA, rRxB, rD}, {xA,xOff},{R0,G1,G2}]
+	   	},
+	   PrecisionGoal->IntPrec,AccuracyGoal->5,MaxRecursion->5,MaxPoints->300000
+	],
+	{bin,XYList},Method->"FinestGrained"
+	];
+	CloseKernels[];
+	intresult
+]
+
+
+
+(* ::Section:: *)
+(* with Bgradient and Det spread *)
+
+IntTable2DArithBGradDetSpread[b_?NumericQ, {alpha_?NumericQ, BRxB_?NumericQ, rRxB_?NumericQ, rD_?NumericQ,rF_?NumericQ},
+	 {xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ, yOff_?NumericQ, rA_?NumericQ},{R0_?NumericQ,G1_?NumericQ,G2_?NumericQ},
+	 XYList_List,IntPrec_,kernels_]:=
+Block[{intresult},
+	LaunchKernels[kernels];
+	intresult=ParallelTable[
+	Quiet[NIntegrate[
+	  Re[
+	   Integrand2DArithBGradDetSpread[b, {bin[[1]],bin[[2]],phi, p, th0, alpha, BRxB, rRxB, rD}, {xA, yA, xOff, yOff, rA},{R0,G1,G2}]
+	   ],
+	   
+	   {th0,0,thetamax[rF]},
+	   {phi,0,2*Pi},
+	   {p,
+	   	pmin2DBGradDetSpreadCases[{bin[[1]],bin[[2]], phi, th0, BRxB, alpha, rA, rRxB, rD}, {xA,xOff},{R0,G1,G2}],
+	   	pmax2DBGradDetSpreadCases[{bin[[1]],bin[[2]], phi, th0, BRxB, alpha, rA, rRxB, rD}, {xA,xOff},{R0,G1,G2}]
+	   	},
+	   PrecisionGoal->IntPrec,AccuracyGoal->4,MaxRecursion->5,MaxPoints->80000,Method -> {"AdaptiveMonteCarlo", "MaxPoints" -> 500000, 
+  								Method -> {"MonteCarloRule", "AxisSelector" -> {"MinVariance", "SubsampleFraction" -> 1/2}}, 
+  								"SymbolicProcessing" -> False}
+	],{NIntegrate::slwcon}],
+	{bin,XYList},Method->"FinestGrained"
+	];
+	CloseKernels[];
+	intresult
+]
+
+
+
+(* ::Section:: *)
+(* with Bgradient and Det spread inc. phi restrictions *)
+
+
+IntTable2DArithBGradDetSpreadPhiLimits[b_?NumericQ, {alpha_?NumericQ, BRxB_?NumericQ, rRxB_?NumericQ, rD_?NumericQ,rF_?NumericQ},
+	 {xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ, yOff_?NumericQ, rA_?NumericQ},{R0_?NumericQ,G1_?NumericQ,G2_?NumericQ},
+	 XYList_List,IntPrec_,kernels_]:=
+Block[{intresult},
+	LaunchKernels[kernels];
+	intresult=ParallelTable[
+	NIntegrate[
+	  Re[
+	   Integrand2DArithBGradDetSpread[b, {bin[[1]],bin[[2]],phi, p, th0, alpha, BRxB, rRxB, rD}, {xA, yA, xOff, yOff, rA},{R0,G1,G2}]
+	   ],
+	   
+	   {th0,0,thetamax[rF]},
+	   {phi, PhiLimits[bin[[2]], th0, BRxB, rA, rRxB, yA, yOff, rD][[1]],Sequence@@PhiLimits[bin[[2]], th0, BRxB, rA, rRxB, yA, yOff, rD][[2;;-1]]},
+	   {p,
+	   	pmin2DBGradDetSpreadCases[{bin[[1]],bin[[2]], phi, th0, BRxB, alpha, rA, rRxB, rD}, {xA,xOff},{R0,G1,G2}],
+	   	pmax2DBGradDetSpreadCases[{bin[[1]],bin[[2]], phi, th0, BRxB, alpha, rA, rRxB, rD}, {xA,xOff},{R0,G1,G2}]
+	   	},
+	   PrecisionGoal->IntPrec,AccuracyGoal->4,MaxRecursion->5,MaxPoints->80000
+	],
+	{bin,XYList},Method->"FinestGrained"
+	];
+	CloseKernels[];
+	intresult
+]
+
+
+
+
+
+
+
