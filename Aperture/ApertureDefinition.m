@@ -28,7 +28,7 @@ ApertureFunc[xA_?NumericQ, yA_?NumericQ, xOff_?NumericQ,
       	}
       },
      0.],
-    rG[p, th2, BA] < 10^-8
+    rG[p, th2, BA] < 10^-5
     }
    },
    
