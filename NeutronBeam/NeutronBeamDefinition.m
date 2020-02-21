@@ -36,4 +36,36 @@ FullSimplify[
    TrapezNBeamNewNormed[xn_, {tw_, pl_, k1_, k2_, k3_}] := 
  TrapezNBeamNew[xn, {tw, pl, k1, k2, k3}]/
   TrapezNBeamNewNorm[{tw, pl, k1, k2, k3}]
+
+
+
+(* ::Section:: *)
+(* Compiled version *)
+
+TrapezNBeamCompiled = Compile[
+  {{xn, _Real}, {tw, _Real}, {pl, _Real}, {k1, _Real}, {k2, _Real}, {k3, _Real}},
+  Piecewise[
+   {
+    {0, xn < -tw/2},
+    {k1*xn + k1*tw/2, -tw/2 <= 
+      xn < -((2 k2 pl - 2 k3 pl + (k1 + k3) tw)/(2 (k1 - k3)))}, {k2*
+       xn + (-2 (k1 - k2) (k2 - k3) pl + (k1 (k2 - 2 k3) + 
+            k2 k3) tw)/(2 (k1 - k3)), -((2 k2 pl - 
+           2 k3 pl + (k1 + k3) tw)/(2 (k1 - k3))) <= 
+      xn < -((2 (-k1 + k2) pl + (k1 + k3) tw)/(2 (k1 - k3)))},
+    {k3*xn - (k3 tw)/
+       2, -((2 (-k1 + k2) pl + (k1 + k3) tw)/(2 (k1 - k3))) <= xn <= 
+      tw/2},
+    {0, xn > tw/2}
+    }], CompilationTarget -> "C", RuntimeAttributes -> {Listable}, RuntimeOptions -> "Speed"
+  ];
+
+TrapezNBeamCompiledNorm[{tw_, pl_, k1_, k2_, k3_}] := 
+ TrapezNBeamCompiledNorm[{tw, pl, k1, k2, k3}] = 
+  NIntegrate[TrapezNBeamNew[xn, {tw, pl, k1, k2, k3}], {xn, -tw/2, tw/2}]
+  
    
+TrapezNBeamCompiledNormed[xn_, {tw_, pl_, k1_, k2_, k3_}] := 
+ TrapezNBeamCompiled[xn, tw, pl, k1, k2, k3]/
+  TrapezNBeamCompiledNorm[{tw, pl, k1, k2, k3}]
+

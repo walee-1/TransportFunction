@@ -58,7 +58,7 @@ we[\[Lambda]_,\[Kappa]_,Ee_] :=(*(4*Pi)^2/(2*Pi*hq)^6**)
  Interpolation[
   ParallelTable[{Ee, we[\[Lambda],\[Kappa],Ee]}, {Ee, me, E0, (E0 - me)/2000}]];*)
 
-weNorm[\[Lambda]_,\[Kappa]_,b_] := weNorm[\[Lambda],\[Kappa],b] = NIntegrate[(1 + b*me/Ee)*we[\[Lambda],\[Kappa],Ee], {Ee, me, E0},PrecisionGoal->4];
+weNorm[\[Lambda]_,\[Kappa]_,b_] := weNorm[\[Lambda],\[Kappa],b] = NIntegrate[(1 + b*me/Ee)*we[\[Lambda],\[Kappa],Ee], {Ee, me, E0},PrecisionGoal->6];
 
 weNormed[\[Lambda]_,\[Kappa]_,b_,Ee_]:=(1+b*me/Ee)*we[\[Lambda],\[Kappa],Ee]/weNorm[\[Lambda],\[Kappa],b];
 
@@ -69,7 +69,9 @@ weNormed[\[Lambda]_,\[Kappa]_,b_,Ee_]:=(1+b*me/Ee)*we[\[Lambda],\[Kappa],Ee]/weN
 
 pmax = Solve[Eofp[p] == E0, p][[2, 1, 2]];
 
-wmom[\[Lambda]_?NumericQ,\[Kappa]_?NumericQ,p_?NumericQ] := we[\[Lambda],\[Kappa],Eofp[p]]*p/Eofp[p]
+SetAttributes[pmax,{Constant,Protected}];
+
+wmom[\[Lambda]_,\[Kappa]_,p_] := we[\[Lambda],\[Kappa],Eofp[p]]*p/Eofp[p]
 
 wmomPiecewise[\[Lambda]_,\[Kappa]_,p_] := Piecewise[{
    {0, p <= 0},
@@ -80,8 +82,7 @@ wmomPiecewise[\[Lambda]_,\[Kappa]_,p_] := Piecewise[{
   
 wmomNorm[\[Lambda]_,\[Kappa]_,b_] := 
  wmomNorm[\[Lambda],\[Kappa],b] = 
-  NIntegrate[(1 + b*me/Eofp[p])*wmom[\[Lambda],\[Kappa],p], {p, 0, pmax}, 
-   PrecisionGoal -> 4]
+  NIntegrate[(1 + b*me/Eofp[p])*wmom[\[Lambda],\[Kappa],p], {p, 0, pmax}, PrecisionGoal -> 6]
   
 wmomNormedWb[\[Lambda]_,\[Kappa]_,b_, p_] := (1 + b*me/Eofp[p])*
   wmomPiecewise[\[Lambda],\[Kappa],p]/wmomNorm[\[Lambda],\[Kappa],b]
