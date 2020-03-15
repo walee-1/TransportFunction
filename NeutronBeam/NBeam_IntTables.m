@@ -3,7 +3,8 @@
 Get["NeutronBeam/NBeamIntegrand.m"];
 
 
-
+(* ::Section:: *)
+(* Old Integrands - better ignore *)
 
 Integration2DwNBeamc31[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	 {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
@@ -38,8 +39,7 @@ ParallelTable[
 
 	
 	
-(*Compiled Integrand*)
-
+(* Integration of compiled integrand *)
 Integration2DwNBeamCompiled[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	 {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
 
@@ -53,10 +53,11 @@ ParallelTable[
    PrecisionGoal -> IntPrec, Method -> "AdaptiveMonteCarlo", AccuracyGoal -> 5, MaxPoints -> 10000000]
 	, {bin,1,Length[XYData]}, Method -> "FinestGrained"]
 	
-	
-	
-(*with phiA limits*)
 
+(* ::Section:: *)
+(* Including phiA limits *)	
+	
+(*compiled with phiA limits*)
 Int2DwNBeamCompiledphiALimits[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
 
@@ -78,6 +79,7 @@ ParallelTable[
    	
 {bin,1,Length[XYData]}, Method -> "FinestGrained"]	
 
+(*compiled with phiA limits + *)
 (*GLOBAL ADAPTIVE METHOD*)
 Int2DwNBeamCompiledphiALimitsGLOBADAP[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
@@ -139,7 +141,9 @@ ParallelTable[
 
 
 
-(*Manual phiA integration*)
+(* ::Section:: *)
+(* Manual phiA integration *)
+
 Int2DwNBeamCompiledManualphiA[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
 
@@ -159,13 +163,16 @@ Int2DwNBeamCompiledManualphiAAllLimits[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
 
 ParallelTable[
-  NIntegrate[
+	Module[{t0=AbsoluteTime[],t1,intresult},
+  intresult=NIntegrate[
    ManualphiAIntegrandAllLimits[b, XYData[[bin,2]], XYData[[bin,1]], {phiDV, phiDet, p, th0},
    	 {alpha,BRxB, rRxB, rA, rD, R, G1, G2}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA,yAA, xOff, yOff}],
      
      {th0, 0., thetamax[rF]}, {phiDet, -Pi//N, Pi//N}, {p, 0., pmax}, {phiDV, -Pi//N, Pi//N}, 
-   PrecisionGoal -> IntPrec, Method -> "LocalAdaptive", AccuracyGoal -> 5,MinRecursion->3,MaxRecursion->10], 
-   	
+   PrecisionGoal -> IntPrec, Method -> "LocalAdaptive", AccuracyGoal -> 5,MinRecursion->3,MaxRecursion->10];
+   t1=AbsoluteTime[];
+   {intresult,t1-t0}
+	],
 {bin,1,Length[XYData]}, Method -> "FinestGrained"]
 
 
@@ -175,8 +182,8 @@ Int2DwNBeamCompiledManualphiAAllLimitspLimitsX[b_, XYData_List, {alpha_, BRxB_,r
 
 ParallelTable[
 	Module[
-		{xbin=XYData[[bin,1]],ybin=XYData[[bin,2]]},
-  NIntegrate[
+		{xbin=XYData[[bin,1]],ybin=XYData[[bin,2]](*,t0=AbsoluteTime[],t1,intresult*)},
+  (*intresult=*)NIntegrate[
    ManualphiAIntegrandAllLimits[b, ybin, xbin, {phiDV, phiDet, p, th0},
    	 {alpha,BRxB, rRxB, rA, rD, R, G1, G2}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA,yAA, xOff, yOff}],
      
@@ -188,7 +195,9 @@ ParallelTable[
      	pmax
      }, 
      {phiDV, -Pi//N, Pi//N}, 
-   PrecisionGoal -> IntPrec, Method -> "LocalAdaptive", AccuracyGoal -> 5,MinRecursion->3,MaxRecursion->10]
+   PrecisionGoal -> IntPrec, Method -> {"LocalAdaptive",Method->"MultidimensionalRule"}, AccuracyGoal -> 5,MinRecursion->0,MaxRecursion->10](*;*)
+   (*t1=AbsoluteTime[];
+   {intresult,t1-t0}*)
 	], 
    	
 {bin,1,Length[XYData]}, Method -> "CoarsestGrained"]
@@ -225,9 +234,8 @@ ParallelTable[
 
 
 
-
-(*Integration with p limits*)
-
+(* ::Section:: *)
+(*Old Integrand with p limits*)
   
 Integration2DwNBeamc31wpLimits[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	 {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=

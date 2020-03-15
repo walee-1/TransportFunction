@@ -14,6 +14,6 @@ E0 = del - (del^2 - me^2)/(2*mn);
 tpMax = epMax - mp;
 \[Alpha] = 1/137;
 
-<<ErrorBarPlots`;
+
 SetOptions[ListPlot,GridLines->Automatic,Frame->True,ImageSize->700,FrameStyle->20];
 SetOptions[Plot,GridLines->Automatic,Frame->True,ImageSize->700,FrameStyle->20];

@@ -14,6 +14,8 @@ Get["Common/CommonFunctions.m"];
 F[Ee_] := 
  2*Pi*\[Alpha]/\[Beta][Ee]/(1 - Exp[-2*Pi*\[Alpha]/\[Beta][Ee]]);
 
+FPiecewise[Ee_]:=Piecewise[{{F[me+0.01],Ee<me+0.01}},F[Ee]]
+
 Fapprox[Ee_] := 
  1 + Pi*\[Alpha]/\[Beta][Ee] + \[Alpha]^2*(11/4 - 0.5772 - 
      Log[2*\[Beta][Ee]*Ee*0.01/4/me] + Pi^2/3/\[Beta][Ee]^2);
@@ -50,7 +52,7 @@ R0[\[Lambda]_,\[Kappa]_,Ee_] :=  1/(1 + 3*\[Lambda]^2)*
     E0, (E0 - me)/2000}]];*)
 
 we[\[Lambda]_,\[Kappa]_,Ee_] :=(*(4*Pi)^2/(2*Pi*hq)^6**)
- F[Ee]*Sqrt[Ee^2 - me^2]*
+ FPiecewise[Ee]*Sqrt[Ee^2 - me^2]*
   Ee*(E0 - Ee)^2*(1 + dRInter[Ee])*(1 + R0[\[Lambda],\[Kappa],Ee])/10^23;
 
 

@@ -140,10 +140,10 @@ ManualphiAIntegrandAllLimits[
 	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] := 
 	Module[
   		{
-  			phimin = Re[phiAminApert[yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]],
-  			phimax = Re[phiAmaxApert[yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]], 
-  			phiminY = Re[phiAminApertfromY[yD, p, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]], 
-  			phimaxY = Re[phiAmaxApertfromY[yD, p, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]],
+  			phimin = Re[phiAminApert[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]],
+  			phimax = Re[phiAmaxApert[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]], 
+  			phiminY = Re[phiAminApertfromY[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]], 
+  			phimaxY = Re[phiAmaxApertfromY[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]],
 			IntValues, philimitlist, philimitlistSorted, Deltalimits, phiCenters, Integrated
 		},
   		
@@ -152,7 +152,7 @@ ManualphiAIntegrandAllLimits[
 		philimitlistSorted = DeleteDuplicates[Sort[philimitlist]];
 		Deltalimits = Table[philimitlistSorted[[i + 1]] - philimitlistSorted[[i]], {i, 1, Length[philimitlistSorted] - 1}];
 		phiCenters = Table[philimitlistSorted[[i]] + Deltalimits[[i]]/2, {i, 1, Length[philimitlistSorted] - 1}];
-		IntValues = Integrand2DwNBeamCompiled[b, yD, xD, {phiDV, #, phiDet, If[p<40.,0.,p], th0}, {alpha, BRxB, rRxB, rA, rD, R, G1,G2},
+		IntValues = Integrand2DwNBeamCompiled[b, yD, xD, {phiDV, #, phiDet, p, th0}, {alpha, BRxB, rRxB, rA, rD, R, G1,G2},
 			{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}] & /@ phiCenters;
 		Integrated = Total[Deltalimits*IntValues];
   		Integrated
@@ -219,6 +219,7 @@ Module[
   
   
 pLimitsApertXList[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_] := 
+(*pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA] =*)
 Module[
   {
    pminXmPi = pminApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
@@ -226,8 +227,44 @@ Module[
    pmaxXmPi = pmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
    pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]
    },
- (*Sequence@@*)Sort[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}]
+ (*Sequence@@*)Union[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}]
   ]
+
+
+(*p limits from apertY*)
+
+pminApertY[phiA_, yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] =
+ Module[{plocal}, Solve[yOff + yAA/2 == yA[phiA, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet], plocal, Reals][[1, 1, 2, 1]]]
+ 
+pmaxApertY[phiA_, yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] =
+Module[{plocal}, Solve[yOff - yAA/2 == yA[phiA, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet], plocal][[1, 1, 2]]]
+
+pminApertYCases[yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] := Module[
+  {phiAlocal = If[yD > yAA/2 + yOff, -Pi/2, Pi/2], pminlocal},
+  pminlocal = pminApertY[phiAlocal, yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA];
+  Piecewise[{{pminlocal, 0. < pminlocal < pmax}}, 0.]
+  ]
+
+pmaxApertYCases[yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] := Module[
+  {phiAlocal = If[yD < -yAA/2 + yOff, Pi/2, -Pi/2], pmaxlocal},
+  pmaxlocal = pmaxApertY[phiAlocal, yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA];
+  Piecewise[{{pmaxlocal, 0. < pmaxlocal < pmax}}, 0.]
+  ]
+
+pLimitsApertAllList[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, {xAA_, xOff_,yAA_, yOff_}] := 
+Module[
+  {
+   pminXmPi = pminApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pminX0 = pminApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pmaxXmPi = pmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pminY = pminApertYCases[yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA],
+   pmaxY = pmaxApertYCases[yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]
+   },
+ 	Sort[{pminXmPi, pminX0, pmaxXmPi, pmaxX0,pminY,pmaxY}]
+  ]
+
+
 
      
    
