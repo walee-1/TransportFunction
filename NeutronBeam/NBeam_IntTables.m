@@ -176,6 +176,7 @@ ParallelTable[
 {bin,1,Length[XYData]}, Method -> "FinestGrained"]
 
 
+
 (*Manual phiA integration V2 with all phiA limits + p limits from APerture X*)
 Int2DwNBeamCompiledManualphiAAllLimitspLimitsX[b_, XYData_List, {alpha_, BRxB_,rF_, rA_,rRxB_,rD_, R_, G1_, G2_},
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},IntPrec_]:=
@@ -191,7 +192,11 @@ ParallelTable[
      {
      	p, 
      	0.,
-     	Sequence@@pLimitsApertXList[ybin, xbin, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+     	(*pLimitsApertXList[ybin, xbin, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA][[1]],*)
+     	Sequence@@pLimitsApertXList[ybin, xbin, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA](*[[2;;4]]*)(*[[1]]*),
+     	(*pLimitsApertXList[ybin, xbin, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA][[2]],
+     	pLimitsApertXList[ybin, xbin, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA][[3]],
+     	pLimitsApertXList[ybin, xbin, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA][[4]]*)
      	pmax
      }, 
      {phiDV, -Pi//N, Pi//N}, 
@@ -200,7 +205,7 @@ ParallelTable[
    {intresult,t1-t0}*)
 	], 
    	
-{bin,1,Length[XYData]}, Method -> "CoarsestGrained"]
+{bin,1,Length[XYData]}, Method -> "FinestGrained"]
 
 
 (*Manual phiA integration V2 with all phiA limits + p limits from APerture X*)

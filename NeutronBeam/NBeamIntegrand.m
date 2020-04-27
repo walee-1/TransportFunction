@@ -149,7 +149,7 @@ ManualphiAIntegrandAllLimits[
   		
   		philimitlist = Flatten[{-Pi//N, phimin, phimax, phiminY, phimaxY, Pi//N}];
 		philimitlist = If[# > Pi, # - 2 Pi, #] & /@ philimitlist;
-		philimitlistSorted = DeleteDuplicates[Sort[philimitlist]];
+		philimitlistSorted = Union[philimitlist];
 		Deltalimits = Table[philimitlistSorted[[i + 1]] - philimitlistSorted[[i]], {i, 1, Length[philimitlistSorted] - 1}];
 		phiCenters = Table[philimitlistSorted[[i]] + Deltalimits[[i]]/2, {i, 1, Length[philimitlistSorted] - 1}];
 		IntValues = Integrand2DwNBeamCompiled[b, yD, xD, {phiDV, #, phiDet, p, th0}, {alpha, BRxB, rRxB, rA, rD, R, G1,G2},
@@ -225,10 +225,16 @@ Module[
    pminXmPi = pminApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
    pminX0 = pminApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
    pmaxXmPi = pmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]
+   pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   plimitlist
    },
- (*Sequence@@*)Union[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}]
-  ]
+	plimitlist=Union[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}];
+	Which[
+		Length[plimitlist]==1,Join[plimitlist,plimitlist],
+		True,plimitlist
+	]
+]
+  
 
 
 (*p limits from apertY*)
@@ -264,6 +270,51 @@ Module[
  	Sort[{pminXmPi, pminX0, pmaxXmPi, pmaxX0,pminY,pmaxY}]
   ]
 
+
+
+(* ::Section:: *)
+(* 2 step-Integration *)
+
+pXDomain[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_]:=
+{p,Sequence@@pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]}
+
+
+Step1Int[b_, yD_, xD_, {phiDet_?NumericQ, th0_?NumericQ}, 
+	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},
+	method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_]:=
+	NIntegrate[
+		ManualphiAIntegrandAllLimits[b, yD, xD, {phiDV, phiDet, p, th0}, 
+			{alpha, BRxB, rRxB, rA, rD, R, G1, G2}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}],
+		Evaluate[pXDomain[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]],
+		{phiDV,-Pi,Pi},
+		Method->method1,PrecisionGoal->PrecGoal1,AccuracyGoal->AccGoal1, MinRecursion->MinRec1, MaxRecursion->MaxRec1	
+]
+
+
+Step2Int[b_, xD_?NumericQ,yD_?NumericQ, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
+	{xAA_, yAA_, xOff_, yOff_}, method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_, method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_]:=
+
+		NIntegrate[
+		Step1Int[b, yD, xD, {phiDet, th0}, 
+			{alpha, BRxB, rRxB, rA, rD, R, G1, G2}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
+			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1],
+			{th0,0.,thetamax[rF]},{phiDet,-Pi,Pi},Method->method2,PrecisionGoal->PrecGoal2,AccuracyGoal->AccGoal2,MinRecursion->MinRec2, MaxRecursion->MaxRec2		
+		]
+		
+		
+(* ::Section:: *)
+(* Add xD and yD integration *)
+
+BinInt[b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
+	{xAA_, yAA_, xOff_, yOff_}, {method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_}, {method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_}, {method3_,PrecGoal3_,AccGoal3_}]:=
+	NIntegrate[
+		
+		Step2Int[b, xD, yD, {alpha, BRxB, rF, rRxB, rA, rD, R, G1, G2}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
+			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1,method2,PrecGoal2,AccGoal2,MinRec2,MaxRec2],
+			
+		{xD, OneBinList[[1,1]], OneBinList[[1,2]]}, {yD, OneBinList[[2,1]], OneBinList[[2,2]]},
+		PrecisionGoal->PrecGoal3,Method->method3,MinRecursion->0,MaxRecursion->1,AccuracyGoal->AccGoal3
+	]
 
 
      

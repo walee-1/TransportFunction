@@ -30,7 +30,7 @@ FullSimplify[
   TrapezNBeamNewNorm[{tw_, pl_, k1_, k2_, k3_}] := 
  TrapezNBeamNewNorm[{tw, pl, k1, k2, k3}] = 
   NIntegrate[
-   TrapezNBeamNew[xn, {tw, pl, k1, k2, k3}], {xn, -tw/2, tw/2}]
+   TrapezNBeamNew[xn, {tw, pl, k1, k2, k3}], {xn, -tw/2, tw/2},PrecisionGoal->7,AccuracyGoal->8]
    
    
    TrapezNBeamNewNormed[xn_, {tw_, pl_, k1_, k2_, k3_}] := 
@@ -57,12 +57,12 @@ TrapezNBeamCompiled = Compile[
        2, -((2 (-k1 + k2) pl + (k1 + k3) tw)/(2 (k1 - k3))) <= xn <= 
       tw/2},
     {0, xn > tw/2}
-    }], CompilationTarget -> "C", RuntimeAttributes -> {Listable}, RuntimeOptions -> "Speed"
+    }], CompilationTarget -> "C", RuntimeAttributes -> {Listable}(*, RuntimeOptions -> "Speed"*)
   ];
 
 TrapezNBeamCompiledNorm[{tw_, pl_, k1_, k2_, k3_}] := 
  TrapezNBeamCompiledNorm[{tw, pl, k1, k2, k3}] = 
-  NIntegrate[TrapezNBeamNew[xn, {tw, pl, k1, k2, k3}], {xn, -tw/2, tw/2}]
+  NIntegrate[TrapezNBeamNew[xn, {tw, pl, k1, k2, k3}], {xn, -tw/2, tw/2},PrecisionGoal->7,AccuracyGoal->8]
   
    
 TrapezNBeamCompiledNormed[xn_, {tw_, pl_, k1_, k2_, k3_}] := 
