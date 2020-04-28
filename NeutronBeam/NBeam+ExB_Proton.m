@@ -83,15 +83,15 @@ xDVHandSolve[phiDV_, xDet_, yDet_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, R_,
  (*xA for Aperture function*)
  
  
-xAAccel[phiA_, xDet_, yDet_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_,R_, G1_, G2_, ExBscale_, U_] := 
-	xGCAF[xDVHandSolve[phiDV, xDet, yDet, p, th0, alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U, phiDet], phiDV, p, th0, BRxB, rRxB, rA] + 
+xAAccel[xGCVar_, phiA_, p_, th0_, BRxB_, rRxB_, rA_] := 
+	xGCVar + 
 	rG[p, th0, rA*BRxB/rRxB]*Cos[phiA]
 	
-yAAccel[phiA_, xDet_, yDet_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_,R_, G1_, G2_, ExBscale_, U_] := 
-	yGCAF[yDVHandSolve[phiDV, xDet, yDet, p, th0, BRxB, rRxB, rA, rD, ExBscale, U, phiDet], phiDV, p, th0, BRxB, rRxB, rA] + 
+yAAccel[yGCVar_, phiA_, p_, th0_, BRxB_, rRxB_, rA_] := 
+	yGCVar + 
 	rG[p, th0, rA*BRxB/rRxB]*Sin[phiA]
   
-  
+ 
   
   
 (*Compiled Integrand*)
@@ -109,66 +109,203 @@ IntegrandProton2DwNBeamAccelCompiled[
    yDVHandSolve[phiDV, xDet, yDet, p, th0, BRxB, rRxB, rA, rD, ExBscale, U, phiDet]-yOff, {twy, ply,k1y, k2y, k3y}]*
   
   ApertBooleCompiled[
-   xAAccel[phiA, xDet, yDet, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, ExBscale, U], 
-   yAAccel[phiA, xDet, yDet, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, ExBscale, U], 
-   	xAA, yAA, xOff, yOff] 
+   xAAccel[
+   	xGCAF[xDVHandSolve[phiDV, xDet, yDet, p, th0, alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U, phiDet],
+   	phiDV, p, th0, BRxB, rRxB, rA] , phiA, p, th0, BRxB, rRxB, rA
+   ], 
+   yAAccel[
+   	yGCAF[yDVHandSolve[phiDV, xDet, yDet, p, th0, BRxB, rRxB, rA, rD, ExBscale, U, phiDet], 
+   	phiDV, p, th0, BRxB, rRxB, rA], phiA, p, th0, BRxB, rRxB, rA
+   ], 
+   xAA, yAA, xOff, yOff] 
   
   
-(* ::Section:: *)
-(* get limits of integration *)
-
-phiAminApertAccel[xDet_, yDet_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_, ExBscale_,U_] = 
-  Solve[xOff + xAA/2 == xAAccel[phiAlocal, xDet, yDet, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, ExBscale, U], phiAlocal][[All, 1, 2, 1, 1]];
-phiAmaxApertAccel[xDet_, yDet_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_, ExBscale_,U_] = 
-   Solve[xOff - xAA/2 == xAAccel[phiAlocal, xDet, yDet, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, ExBscale, U], phiAlocal][[All, 1, 2, 1, 1]];
+(* ::Section::*)(*get limits of integration*)
+phiAminApertAccel[xGCVar_, p_, th0_, BRxB_, rRxB_, rA_, xAA_, xOff_] = 
+  Solve[xOff + xAA/2 == xAAccel[xGCVar, phiAlocal, p, th0, BRxB, rRxB, rA], phiAlocal][[All, 1, 2, 1, 1]];
+phiAmaxApertAccel[xGCVar_, p_, th0_, BRxB_, rRxB_, rA_, xAA_, xOff_] = 
+  Solve[xOff - xAA/2 == xAAccel[xGCVar, phiAlocal, p, th0, BRxB, rRxB, rA], phiAlocal][[All, 1, 2, 1, 1]];
 
 
-phiACasesAccel[yD_?NumericQ, xD_?NumericQ, plocal_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_, ExBscale_,U_] :=
- {phiA,
- 	Sequence@@Re[{
-  phiAmaxApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet,R, G1, G2, xOff, xAA, ExBscale, U][[1]],
-  phiAminApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet,R, G1, G2, xOff, xAA, ExBscale, U][[1]],
-  phiAminApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet,R, G1, G2, xOff, xAA, ExBscale, U][[2]],
-  phiAmaxApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet,R, G1, G2, xOff, xAA, ExBscale, U][[2]]
-  }]
- }
+(*phiACasesAccel[yD_?NumericQ, xD_?NumericQ, plocal_?NumericQ, 
+  th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_,
+   G1_, G2_, xOff_, xAA_, ExBscale_, U_] := {phiA, 
+  Sequence @@ 
+   Re[{phiAmaxApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, 
+       rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U][[1]], 
+     phiAminApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD,
+        phiDet, R, G1, G2, xOff, xAA, ExBscale, U][[1]], 
+     phiAminApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD,
+        phiDet, R, G1, G2, xOff, xAA, ExBscale, U][[2]], 
+     phiAmaxApertAccel[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD,
+        phiDet, R, G1, G2, xOff, xAA, ExBscale, U][[2]]}]}*)
 
 (*phiA limits from Y Aperture*)
 
-phiAminApertfromYAccel[xDet_, yDet_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, R_, G1_, G2_, ExBscale_, U_] = 
- Solve[yOff + yAA/2 == yAAccel[phiAlocal, xDet, yDet, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, ExBscale, U], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
- 
-phiAmaxApertfromYAccel[xDet_, yDet_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, R_, G1_, G2_, ExBscale_, U_] = 
- Solve[yOff - yAA/2 == yAAccel[phiAlocal, xDet, yDet, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, ExBscale, U], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+phiAminApertfromYAccel[yGCVar_, p_, th0_, BRxB_, rRxB_, rA_, yAA_, yOff_] = Solve[
+   yOff + yAA/2 == yAAccel[yGCVar, phiAlocal, p, th0, BRxB, rRxB, rA], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
 
-  
+phiAmaxApertfromYAccel[yGCVar_, p_, th0_, BRxB_, rRxB_, rA_, yAA_, yOff_] = Solve[
+   yOff - yAA/2 == yAAccel[yGCVar, phiAlocal, p, th0, BRxB, rRxB, rA], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+
+
 (*new manual phiA integration with all phi limits*)
-ManualphiAIntegrandAllLimitsAccel[
-	lambda_, a_, b_, xDet_, yDet_, {phiDV_?NumericQ, phiDet_?NumericQ, p_?NumericQ, th0_?NumericQ}, 
-	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_, ExBscale_, U_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] := 
-	Module[
-  		{
-  			phimin = Re[phiAminApertAccel[xDet, yDet, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U]],
-  			phimax = Re[phiAmaxApertAccel[xDet, yDet, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U]], 
-  			phiminY = Re[phiAminApertfromYAccel[xDet, yDet, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, R, G1, G2, ExBscale, U]], 
-  			phimaxY = Re[phiAmaxApertfromYAccel[xDet, yDet, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, R, G1, G2, ExBscale, U]],
-			IntValues, philimitlist, philimitlistSorted, Deltalimits, phiCenters, Integrated
-		},
-  		
-  		philimitlist = Flatten[{-Pi//N, phimin, phimax, phiminY, phimaxY, Pi//N}];
-		philimitlist = If[# > Pi, # - 2 Pi, #] & /@ philimitlist;
-		philimitlistSorted = Union[philimitlist];
-		Deltalimits = Table[philimitlistSorted[[i + 1]] - philimitlistSorted[[i]], {i, 1, Length[philimitlistSorted] - 1}];
-		phiCenters = Table[philimitlistSorted[[i]] + Deltalimits[[i]]/2, {i, 1, Length[philimitlistSorted] - 1}];
-		IntValues = IntegrandProton2DwNBeamAccelCompiled[
-			lambda, a, b, xDet, yDet, {phiDV, #, phiDet, p, th0}, 
-			{alpha, BRxB, rRxB, rA,rD, R, G1, G2, ExBscale,U}, 
-			{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, 
-			{xAA, yAA, xOff, yOff}] & /@ phiCenters;
-		Integrated = Total[Deltalimits*IntValues];
-  		Integrated
-  		
-  ]
 
+ManualphiAIntegrandAllLimitsAccel[lambda_, a_, b_, xDet_, yDet_, {phiDV_?NumericQ, phiDet_?NumericQ, p_?NumericQ, th0_?NumericQ}, 
+	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_, ExBscale_, U_}, 
+	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] := 
+ 	Module[
+ 		{
+ 		phimin = Re[phiAminApertAccel[xGCAF[xDVHandSolve[phiDV, xDet, yDet, If[p == 0., 0.00000001, p], th0, alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U, phiDet],
+   			phiDV, p, th0, BRxB, rRxB, rA], If[p == 0., 0.00000001, p], th0, BRxB, rRxB, rA, xAA, xOff]], 
+   		phimax = Re[phiAmaxApertAccel[xGCAF[xDVHandSolve[phiDV, xDet, yDet, If[p == 0., 0.00000001, p], th0, alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U, phiDet],
+   			phiDV, p, th0, BRxB, rRxB, rA], If[p == 0., 0.00000001, p], th0, BRxB, rRxB, rA, xAA, xOff]], 
+   		phiminY = Re[phiAminApertfromYAccel[yGCAF[yDVHandSolve[phiDV, xDet, yDet, If[p == 0., 0.00000001, p], th0, BRxB, rRxB, rA, rD, ExBscale, U, phiDet], 
+   			phiDV, p, th0, BRxB, rRxB, rA], If[p == 0., 0.00000001, p], th0, BRxB, rRxB, rA, yAA, yOff]], 
+   		phimaxY = Re[phiAmaxApertfromYAccel[yGCAF[yDVHandSolve[phiDV, xDet, yDet, If[p == 0., 0.00000001, p], th0, BRxB, rRxB, rA, rD, ExBscale, U, phiDet], 
+   			phiDV, p, th0, BRxB, rRxB, rA], If[p == 0., 0.00000001, p], th0, BRxB, rRxB, rA, yAA, yOff]], 
+   		IntValues, philimitlist, philimitlistSorted, Deltalimits, phiCenters, Integrated
+   		}, 
+  		philimitlist = Flatten[{-Pi // N, phimin, phimax, phiminY, phimaxY, Pi // N}];
+		philimitlist = If[# > Pi, # - 2 Pi, #] & /@ philimitlist;
+  		philimitlistSorted = Union[philimitlist];
+  		Deltalimits = Table[philimitlistSorted[[i + 1]] - philimitlistSorted[[i]], {i, 1, Length[philimitlistSorted] - 1}];
+  		phiCenters = Table[philimitlistSorted[[i]] + Deltalimits[[i]]/2, {i, 1, Length[philimitlistSorted] - 1}];
+  		IntValues = 
+   			IntegrandProton2DwNBeamAccelCompiled[lambda, a, b, xDet, yDet, {phiDV, #, phiDet, p, th0}, {alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U}, 
+   				{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}] & /@ phiCenters;
+  		Integrated = Total[Deltalimits*IntValues];
+  		Integrated
+  	]
+
+
+
+
+(* ::Section:: *)
+(* Integrand with p limits from aperture *)
+
+
+pminApertAccel[(*phiDV_, *)phiA_?NumericQ, xDet_?NumericQ, yDet_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_, ExBscale_, U_] :=
+Module[
+	{plocal}, 
+ 	NSolve[xOff + xAA/2 == 
+ 		xAAccel[
+   			xGCAF[xDVHandSolve[phiDV, xDet, yDet, plocal, th0, alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U, phiDet],
+   				phiDV, plocal, th0, BRxB, rRxB, rA] , phiA, plocal, th0, BRxB, rRxB, rA],
+   		plocal][[All, 1, 2]]
+]
+
+pmaxApertAccel[(*phiDV_, *)phiA_?NumericQ, xDet_?NumericQ, yDet_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_, ExBscale_, U_] :=
+Module[
+	{plocal}, 
+ 	NSolve[xOff - xAA/2 == 
+ 		xAAccel[
+   			xGCAF[xDVHandSolve[phiDV, xDet, yDet, plocal, th0, alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U, phiDet],
+   				phiDV, plocal, th0, BRxB, rRxB, rA] , phiA, plocal, th0, BRxB, rRxB, rA],
+   		plocal][[All, 1, 2]]
+]
+      
+      
+pminApertCasesAccel[(*phiDV_, *)phiA_?NumericQ, xDet_?NumericQ, yDet_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_, ExBscale_, U_] := 
+Module[
+  {pmin = Cases[pminApertAccel[(*phiDV, *)phiA, xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U], _?(# \[Element] Reals && 0. <= # <= 2*ppmax &)]},
+  Piecewise[
+   {
+    {0, Length[pmin] == 0},
+    {ppmax, Length[pmin] == 1 && pmin[[1]] > ppmax},
+    {pmin[[1]], Length[pmin] == 1},
+    {
+    	Print["pmin: Length =",Length[pmin],pmin,phiA," ",th0," ",phiDet," ",pminApertAccel[(*phiDV, *)phiA, xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U]], 
+    	Length[pmin]>1(*Length[pmin]!=1 && Length[pmin]!=0*) 
+    }
+    },
+    Print["pmin: other Case"]
+   ]
+ 
+]
+
+pmaxApertCasesAccel[(*phiDV_, *)phiA_?NumericQ, xDet_?NumericQ, yDet_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_, ExBscale_, U_] := 
+Module[
+  {pmaxx =Cases[pmaxApertAccel[(*phiDV, *)phiA, xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U], _?(# \[Element] Reals && 0. <= # <= 2*ppmax &)]},
+  
+  Piecewise[
+   {
+    {ppmax, Length[pmaxx] == 0},
+    {ppmax, Length[pmaxx] == 1 && pmaxx[[1]] > ppmax},
+    {pmaxx[[1]], Length[pmaxx] == 1},
+    {	
+    	Print["pmax: Length =",Length[pmaxx],pmaxx,phiA," ",th0," ",phiDet," ",pmaxApertAccel[(*phiDV, *)phiA, xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U]],
+    	Length[pmaxx]>1(*Length[pmaxx]!=1 && Length[pmaxx]!=0*) 
+    }
+    },
+    Print["pmax: other case"]
+   ]
+
+  ]
+  
+  
+pLimitsApertXListAccel[(*phiDV_, *)xDet_?NumericQ, yDet_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_, ExBscale_, U_] := 
+(*pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA] =*)
+Module[
+  {
+   pminXmPi = pminApertCasesAccel[ -Pi, xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U],
+   pminX0 = pminApertCasesAccel[ 0., xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U],
+   pmaxXmPi = pmaxApertCasesAccel[ -Pi, xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U],
+   pmaxX0 = pmaxApertCasesAccel[ 0., xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U],
+   plimitlist
+   },
+	plimitlist=Union[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}];
+	Which[
+		Length[plimitlist]==1,Join[plimitlist,plimitlist],
+		True,plimitlist
+	]
+]
+
+
+(* ::Section:: *)
+(* 2 step-Integration *)
+
+pXDomainAccel[xDet_?NumericQ, yDet_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_, ExBscale_, U_]:=
+{p,Sequence@@pLimitsApertXListAccel[xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U]}
+
+
+Step1IntAccel[lambda_, a_, b_, xDet_, yDet_, {phiDet_?NumericQ, th0_?NumericQ}, 
+	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_, ExBscale_, U_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},
+	method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_]:=
+	NIntegrate[
+		ManualphiAIntegrandAllLimitsAccel[lambda, a, b, xDet, yDet, {phiDV, phiDet, p, th0}, 
+			{alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}],
+		Evaluate[pXDomainAccel[xDet, yDet, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, ExBscale, U]],
+		{phiDV,-Pi,Pi},
+		Method->method1,PrecisionGoal->PrecGoal1,AccuracyGoal->AccGoal1, MinRecursion->MinRec1, MaxRecursion->MaxRec1	
+]
+
+
+Step2IntAccel[lambda_, a_, b_, xDet_?NumericQ,yDet_?NumericQ, 
+	{alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_, ExBscale_, U_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
+	{xAA_, yAA_, xOff_, yOff_}, method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_, method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_]:=
+
+		NIntegrate[
+		Step1IntAccel[lambda, a, b, xDet, yDet, {phiDet, th0}, 
+			{alpha, BRxB, rRxB, rA, rD, R, G1, G2, ExBscale, U}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
+			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1],
+			{th0,0.,thetamax[rF]},{phiDet,-Pi,Pi},Method->method2,PrecisionGoal->PrecGoal2,AccuracyGoal->AccGoal2,MinRecursion->MinRec2, MaxRecursion->MaxRec2		
+		]
+		
+		
+(* ::Section:: *)
+(* Add xD and yD integration *)
+
+BinIntAccel[lambda_, a_, b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_, ExBscale_, U_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
+	{xAA_, yAA_, xOff_, yOff_}, {method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_}, {method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_}, {method3_,PrecGoal3_,AccGoal3_}]:=
+	NIntegrate[
+		
+		Step2IntAccel[lambda, a, b, xDet, yDet, {alpha, BRxB, rF, rRxB, rA, rD, R, G1, G2, ExBscale, U}, 
+			{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
+			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1,method2,PrecGoal2,AccGoal2,MinRec2,MaxRec2],
+			
+		{xDet, OneBinList[[1,1]], OneBinList[[1,2]]}, {yDet, OneBinList[[2,1]], OneBinList[[2,2]]},
+		PrecisionGoal->PrecGoal3,Method->method3,MinRecursion->0,MaxRecursion->1,AccuracyGoal->AccGoal3
+	]
   
   
