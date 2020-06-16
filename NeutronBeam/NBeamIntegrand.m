@@ -306,16 +306,53 @@ Step2Int[b_, xD_?NumericQ,yD_?NumericQ, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_
 (* Add xD and yD integration *)
 
 BinInt[b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_}, {twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
-	{xAA_, yAA_, xOff_, yOff_}, {method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_}, {method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_}, {method3_,PrecGoal3_,AccGoal3_}]:=
+	{xAA_, yAA_, xOff_, yOff_}, 
+	{method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_}, 
+	{method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_}, 
+	{method3_,PrecGoal3_,AccGoal3_,MinRec3_,MaxRec3_}]:=
 	NIntegrate[
 		
 		Step2Int[b, xD, yD, {alpha, BRxB, rF, rRxB, rA, rD, R, G1, G2}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
 			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1,method2,PrecGoal2,AccGoal2,MinRec2,MaxRec2],
 			
 		{xD, OneBinList[[1,1]], OneBinList[[1,2]]}, {yD, OneBinList[[2,1]], OneBinList[[2,2]]},
-		PrecisionGoal->PrecGoal3,Method->method3,MinRecursion->0,MaxRecursion->1,AccuracyGoal->AccGoal3
+		PrecisionGoal->PrecGoal3,Method->method3,MinRecursion->MinRec3,MaxRecursion->MaxRec3,AccuracyGoal->AccGoal3
 	]
 
 
+(* ::Section:: *)
+(* Try to make at least a 4D or even 6D integration, maybe quicker solution *)
+
+(*First we need to adopt the p limits so that we can explicity write the boundaries in the code. fixed length of 4 values*)
+
+(*pLimitsApertXList2[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_]:=Module[
+	{plimitsX=pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],length},
+	length=Length[plimitsX];
+	Which[
+		length==4,plimitsX,
+		length <4,plimitsX
+	]
+]*)
+		
+(*actually no, we just need to remove Union, and do Order again, because then, always 4 solutions*)
+pLimitsApertXList2[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_] := 
+(*pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA] =*)
+Module[
+  {
+   pminXmPi = pminApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pminX0 = pminApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pmaxXmPi = pmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   plimitlist
+   },
+	plimitlist=Sort[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}];
+	If[Length[plimitlist]<4,Print["plimits smaller 4"]];
+	plimitlist
+] 		
+		
+pXDomain2[yD_, xD_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_]:=
+{p,Sequence@@pLimitsApertXList2[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]}		
+		
+		
      
    

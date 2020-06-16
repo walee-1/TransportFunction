@@ -18,3 +18,9 @@ Module[
 	],1]
 		
 ]
+
+
+
+
+
+BinCenters[XYBinBoundaries_] := {Mean[#[[1]]], Mean[#[[2]]]} & /@ XYBinBoundaries
