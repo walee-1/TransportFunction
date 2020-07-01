@@ -15,41 +15,35 @@ Get["Aperture/BooleApert.m"];
    
 xGCAShift[xDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, XAShift_] := (xDV - rG[p, th0, BRxB/rRxB]*Cos[phiDV])*Sqrt[1/rA] + XAShift
 yGCAShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_] := (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV])*Sqrt[1/rA] + YAShift
-yRxBGCShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_, YRxBShift_]:= yGCAShift[yDV, phiDV, p, th0, BRxB, rRxB, rA, YAShift] *Sqrt[rA/rRxB] + YRxBShift  
+yRxBGCShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, YRxBShift_]:= (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV]) *Sqrt[1/rRxB] + YRxBShift  
   
-DeltayDVShift[phiDV_, yD_, p_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YRxBShift_, YDetShift_] := 
-(	
-	(
-		(yD - rG[p, th0, rD*BRxB/rRxB]*Sin[phiDet] - YDetShift)*Sqrt[rD/rRxB] - YRxBShift
-	)*Sqrt[rRxB/rA] - YAShift
-)*Sqrt[rA] + rG[p, th0, BRxB/rRxB]*Sin[phiDV]
+DeltayDVShift[phiDV_, yD_, p_, th0_, BRxB_, rRxB_, rD_, phiDet_, YDetShift_] := 
+	(yD - rG[p, th0, rD*BRxB/rRxB]*Sin[phiDet] - YDetShift)*Sqrt[rD] + rG[p, th0, BRxB/rRxB]*Sin[phiDV]
 
-DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_] := 
+DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, YRxBShift_, XDetShift_] := 
+
 (
-	(
-		(xD - rG[p, th0, rD*BRxB/rRxB]*Cos[phiDet] - XDetShift)*Sqrt[rD/rRxB] -
-    	D1stBPolyGrad[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, rA, YAShift, YRxBShift], R, G1, G2]
-    	- XRxBShift
-	)*Sqrt[rRxB/rA] - XAShift
-)*Sqrt[rA] + rG[p, th0, BRxB/rRxB]*Cos[phiDV]
+	(xD - rG[p, th0, rD*BRxB/rRxB]*Cos[phiDet] - XDetShift)*Sqrt[rD/rRxB] -
+   	D1stBPolyGrad[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, YRxBShift], R, G1, G2]
+)*Sqrt[rRxB] + rG[p, th0, BRxB/rRxB]*Cos[phiDV]
    
    
-DeltaxDV2Shift[phiDV_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, {XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+DeltaxDV2Shift[phiDV_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, {YRxBShift_, XDetShift_, YDetShift_}] := 
  	DeltaxDVShift[phiDV, 
-  		DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YRxBShift, YDetShift],
-  		xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, XAShift, YAShift, XRxBShift, YRxBShift, XDetShift
+  		DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rD, phiDet, YDetShift],
+  		xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, YRxBShift, XDetShift
   	]
    
    
-xAShift[phiA_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, {XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+xAShift[phiA_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, {XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
  	xGCAShift[
- 		DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], 
+ 		DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, {YRxBShift, XDetShift, YDetShift}], 
  		phiDV, p, th0, BRxB, rRxB, rA, XAShift
  	] + rG[p, th0, rA*BRxB/rRxB]*Cos[phiA]
   
-yAShift[phiA_, yD_, p_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YRxBShift_, YDetShift_] := 
+yAShift[phiA_, yD_, p_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YDetShift_] := 
  	yGCAShift[
- 		DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YRxBShift, YDetShift], 
+ 		DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rD, phiDet, YDetShift], 
  		phiDV, p, th0, BRxB, rRxB, rA, YAShift
  	] + rG[p, th0, rA*BRxB/rRxB]*Sin[phiA]
    
@@ -82,19 +76,19 @@ yAShift[phiA_, yD_, p_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YRxBShi
 
 Integrand2DwNBeamCompiledShift[
 	b_, yD_, xD_, {phiDV_?NumericQ, phiA_?NumericQ, phiDet_?NumericQ, p_?NumericQ, th0_?NumericQ}, {alpha_, BRxB_, rRxB_, rA_,rD_, R_, G1_, G2_},
-	{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}, 
+	{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] :=
  
  wmomNormedWb[\[Lambda]0, \[Kappa]0, b, p]*Sin[th0]*
   
   TrapezNBeamCompiledNormed[
-   DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet,R, G1, G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]-xOff, {twx, plx, k1x, k2x, k3x}]*
+   DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, {YRxBShift, XDetShift, YDetShift}]-xOff, {twx, plx, k1x, k2x, k3x}]*
   TrapezNBeamCompiledNormed[
-   DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YRxBShift, YDetShift]-yOff, {twy, ply,k1y, k2y, k3y}]*
+   DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rD, phiDet, YDetShift]-yOff, {twy, ply,k1y, k2y, k3y}]*
   
   ApertBooleCompiled[
-   xAShift[phiA, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], 
-   yAShift[phiA, yD, p, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YRxBShift, YDetShift], 
+   xAShift[phiA, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], 
+   yAShift[phiA, yD, p, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift], 
    	xAA, yAA, xOff, yOff]  
 
 
@@ -105,10 +99,10 @@ Integrand2DwNBeamCompiledShift[
 
 
 
-phiAminApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
-  Solve[xOff + xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2, 1, 1]];
-phiAmaxApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
-   Solve[xOff - xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2, 1, 1]];
+phiAminApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
+  Solve[xOff + xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2, 1, 1]];
+phiAmaxApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
+   Solve[xOff - xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2, 1, 1]];
 
 
 (*phiACases[yD_?NumericQ, xD_?NumericQ, plocal_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_] :=
@@ -140,24 +134,24 @@ phiAmaxApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDe
 
 (*phiA limits from Y Aperture*)
 
-phiAminApertfromYShift[yD_, plocal_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YRxBShift_, YDetShift_] = 
- Solve[yOff + yAA/2 == yAShift[phiAlocal, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YRxBShift, YDetShift], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+phiAminApertfromYShift[yD_, plocal_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_] = 
+ Solve[yOff + yAA/2 == yAShift[phiAlocal, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
  
-phiAmaxApertfromYShift[yD_, plocal_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_,YRxBShift_, YDetShift_] = 
- Solve[yOff - yAA/2 == yAShift[phiAlocal, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YRxBShift, YDetShift], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+phiAmaxApertfromYShift[yD_, plocal_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_] = 
+ Solve[yOff - yAA/2 == yAShift[phiAlocal, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
 
   
 (*new manual phiA integration with all phi limits*)
 ManualphiAIntegrandAllLimitsShift[
 	b_, yD_, xD_, {phiDV_?NumericQ, phiDet_?NumericQ, p_?NumericQ, th0_?NumericQ}, 
-	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_}, {XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}, 
+	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_}, {XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] := 
 	Module[
   		{
-  			phimin = Re[phiAminApertShift[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]],
-  			phimax = Re[phiAmaxApertShift[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]], 
-  			phiminY = Re[phiAminApertfromYShift[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YRxBShift, YDetShift]], 
-  			phimaxY = Re[phiAmaxApertfromYShift[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YRxBShift, YDetShift]],
+  			phimin = Re[phiAminApertShift[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]],
+  			phimax = Re[phiAmaxApertShift[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]], 
+  			phiminY = Re[phiAminApertfromYShift[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YDetShift]], 
+  			phimaxY = Re[phiAmaxApertfromYShift[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YDetShift]],
 			IntValues, philimitlist, philimitlistSorted, Deltalimits, phiCenters, Integrated
 		},
   		
@@ -167,7 +161,7 @@ ManualphiAIntegrandAllLimitsShift[
 		Deltalimits = Table[philimitlistSorted[[i + 1]] - philimitlistSorted[[i]], {i, 1, Length[philimitlistSorted] - 1}];
 		phiCenters = Table[philimitlistSorted[[i]] + Deltalimits[[i]]/2, {i, 1, Length[philimitlistSorted] - 1}];
 		IntValues = Integrand2DwNBeamCompiledShift[b, yD, xD, {phiDV, #, phiDet, p, th0}, {alpha, BRxB, rRxB, rA, rD, R, G1,G2}, 
-			{XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift},
+			{XAShift, YAShift, YRxBShift, XDetShift, YDetShift},
 			{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}] & /@ phiCenters;
 		Integrated = Total[Deltalimits*IntValues];
   		Integrated
@@ -181,16 +175,16 @@ ManualphiAIntegrandAllLimitsShift[
 (* Integrand with p limits from aperture *)
 
 
-pminApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] :=
+pminApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] :=
 Module[
 	{plocal}, 
- 	NSolve[xOff + xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], plocal][[All, 1, 2]]
+ 	NSolve[xOff + xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YRxBShift, XDetShift, YDetShift}], plocal][[All, 1, 2]]
 ]
       
       
-pminApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+pminApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
 Module[
-  {pmin = Cases[pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], _?(# \[Element] Reals && 0. <= # <= 2*pmax &)]},
+  {pmin = Cases[pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}], _?(# \[Element] Reals && 0. <= # <= 2*pmax &)]},
   Piecewise[
    {
     {0, Length[pmin] == 0},
@@ -201,7 +195,7 @@ Module[
     		"pmin: Length =",
     		Length[pmin],
     		pmin,phiA," ",th0," ",phiDet," ",
-    		pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]
+    		pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]
     	], 
     	Length[pmin]>1(*Length[pmin]!=1 && Length[pmin]!=0*) 
     }
@@ -211,16 +205,16 @@ Module[
  
 ]
   
-pmaxApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] :=
+pmaxApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_,YRxBShift_, XDetShift_, YDetShift_}] :=
 	Module[
 		{plocal}, 
- 		NSolve[xOff - xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], plocal][[All, 1, 2]]
+ 		NSolve[xOff - xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YRxBShift, XDetShift, YDetShift}], plocal][[All, 1, 2]]
 	]
 
 
-pmaxApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+pmaxApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
 Module[
-  {pmaxx =Cases[pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}], _?(# \[Element] Reals && 0. <= # <= 2*pmax &)]},
+  {pmaxx =Cases[pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}], _?(# \[Element] Reals && 0. <= # <= 2*pmax &)]},
   
   Piecewise[
    {
@@ -229,7 +223,7 @@ Module[
     {pmaxx[[1]], Length[pmaxx] == 1},
     {	
     	Print["pmax: Length =",Length[pmaxx],pmaxx,phiA," ",th0," ",phiDet," ",
-    		pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]
+    		pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]
     	],
     	Length[pmaxx]>1(*Length[pmaxx]!=1 && Length[pmaxx]!=0*) 
     }
@@ -241,14 +235,14 @@ Module[
   
   
 pLimitsApertXListShift[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,
-	{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
 (*pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA] =*)
 Module[
   {
-   pminXmPi = pminApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}],
-   pminX0 = pminApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}],
-   pmaxXmPi = pmaxApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}],
-   pmaxX0 = pmaxApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}],
+   pminXmPi = pminApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+   pminX0 = pminApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+   pmaxXmPi = pmaxApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+   pmaxX0 = pmaxApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
    plimitlist
    },
 	plimitlist=Union[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}];
@@ -299,30 +293,30 @@ Module[
 (* 2 step-Integration *)
 
 pXDomainShift[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,
-	{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}]:=
-{p,Sequence@@pLimitsApertXListShift[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]}
+	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}]:=
+{p,Sequence@@pLimitsApertXListShift[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]}
 
 
 Step1IntShift[b_, yD_, xD_, {phiDet_?NumericQ, th0_?NumericQ}, 
-	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_},{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}, 
+	{alpha_, BRxB_, rRxB_, rA_, rD_, R_, G1_, G2_},{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_},
 	method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_]:=
 	NIntegrate[
 		ManualphiAIntegrandAllLimitsShift[b, yD, xD, {phiDV, phiDet, p, th0}, 
-			{alpha, BRxB, rRxB, rA, rD, R, G1, G2}, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}],
-		Evaluate[pXDomainShift[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}]],
+			{alpha, BRxB, rRxB, rA, rD, R, G1, G2}, {XAShift, YAShift, YRxBShift, XDetShift, YDetShift}, {twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff}],
+		Evaluate[pXDomainShift[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]],
 		{phiDV,-Pi,Pi},
 		Method->method1,PrecisionGoal->PrecGoal1,AccuracyGoal->AccGoal1, MinRecursion->MinRec1, MaxRecursion->MaxRec1	
 ]
 
 
-Step2IntShift[b_, xD_?NumericQ,yD_?NumericQ, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_},{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}, 
+Step2IntShift[b_, xD_?NumericQ,yD_?NumericQ, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_},{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
 	{xAA_, yAA_, xOff_, yOff_}, method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_, method2_,PrecGoal2_,AccGoal2_,MinRec2_,MaxRec2_]:=
 
 		NIntegrate[
 		Step1IntShift[b, yD, xD, {phiDet, th0}, 
-			{alpha, BRxB, rRxB, rA, rD, R, G1, G2}, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}, 
+			{alpha, BRxB, rRxB, rA, rD, R, G1, G2}, {XAShift, YAShift, YRxBShift, XDetShift, YDetShift}, 
 			{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
 			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1],
 			{th0,0.,thetamax[rF]},{phiDet,-Pi,Pi},Method->method2,PrecisionGoal->PrecGoal2,AccuracyGoal->AccGoal2,MinRecursion->MinRec2, MaxRecursion->MaxRec2		
@@ -332,7 +326,7 @@ Step2IntShift[b_, xD_?NumericQ,yD_?NumericQ, {alpha_, BRxB_, rF_, rRxB_, rA_, rD
 (* ::Section:: *)
 (* Add xD and yD integration *)
 
-BinIntShift[b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_},{XAShift_, YAShift_, XRxBShift_, YRxBShift_, XDetShift_, YDetShift_}, 
+BinIntShift[b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_},{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
 	{xAA_, yAA_, xOff_, yOff_}, 
 	{method1_,PrecGoal1_,AccGoal1_,MinRec1_,MaxRec1_}, 
@@ -340,7 +334,7 @@ BinIntShift[b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_}
 	{method3_,PrecGoal3_,AccGoal3_,MinRec3_,MaxRec3_}]:=
 	NIntegrate[
 		
-		Step2IntShift[b, xD, yD, {alpha, BRxB, rF, rRxB, rA, rD, R, G1, G2}, {XAShift, YAShift, XRxBShift, YRxBShift, XDetShift, YDetShift}, 
+		Step2IntShift[b, xD, yD, {alpha, BRxB, rF, rRxB, rA, rD, R, G1, G2}, {XAShift, YAShift, YRxBShift, XDetShift, YDetShift}, 
 			{twx, plx, k1x, k2x, k3x, twy, ply, k1y, k2y, k3y}, {xAA, yAA, xOff, yOff},
 			method1,PrecGoal1,AccGoal1,MinRec1,MaxRec1,method2,PrecGoal2,AccGoal2,MinRec2,MaxRec2],
 			
@@ -349,38 +343,4 @@ BinIntShift[b_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, R_, G1_, G2_}
 	]
 
 
-(* ::Section:: *)
-(* Try to make at least a 4D or even 6D integration, maybe quicker solution *)
-
-(*First we need to adopt the p limits so that we can explicity write the boundaries in the code. fixed length of 4 values*)
-
-(*pLimitsApertXList2[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_]:=Module[
-	{plimitsX=pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],length},
-	length=Length[plimitsX];
-	Which[
-		length==4,plimitsX,
-		length <4,plimitsX
-	]
-]*)
-		
-(*actually no, we just need to remove Union, and do Order again, because then, always 4 solutions*)
-pLimitsApertXList2[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_] := 
-(*pLimitsApertXList[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA] =*)
-Module[
-  {
-   pminXmPi = pminApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   pminX0 = pminApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   pmaxXmPi = pmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   plimitlist
-   },
-	plimitlist=Sort[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}];
-	If[Length[plimitlist]<4,Print["plimits smaller 4"]];
-	plimitlist
-] 		
-		
-pXDomain2[yD_, xD_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_]:=
-{p,Sequence@@pLimitsApertXList2[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA]}		
-		
-		
      
