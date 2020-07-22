@@ -11,7 +11,7 @@ Get["NeutronBeam/NeutronBeamDefinition.m"];
 Get["Aperture/BooleApert.m"];
    
    
-   
+charge= -1;   
    
 xGCAShift[xDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, XAShift_] := (xDV - rG[p, th0, BRxB/rRxB]*Cos[phiDV])*Sqrt[1/rA] + XAShift
 yGCAShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_] := (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV])*Sqrt[1/rA] + YAShift
@@ -24,7 +24,7 @@ DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R
 
 (
 	(xD - rG[p, th0, rD*BRxB/rRxB]*Cos[phiDet] - XDetShift)*Sqrt[rD/rRxB] -
-   	D1stBPolyGrad[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, YRxBShift], R, G1, G2]
+   	charge*D1stBPolyGrad[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, YRxBShift], R, G1, G2]
 )*Sqrt[rRxB] + rG[p, th0, BRxB/rRxB]*Cos[phiDV]
    
    
