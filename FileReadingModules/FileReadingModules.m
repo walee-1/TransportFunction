@@ -1,5 +1,7 @@
-Get["easeFunctions.m"];
-Get["commonTables.m"];
+(* ::Package:: *)
+
+Get["FileReadingModules/easeFunctions.m"];
+Get["FileReadingModules/commonTables.m"];
 
 depthCutOffMod[array_] := 
  Module[{energy = {}, depth = {}}, 
@@ -20,6 +22,29 @@ backscatteringReaderMod[fileName_, numberIons_] :=
     dataFile[[Position[dataFile, "Backscattered"][[1, 1]], 4]]; 
    backscatPercentage = totalBackscat/numberIons; 
    Return[{totalBackscat, backscatPercentage}]];
+   
+   rangeReadingMod[fileName_, headerLines_: 24, germanGuard_: False] := 
+ Module[{dataFile, depth, len, decDelimiter}, 
+  decDelimiter = If[germanGuard, ",", "."]; 
+  dataFile = 
+   Import[fileName, "Table", HeaderLines -> headerLines, 
+    NumberPoint -> decDelimiter]; 
+  If[NumericQ[Check[dataFile[[dataFile // Length, 2]], False]], 
+   len = dataFile // Length, len = (dataFile // Length) - 1];
+  depth = Table[dataFile[[i, 2]], {i, 1, len}];
+  Return[{dataFile, depth}]]
+  
+  BSJoinerMod[fileName1_, fileName2_] := 
+ Block[{joinedList, list1, list2, totalIons, totalBS, BSPercent},
+  list1 = fileReadingModNew2[fileName1];
+  list2 = fileReadingModNew2[fileName2];
+  totalIons = list1[[5]] + list2[[5]];
+  totalBS = (list1[[3]] + list2[[3]]);
+  BSPercent = totalBS/totalIons;
+  joinedList = {Join[list1[[1]], list2[[1]]], BSPercent, totalBS, 
+    list1[[4]], totalIons};
+  Return[joinedList]
+  ]
 
 fileReadingModNew2[fileName_, numberIons_] := 
  Block[{dataFile, totalBackscat, backscatPercentage, len, col, 
