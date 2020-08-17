@@ -10,13 +10,19 @@ fReduced[th0_,
 
 D1stSimple[p_, alpha_, B_, th0_, rRxB_] := 
  p*alpha/c/B*fReduced[th0, rRxB]
- 
+
+DY[p_,alpha_,BRxB_,th0_,rRxB_,R_]:=2*D1stSimple[p, alpha, th0, BRxB, rRxB]^2/Pi^2/R
  
  D1stBPoly[p_, alpha_, BRxB_, th0_, rRxB_, y0_, R0_] := 
  p*alpha/c*fReduced[th0, rRxB]/Bpolynom[y0, BRxB, R0]
 
 D1stBPolyGrad[p_, alpha_, th0_, BRxB_, rRxB_, y0_, R_, G1_, G2_] := 
  p*alpha/c*fReduced[th0, rRxB]/BpolynomGrad[y0, BRxB, R, G1, G2]
+ 
+ 
+DxBPolyGradRx[p_, alpha_, th0_, BRxB_, rRxB_, y0_, R_, G1_, G2_] := 
+ D1stBPolyGrad[p, alpha, th0, BRxB, rRxB, y0, R, G1, G2]*ArcTan[D1stSimple[p,alpha,BRxB,th0,rRxB]/R]*R/D1stSimple[p,alpha,BRxB,th0,rRxB]
+ 
  
  
  DriftPolywrGWg[p_?NumericQ, alpha_?NumericQ, th0_?NumericQ, 

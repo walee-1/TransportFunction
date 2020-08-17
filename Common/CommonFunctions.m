@@ -4,6 +4,8 @@ Get["Common/Constants.m"];
 
 Eofp[p_] := Sqrt[me^2 + p^2]
 
+Tofpe[p_] := Eofp[p] - me
+
 TofPClassical[p_] := p^2/(2*mp);
 
 pofT[T_, m_] := Sqrt[T^2 + 2*T*m]
