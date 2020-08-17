@@ -80,3 +80,15 @@ scTicks[start_, end_, step_, power_] :=
  Table[{i*10^power, 
    Style[ToString[i] <> "\[Times]\!\(\*SuperscriptBox[\(10\), \(" <> 
      ToString[power] <> "\)]\)"]}, {i, start, end, step}]
+     
+     imageWrite[var_, path_: imgDir] := 
+  Block[{}, Export[path <> var <> ".png", ToExpression[var]]; 
+   Export[path <> var <> ".svg", ToExpression[var]];];
+
+texWrite[var_, path_: writeDir] := 
+  Export[path <> var <> ".tex", ToExpression[var]];
+  
+  SetOptions[ListLogLogPlot, ImageSize -> 800, Frame -> True, 
+  GridLines -> Automatic, 
+  LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
+  FrameStyle -> Thick, FrameTicksStyle -> Thick];
