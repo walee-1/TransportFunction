@@ -4,7 +4,7 @@ Get["Common/Constants.m"];
 
 Eofp[p_] := Sqrt[me^2 + p^2]
 
-Tofpe[p_] := Eofp[p] - me
+Tofpe[p_] = Eofp[p] - me
 
 TofPClassical[p_] := p^2/(2*mp);
 
@@ -13,9 +13,9 @@ pofTClassic[T_, m_] := Sqrt[2*T*m]
 
 thetamax[rB1_] := ArcSin[Sqrt[1/rB1]]
 
-rG[p_, th2_, B_] := p*Sin[th2]/c/B
+rG[p_, th2_, B_] = p*Sin[th2]/c/B
 
-theta2[th0_, rB2_] := ArcSin[Sin[th0]*Sqrt[rB2]]
+theta2[th0_, rB2_] = ArcSin[Sin[th0]*Sqrt[rB2]]
 
 Chi2FitandPlot::usage = "Takes a drift distance data1, a variation of data2 (for 1 varying parameter b),
 	 a list of values of varied parameter b and optionally plot options.

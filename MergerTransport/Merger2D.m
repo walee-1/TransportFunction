@@ -6,42 +6,57 @@ Get["Common/CommonFunctions.m"];
 Get["NeutronBeam/NeutronBeamDefinition.m"];
 Get["Aperture/BooleApert.m"];
 Get["Spectra/Backscattering.m"];
-   
+
+
+Print["Sub-modules loaded ..."]
+
 charge= -1;   
-BackScatterBoole = True;
+BackScatterBoole = False;
    
-xGCAShift[xDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, XAShift_] := (xDV - rG[p, th0, BRxB/rRxB]*Cos[phiDV])*Sqrt[1/rA] + XAShift
-yGCAShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_] := (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV])*Sqrt[1/rA] + YAShift
-yRxBGCShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, YRxBShift_]:= (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV]) *Sqrt[1/rRxB] + YRxBShift  
+xGCAShift[xDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, XAShift_] = (xDV - rG[p, th0, BRxB/rRxB]*Cos[phiDV])*Sqrt[1/rA] + XAShift
+yGCAShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_] = (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV])*Sqrt[1/rA] + YAShift
+yRxBGCShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, YRxBShift_] = (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV]) *Sqrt[1/rRxB] + YRxBShift  
   
-DeltayDVShift[phiDV_, yD_, p_,alpha_, th0_, BRxB_, rRxB_, rD_, phiDet_, YDetShift_,R_] := 
+DeltayDVShift[phiDV_, yD_, p_,alpha_, th0_, BRxB_, rRxB_, rD_, phiDet_, YDetShift_,R_] = 
 (	
-	(yD - rG[p, th0, rD*BRxB/rRxB]*Sin[phiDet] - YDetShift)*Sqrt[rD/rRxB] -
-	DY[p,alpha,BRxB,th0,rRxB,R]
+	(yD - rG[p, th0, rD*BRxB/rRxB]*Sin[phiDet] - YDetShift)*Sqrt[rD/rRxB]-
+	DYSimple[p,alpha,BRxB,th0,rRxB,R]
 )*Sqrt[rRxB] + rG[p, th0, BRxB/rRxB]*Sin[phiDV]
 
-DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, YRxBShift_, XDetShift_] := 
+DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, YRxBShift_, XDetShift_] = 
 
 (
 	(xD - rG[p, th0, rD*BRxB/rRxB]*Cos[phiDet] - XDetShift)*Sqrt[rD/rRxB] -
-   	charge*DxBPolyGradRx[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, YRxBShift], R, G1, G2]
+	charge*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, YRxBShift], G1, G2,YRxBShift]
+   	(*DxBPolyGradRx[p, alpha, th0, BRxB, rRxB, yRxBGCShift[yDV, phiDV, p, th0, BRxB, rRxB, YRxBShift], R, G1, G2, charge, YRxBShift]*)
 )*Sqrt[rRxB] + rG[p, th0, BRxB/rRxB]*Cos[phiDV]
    
    
-DeltaxDV2Shift[phiDV_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, {YRxBShift_, XDetShift_, YDetShift_}] := 
+DeltaxDV2Shift[phiDV_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, {YRxBShift_, XDetShift_, YDetShift_}] = 
  	DeltaxDVShift[phiDV, 
   		DeltayDVShift[phiDV, yD, p, alpha, th0, BRxB, rRxB, rD, phiDet, YDetShift, R],
   		xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, YRxBShift, XDetShift
   	]
+
+xGCAShift2[yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, {XAShift_, YRxBShift_, XDetShift_, YDetShift_}] =
+	xGCAShift[
+ 		DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, {YRxBShift, XDetShift, YDetShift}], 
+ 		phiDV, p, th0, BRxB, rRxB, rA, XAShift
+ 	]
+ 	
+yGCAShift2[yD_, p_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YDetShift_, R_] =
+	yGCAShift[
+ 		DeltayDVShift[phiDV, yD, p, alpha, th0, BRxB, rRxB, rD, phiDet, YDetShift, R], 
+ 		phiDV, p, th0, BRxB, rRxB, rA, YAShift
+ 	]
    
-   
-xAShift[phiA_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, {XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+xAShift[phiA_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, {XAShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
  	xGCAShift[
  		DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, {YRxBShift, XDetShift, YDetShift}], 
  		phiDV, p, th0, BRxB, rRxB, rA, XAShift
  	] + rG[p, th0, rA*BRxB/rRxB]*Cos[phiA]
   
-yAShift[phiA_, yD_, p_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YDetShift_, R_] := 
+yAShift[phiA_, yD_, p_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YDetShift_, R_] = 
  	yGCAShift[
  		DeltayDVShift[phiDV, yD, p, alpha, th0, BRxB, rRxB, rD, phiDet, YDetShift, R], 
  		phiDV, p, th0, BRxB, rRxB, rA, YAShift
@@ -53,12 +68,13 @@ yAShift[phiA_, yD_, p_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_,
 (*Compiled Integrand*)
 
 If[BackScatterBoole,
+	
 	Integrand2DwNBeamCompiledShiftRxBS[
 	b_, yD_, xD_, {phiDV_?NumericQ, phiA_?NumericQ, phiDet_?NumericQ, p_?NumericQ, th0_?NumericQ}, {alpha_, BRxB_, rRxB_, rA_,rD_, R_, G1_, G2_},
 	{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] :=
  
- wmomNormedWb[\[Lambda]0, \[Kappa]0, b, p]*Sin[th0]*(1-bsFuncElectron[theta2[th0,rD], Tofpe[p]])*
+ wmomNormedWb[\[Lambda]0, \[Kappa]0, b, p]*Sin[th0]*(1-bsFuncElectron2[p, th0, rD])*
   
   TrapezNBeamCompiledNormed[
    DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, {YRxBShift, XDetShift, YDetShift}]-xOff, {twx, plx, k1x, k2x, k3x}]*
@@ -69,6 +85,8 @@ If[BackScatterBoole,
    xAShift[phiA, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], 
    yAShift[phiA, yD, p, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], 
    	xAA, yAA, xOff, yOff],
+   	
+   	
    	Integrand2DwNBeamCompiledShiftRxBS[
 	b_, yD_, xD_, {phiDV_?NumericQ, phiA_?NumericQ, phiDet_?NumericQ, p_?NumericQ, th0_?NumericQ}, {alpha_, BRxB_, rRxB_, rA_,rD_, R_, G1_, G2_},
 	{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
@@ -94,10 +112,18 @@ If[BackScatterBoole,
 
 
 phiAminApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
-  Solve[xOff + xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2, 1, 1]];
+	ArcCos[(xOff + xAA/2 - 
+		xGCAShift2[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}]
+		)/rG[plocal, th0, rA*BRxB/rRxB]]
+  (*Solve[xOff + xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2]];*)
 phiAmaxApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] = 
-   Solve[xOff - xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2, 1, 1]];
+   ArcCos[(
+   	xOff - xAA/2 - 
+   	xGCAShift2[yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}]
+   	)/rG[plocal, th0, rA*BRxB/rRxB]]
+   (*Solve[xOff - xAA/2 == xAShift[phiAlocal, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], phiAlocal][[All, 1, 2]];*)
 
+Print["PhiAX limits solved ..."]
 
 (*phiACases[yD_?NumericQ, xD_?NumericQ, plocal_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_] :=
  {phiA,
@@ -129,11 +155,17 @@ phiAmaxApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDe
 (*phiA limits from Y Aperture*)
 
 phiAminApertfromYShift[yD_, plocal_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_, R_] = 
- Solve[yOff + yAA/2 == yAShift[phiAlocal, yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+	ArcSin[(yOff + yAA/2 - yGCAShift2[yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R])/rG[plocal, th0, rA*BRxB/rRxB]]
+ (*Solve[yOff + yAA/2 == yAShift[phiAlocal, yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], phiAlocal][[All, 1, 2]]*)
  
 phiAmaxApertfromYShift[yD_, plocal_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_,R_] = 
- Solve[yOff - yAA/2 == yAShift[phiAlocal, yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+ ArcSin[(yOff - yAA/2 - yGCAShift2[yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R])/rG[plocal, th0, rA*BRxB/rRxB]]
+ (*Solve[yOff - yAA/2 == yAShift[phiAlocal, yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], phiAlocal][[All, 1, 2]]*)
 
+Print["PhiAY limits solved ..."]
+  
+  
+  
   
 (*new manual phiA integration with all phi limits*)
 ManualphiAIntegrandAllLimitsShift[
@@ -149,7 +181,7 @@ ManualphiAIntegrandAllLimitsShift[
 			IntValues, philimitlist, philimitlistSorted, Deltalimits, phiCenters, Integrated
 		},
   		
-  		philimitlist = Flatten[{-Pi//N, phimin, phimax, phiminY, phimaxY, Pi//N}];
+  		philimitlist = (*Flatten[*){-Pi//N, phimin, phimax,-phimin, -phimax(*also minus because ArcCos and negative both true*), phiminY, phimaxY, Pi//N}(*]*);
 		philimitlist = If[# > Pi, # - 2 Pi, #] & /@ philimitlist;
 		philimitlistSorted = Union[philimitlist];
 		Deltalimits = Table[philimitlistSorted[[i + 1]] - philimitlistSorted[[i]], {i, 1, Length[philimitlistSorted] - 1}];
@@ -169,22 +201,30 @@ ManualphiAIntegrandAllLimitsShift[
 (* Integrand with p limits from aperture *)
 
 
-pminApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] :=
+pminApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,
+	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] :=
 Module[
 	{plocal}, 
- 	NSolve[xOff + xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YRxBShift, XDetShift, YDetShift}], plocal][[All, 1, 2]]
+ 	NSolve[xOff + xAA/2 == 
+ 		xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YRxBShift, XDetShift, YDetShift}],
+ 		plocal,Reals][[All, 1, 2]]
 ]
       
       
-pminApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+pminApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,
+	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
 Module[
-  {pmin = Cases[pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}], _?(# \[Element] Reals && 0. <= # <= 2*pmax &)]},
+  {
+  	pmin = Cases[
+  	pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+  	 _?( 0. <= # <= 2*pmax &)]
+  	 },
   Piecewise[
    {
-    {0, Length[pmin] == 0},
     {pmax, Length[pmin] == 1 && pmin[[1]] > pmax},
     {pmax, Length[pmin] == 2 && pmin[[1]] > pmax && pmin[[2]] > pmax},
     {pmin[[1]], Length[pmin] == 1},
+    {0, Length[pmin] == 0},
     {
     	Print[
     		"pmin: Length =",
@@ -195,28 +235,33 @@ Module[
     	Length[pmin]>1(*Length[pmin]!=1 && Length[pmin]!=0*) 
     }
     },
-    Print["pmin: other Case"]
+    Print["pmin: other Case",pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]]
    ]
- 
 ]
   
-pmaxApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,{XAShift_,YRxBShift_, XDetShift_, YDetShift_}] :=
+  
+pmaxApertShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, G1_, G2_, xOff_, xAA_,
+	{XAShift_,YRxBShift_, XDetShift_, YDetShift_}] :=
 	Module[
 		{plocal}, 
- 		NSolve[xOff - xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YRxBShift, XDetShift, YDetShift}], plocal][[All, 1, 2]]
+ 		NSolve[xOff - xAA/2 == xAShift[phiA, yD, xD, plocal, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1,G2, {XAShift, YRxBShift, XDetShift, YDetShift}], plocal,Reals][[All, 1, 2]]
 	]
 
 
-pmaxApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
+pmaxApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, xOff_, xAA_,
+	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
 Module[
-  {pmaxx =Cases[pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}], _?(# \[Element] Reals && 0. <= # <= 2*pmax &)]},
+  {
+  	pmaxx =Cases[
+  		pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+  		 _?(0. <= # <= 2*pmax &)]},
   
   Piecewise[
    {
-    {pmax, Length[pmaxx] == 0},
     {pmax, Length[pmaxx] == 1 && pmaxx[[1]] > pmax},
     {pmax, Length[pmaxx] == 2 && pmaxx[[1]] > pmax && pmaxx[[2]] > pmax},
     {pmaxx[[1]], Length[pmaxx] == 1},
+    {pmax, Length[pmaxx] == 0},
     {	
     	Print["pmax: Length =",Length[pmaxx],pmaxx,phiA," ",th0," ",phiDet," ",
     		pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]
