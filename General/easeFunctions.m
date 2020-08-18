@@ -1,4 +1,8 @@
 (* Wolfram Language package *)
+Get["General/PathSettings.m"]
+Get["General/Colors.m"]
+
+saveFile[] := NotebookSave@EvaluationNotebook[];
 
   rebinningMod[list_, binsRebin_] := 
  Block[{binLength, retList, remainderBins, remainderList}, 
@@ -11,7 +15,7 @@
       Length[list], binsRebin}], 
    retList = 
     Table[{Sum[list[[i + j, 1]], {j, 0, binsRebin - 1}]/binsRebin, 
-      Sum[list[[i + j, 2]], {j, 0, binsRebin - 1}]}, {i, 1, 
+      Sum[list[[i + j, 2]], {j, 0, binsReabin - 1}]}, {i, 1, 
       Length[list] - remainderBins, binsRebin}]; 
    remainderList = 
     Join[list[[-remainderBins ;;]], 
@@ -34,19 +38,14 @@ saveFile[] := NotebookSave@EvaluationNotebook[];
  percent/Sqrt[(percent*TotalNumber)]
  
  relErrCalc[valEXP_, valOrig_] := (valEXP - valOrig)/valOrig
- 
- Which[$OperatingSystem == "Unix", TwoTbDir = "/home/waleed/TwoTb/"; 
-  FourTbDir = "/home/waleed/FourTb/"; 
-  imgDir = "/home/waleed/Desktop/Images/"; 
-  writeDir = FourTbDir <> "Tex_Mathematica/", $OperatingSystem == 
-   "Windows", TwoTbDir = "D:/"; FourTbDir = "F:/"; 
-  imgDir = "C:\\Users\\Waleed\\Desktop\\Images\\"; 
-  writeDir = FourTbDir <> "Tex_Mathematica/"];
   
-  
-  imageWrite[var_, path_: imgDir] := 
-  Block[{}, Export[path <> var <> ".png", ToExpression[var]]; 
-   Export[path <> var <> ".svg", ToExpression[var]];];
+SetAttributes[imageWrite, HoldFirst];
+imageWrite[var_, file_: 0 path_: imgDir] := 
+  Block[{varName, fileName}, varName = SymbolName[Unevaluated@var];
+   If[Evaluate[file] == 0, fileName = varName,fileName=file];
+   Export[path <> fileName <> ".png", ToExpression[varName]];
+   Export[path <> fileName <> ".svg", ToExpression[varName]];];
+
 
    
    texWrite[var_, path_: writeDir] := 
@@ -80,10 +79,6 @@ scTicks[start_, end_, step_, power_] :=
  Table[{i*10^power, 
    Style[ToString[i] <> "\[Times]\!\(\*SuperscriptBox[\(10\), \(" <> 
      ToString[power] <> "\)]\)"]}, {i, start, end, step}]
-     
-     imageWrite[var_, path_: imgDir] := 
-  Block[{}, Export[path <> var <> ".png", ToExpression[var]]; 
-   Export[path <> var <> ".svg", ToExpression[var]];];
 
 texWrite[var_, path_: writeDir] := 
   Export[path <> var <> ".tex", ToExpression[var]];

@@ -1,7 +1,6 @@
 (* Wolfram Language Raw Program *)
 Get["FileReadingModules/FileReadingModules.m"]
-Get["General/PathSettings.m"]
-Get["General/PlotStyles.m"]
+
 
 cceFormula[z_?NumericQ, gamma_?NumericQ, tau_?NumericQ] := 
  1 - gamma*Exp[-z/tau]
@@ -47,8 +46,8 @@ cceModImsil[list_, gammaVal_: gammaVals[[2]], tauVal_: tauVals[[2]],
   len = Length[list[[2]]];
   cceTable = 
    Table[list[[2, i]]/
-      3.6*(cceFormula[list[[1, i]], gammaVal, tauVal] + 
-        cceFormula[list[[1, i + 1]], gammaVal, tauVal])/2, {i, len}];
+      3.6*(cceFormula[list[[1, i]]/10, gammaVal, tauVal] + 
+        cceFormula[list[[1, i + 1]]/10, gammaVal, tauVal])/2, {i, len}];
   Return[{list[[1]], cceTable}];
   ]
 
@@ -62,7 +61,7 @@ histogramModImsil[list_, binSize_] :=
   Return[{histogramList, plotList}];
   ]
 
-effiencyModImsil[histoList_, noIons_: 1000] := 
+effiencyModImsil[histoList_, noIons_: 50000] := 
  Block[{len, binsWoPedes, signalWoPedes, resBinX, resBinY, effRes, 
    undetectRes},
   binsWoPedes = histoList[[2 ;; All, 1]];
@@ -71,7 +70,7 @@ effiencyModImsil[histoList_, noIons_: 1000] :=
   resBinY = 
    Table[Sum[signalWoPedes[[j]], {j, i, len}]/noIons, {i, 1, len}];
   resBinX = binsWoPedes;
-  effRes = Transpose[{Reverse[resBinX], resBinY}];
+  effRes = Transpose[{resBinX, resBinY}];
   undetectRes = Transpose[{resBinX, 100.*(1 - resBinY)}];
   Return[{effRes, undetectRes}];
   ]

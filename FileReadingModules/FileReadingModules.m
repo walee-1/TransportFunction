@@ -1,7 +1,8 @@
 (* ::Package:: *)
 
-Get["FileReadingModules/easeFunctions.m"];
+Get["General/easeFunctions.m"];
 Get["FileReadingModules/commonTables.m"];
+
 
 depthCutOffMod[array_] := 
  Module[{energy = {}, depth = {}}, 
@@ -85,17 +86,7 @@ fileReadingModNew2[fileName_, numberIons_] :=
       "Cos(Y)"}, {9, "Cos(Z)"}}];
   Return[{dataFile, backscatPercentage, totalBackscat, key}]]
 
-rangeReadingMod[fileName_, headerLines_: 24, 
-  germanGuard_: False] := 
- Module[{dataFile, depth, len, decDelimiter}, 
-  decDelimiter = If[germanGuard, ",", "."]; 
-  dataFile = 
-   Import[fileName, "Table", HeaderLines -> headerLines, 
-    NumberPoint -> decDelimiter]; 
-  If[NumericQ[Check[dataFile[[dataFile // Length, 2]], False]], 
-   len = dataFile // Length, len = (dataFile // Length) - 1];
-  depth = Table[dataFile[[i, 2]], {i, 1, len}];
-  Return[{dataFile, depth}]]
+
 
 transmissionFileReadingMod[fileName_, numberIons_] := 
  Module[{dataFile, energy, depth, transmitPercentage, len, 
