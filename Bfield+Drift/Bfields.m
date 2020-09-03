@@ -5,7 +5,14 @@ Get["Common/CommonFunctions.m"];
 Bpolynom[y0_, B0_, R0_] := 3*B0 - 3*B0*(R0+y0)/R0 + B0*(R0+y0)^2/R0^2
 BpolynomGrad[y0_, BRxB_, R_, G1_, G2_] := 
  BRxB - G1*BRxB/R*(y0) + G2*BRxB/R^2*(y0)^2
-
+ 
+ 
+BpolynomGradwoR[yRxBGC_, YRxBShift_, BRxB_, G1_, G2_] = 
+ BRxB* (1 - G1*(yRxBGC-YRxBShift) + G2*(yRxBGC-YRxBShift)^2 ) 
+ 
+ 
+(* old stuff *) 
+(*
 B1overr[y0_, B0_, R_] := B0*R/y0
 B1overrWgW\[CapitalDelta]G[B0_, R0_, y0_, \[CapitalDelta]G1_] := 
  B0*R0/y0 + \[CapitalDelta]G1*B0/R0*(y0 - R0)
@@ -69,7 +76,7 @@ BPolygLimitsWg[p_, th2_, B0_, R_, G1_, G2_, y0_] =
     
     BBarPolyWg::usage="Gyration Mean B-field of polynomial form  with arguments: p_?NumericQ, th2_?NumericQ, B_?NumericQ, R_?NumericQ, 
   G1_?NumericQ, G2_?NumericQ, y0_?NumericQ"; 
-  
+  *)
   
      
     

@@ -9,7 +9,9 @@ Get["Bfield+Drift/Drifts.m"];
 Get["Common/CommonFunctions.m"];
 Get["NeutronBeam/NeutronBeamDefinition.m"];
 Get["Aperture/BooleApert.m"];
-   
+
+
+DY[p_,alpha_,BRxB_,th0_,rRxB_,R_]:=2*D1stSimple[p, alpha, th0, BRxB, rRxB]^2/Pi^2/R
    
 charge= -1;   
    
@@ -17,8 +19,11 @@ xGCAShift[xDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, XAShift_] := (xDV - rG[p, t
 yGCAShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_] := (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV])*Sqrt[1/rA] + YAShift
 yRxBGCShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, YRxBShift_]:= (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV]) *Sqrt[1/rRxB] + YRxBShift  
   
-DeltayDVShift[phiDV_, yD_, p_, th0_, BRxB_, rRxB_, rD_, phiDet_, YDetShift_] := 
-	(yD - rG[p, th0, rD*BRxB/rRxB]*Sin[phiDet] - YDetShift)*Sqrt[rD] + rG[p, th0, BRxB/rRxB]*Sin[phiDV]
+DeltayDVShift[phiDV_, yD_, p_,alpha_, th0_, BRxB_, rRxB_, rD_, phiDet_, YDetShift_,R_] := 
+(	
+	(yD - rG[p, th0, rD*BRxB/rRxB]*Sin[phiDet] - YDetShift)*Sqrt[rD/rRxB] -
+	DY[p,alpha,BRxB,th0,rRxB,R]
+)*Sqrt[rRxB] + rG[p, th0, BRxB/rRxB]*Sin[phiDV]
 
 DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, YRxBShift_, XDetShift_] := 
 
@@ -30,7 +35,7 @@ DeltaxDVShift[phiDV_, yDV_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R
    
 DeltaxDV2Shift[phiDV_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rD_, phiDet_, R_, G1_, G2_, {YRxBShift_, XDetShift_, YDetShift_}] := 
  	DeltaxDVShift[phiDV, 
-  		DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rD, phiDet, YDetShift],
+  		DeltayDVShift[phiDV, yD, p, alpha, th0, BRxB, rRxB, rD, phiDet, YDetShift, R],
   		xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, YRxBShift, XDetShift
   	]
    
@@ -41,9 +46,9 @@ xAShift[phiA_, yD_, xD_, p_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_, R_, 
  		phiDV, p, th0, BRxB, rRxB, rA, XAShift
  	] + rG[p, th0, rA*BRxB/rRxB]*Cos[phiA]
   
-yAShift[phiA_, yD_, p_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YDetShift_] := 
+yAShift[phiA_, yD_, p_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, YAShift_, YDetShift_, R_] := 
  	yGCAShift[
- 		DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rD, phiDet, YDetShift], 
+ 		DeltayDVShift[phiDV, yD, p, alpha, th0, BRxB, rRxB, rD, phiDet, YDetShift, R], 
  		phiDV, p, th0, BRxB, rRxB, rA, YAShift
  	] + rG[p, th0, rA*BRxB/rRxB]*Sin[phiA]
    
@@ -84,11 +89,11 @@ Integrand2DwNBeamCompiledShift[
   TrapezNBeamCompiledNormed[
    DeltaxDV2Shift[phiDV, yD, xD, p, th0, alpha, BRxB, rRxB, rD, phiDet, R, G1, G2, {YRxBShift, XDetShift, YDetShift}]-xOff, {twx, plx, k1x, k2x, k3x}]*
   TrapezNBeamCompiledNormed[
-   DeltayDVShift[phiDV, yD, p, th0, BRxB, rRxB, rD, phiDet, YDetShift]-yOff, {twy, ply,k1y, k2y, k3y}]*
+   DeltayDVShift[phiDV, yD, p, alpha, th0, BRxB, rRxB, rD, phiDet, YDetShift, R]-yOff, {twy, ply,k1y, k2y, k3y}]*
   
   ApertBooleCompiled[
    xAShift[phiA, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], 
-   yAShift[phiA, yD, p, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift], 
+   yAShift[phiA, yD, p, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], 
    	xAA, yAA, xOff, yOff]  
 
 
@@ -134,11 +139,11 @@ phiAmaxApertShift[yD_, xD_, plocal_, th0_, alpha_, BRxB_, rRxB_, rA_, rD_, phiDe
 
 (*phiA limits from Y Aperture*)
 
-phiAminApertfromYShift[yD_, plocal_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_] = 
- Solve[yOff + yAA/2 == yAShift[phiAlocal, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+phiAminApertfromYShift[yD_, plocal_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_, R_] = 
+ Solve[yOff + yAA/2 == yAShift[phiAlocal, yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
  
-phiAmaxApertfromYShift[yD_, plocal_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_] = 
- Solve[yOff - yAA/2 == yAShift[phiAlocal, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
+phiAmaxApertfromYShift[yD_, plocal_, alpha_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_, YAShift_, YDetShift_,R_] = 
+ Solve[yOff - yAA/2 == yAShift[phiAlocal, yD, plocal, alpha, th0, BRxB, rRxB, rA, rD, phiDet, YAShift, YDetShift, R], phiAlocal][[All, 1, 2, 1, 1 ;; -2]]
 
   
 (*new manual phiA integration with all phi limits*)
@@ -150,8 +155,8 @@ ManualphiAIntegrandAllLimitsShift[
   		{
   			phimin = Re[phiAminApertShift[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]],
   			phimax = Re[phiAmaxApertShift[yD, xD, If[p==0.,0.00000001,p], th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]], 
-  			phiminY = Re[phiAminApertfromYShift[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YDetShift]], 
-  			phimaxY = Re[phiAmaxApertfromYShift[yD, If[p==0.,0.00000001,p], th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YDetShift]],
+  			phiminY = Re[phiAminApertfromYShift[yD, If[p==0.,0.00000001,p], alpha, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YDetShift, R]], 
+  			phimaxY = Re[phiAmaxApertfromYShift[yD, If[p==0.,0.00000001,p], alpha, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA, YAShift, YDetShift, R]],
 			IntValues, philimitlist, philimitlistSorted, Deltalimits, phiCenters, Integrated
 		},
   		
@@ -189,6 +194,7 @@ Module[
    {
     {0, Length[pmin] == 0},
     {pmax, Length[pmin] == 1 && pmin[[1]] > pmax},
+    {pmax, Length[pmin] == 2 && pmin[[1]] > pmax && pmin[[2]] > pmax},
     {pmin[[1]], Length[pmin] == 1},
     {
     	Print[
@@ -220,6 +226,7 @@ Module[
    {
     {pmax, Length[pmaxx] == 0},
     {pmax, Length[pmaxx] == 1 && pmaxx[[1]] > pmax},
+    {pmax, Length[pmaxx] == 2 && pmaxx[[1]] > pmax && pmaxx[[2]] > pmax},
     {pmaxx[[1]], Length[pmaxx] == 1},
     {	
     	Print["pmax: Length =",Length[pmaxx],pmaxx,phiA," ",th0," ",phiDet," ",

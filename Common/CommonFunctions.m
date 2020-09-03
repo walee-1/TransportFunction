@@ -4,6 +4,8 @@ Get["Common/Constants.m"];
 
 Eofp[p_] := Sqrt[me^2 + p^2]
 
+Tofpe[p_] = Eofp[p] - me
+
 TofPClassical[p_] := p^2/(2*mp);
 
 pofT[T_, m_] := Sqrt[T^2 + 2*T*m]
@@ -11,9 +13,9 @@ pofTClassic[T_, m_] := Sqrt[2*T*m]
 
 thetamax[rB1_] := ArcSin[Sqrt[1/rB1]]
 
-rG[p_, th2_, B_] := p*Sin[th2]/c/B
+rG[p_, th2_, B_] = p*Sin[th2]/c/B
 
-theta2[th0_, rB2_] := ArcSin[Sin[th0]*Sqrt[rB2]]
+theta2[th0_, rB2_] = ArcSin[Sin[th0]*Sqrt[rB2]]
 
 Chi2FitandPlot::usage = "Takes a drift distance data1, a variation of data2 (for 1 varying parameter b),
 	 a list of values of varied parameter b and optionally plot options.
@@ -63,3 +65,36 @@ Module[
   	]
   }
 ]
+
+
+
+TransferToMCParableFit[MCData_, TransferDataList_, ParaList_] := 
+ Module[
+  {N = Total[MCData], NonZeroPos, MCDataNormed, SigmaNormed, TransferDataListNormed, Chi2List, dChi2List, errorplotdata, fitresult, fitfunc},
+  NonZeroPos=Flatten[Position[MCData,_?(#!=0&)],1];
+  MCDataNormed = MCData[[NonZeroPos]]/N;
+  SigmaNormed = Sqrt[MCData[[NonZeroPos]]]/N;
+  TransferDataListNormed = ((#/Total[#])[[NonZeroPos]]) &/@ TransferDataList;
+  Chi2List = Table[Total[(MCDataNormed - TransferDataListNormed[[b]])^2/SigmaNormed^2]/(Length[NonZeroPos-1]), {b, 1, Length[ParaList]}];
+  dChi2List = Table[2*Sqrt[Total[(MCDataNormed - TransferDataListNormed[[b]])^2/SigmaNormed^2]]/(Length[NonZeroPos-1]), {b, 1, Length[ParaList]}];
+  errorplotdata = Transpose[{ParaList, Table[Around[Chi2List[[b]], dChi2List[[b]]], {b, 1, Length[ParaList]}]}];
+  fitfunc[x_, x0_, f_, g_] := f + g*(x - x0)^2; 
+  fitresult = 
+   NonlinearModelFit[
+    Transpose[{ParaList, Chi2List}],
+    {fitfunc[b, b0, yoffset, scale], -0.01 < b0 < 0.01 && 0.00001 < scale < 100 && 0. < yoffset < Max[Chi2List]}, 
+    {{b0, -0.001}, {scale, 0.0005}, {yoffset, Min[Chi2List]}}, b,
+    Method -> "NMinimize", Weights -> 1/dChi2List^2, VarianceEstimatorFunction -> (1 &)];
+  {
+  	{Chi2List,dChi2List},
+   {{"b0 = ", fitresult["BestFitParameters"][[1, 2]]}, fitresult, 
+     fitresult["ParameterTable"], fitresult["ANOVATable"]} // 
+    TableForm,
+   Show[
+     ListPlot[errorplotdata,PlotRange->{{-0.005,0.005},Automatic}],
+     Plot[fitresult[b], {b, -0.003, 0.003}, PlotStyle -> Red]
+     
+   
+    ]
+   }
+  ]
