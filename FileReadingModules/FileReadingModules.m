@@ -48,8 +48,8 @@ backscatteringReaderMod[fileName_, numberIons_] :=
   ]
 
 fileReadingModNew2[fileName_, numberIons_] := 
- Block[{dataFile, totalBackscat, backscatPercentage, len, col, 
-   decDelimiter, bLength, dataFileBefore, dataFileAfter, key, 
+ Block[{dataFile, numberIons2, totalBackscat, backscatPercentage, len,
+    col, decDelimiter, bLength, dataFileBefore, dataFileAfter, key, 
    germanGuard, char},
   If[StringContainsQ[fileName, "BACK"] || 
     StringContainsQ[fileName, "Back"] || 
@@ -73,6 +73,7 @@ fileReadingModNew2[fileName_, numberIons_] :=
        StringReplace[char -> ""][
         dataFile[[bLength + 1 ;; All, 1]]]]];
   dataFile = Join[dataFileBefore, dataFileAfter];
+  numberIons2 = Round[dataFile[[Length[dataFile]]][[1]], 10000];
   backscatPercentage = len/numberIons;
   totalBackscat = len;
   If[char == "B", 
@@ -84,7 +85,55 @@ fileReadingModNew2[fileName_, numberIons_] :=
       "energy at leaving (ev)"}, {4, "xPos when decl. BS(A)"}, {5, 
       "lateralY (A)"}, {6, "lateralZ (A)"}, {7, "Cos(X)"}, {8, 
       "Cos(Y)"}, {9, "Cos(Z)"}}];
-  Return[{dataFile, backscatPercentage, totalBackscat, key}]]
+  Return[{dataFile, backscatPercentage, totalBackscat, key, 
+    numberIons}]]
+fileReadingModNew2[fileName_] := 
+ Block[{dataFile, numberIons, totalBackscat, backscatPercentage, len, 
+   rangeString, decDelimiter, bLength, dataFileBefore, dataFileAfter, 
+   key, germanGuard, char},
+  If[StringContainsQ[fileName, "BACK"] || 
+    StringContainsQ[fileName, "Back"] || 
+    StringContainsQ[fileName, "back"], char = "B", char = "T"];
+  Which[char == "B", 
+   rangeString = StringReplace[fileName, "BACKSCAT" -> "RANGE_3D"], 
+   char == "T", 
+   rangeString = StringReplace[fileName, "TRANSMIT" -> "RANGE_3D"], 
+   True, Print["Wrong File given"]; Return[]];
+  dataFile = OpenRead[fileName];
+  germanGuard = 
+   StringContainsQ[Table[ReadLine[dataFile], {i, 13}][[13]], ","];
+  Close[dataFile]; Clear[dataFile];
+  decDelimiter = If[germanGuard, ",", "."];
+  dataFile = 
+   Import[fileName, "Table", HeaderLines -> 12, 
+    NumberPoint -> decDelimiter];
+  len = dataFile // Length;
+  bLength = Length[Position[dataFile, char]];
+  dataFileBefore = 
+   Delete[dataFile[[1 ;; bLength]], Position[dataFile, char]];
+  dataFileAfter = 
+   Transpose@
+    ReplacePart[Transpose[dataFile[[bLength + 1 ;; All]]], 
+     1 -> ToExpression[
+       StringReplace[char -> ""][
+        dataFile[[bLength + 1 ;; All, 1]]]]];
+  dataFile = Join[dataFileBefore, dataFileAfter];
+  numberIons = 
+   ToExpression[
+    StringSplit[Import[rangeString, {"Data", -Range[1]}]][[1]]];
+  backscatPercentage = len/numberIons;
+  totalBackscat = len;
+  If[char == "B", 
+   key = {{1, "ionNo"}, {2, "AtomNo"}, {3, 
+      "energy at leaving (ev)"}, {4, " -sign"}, {5, 
+      "xPos when decl. BS(A)"}, {6, "lateralY (A)"}, {7, 
+      "lateralZ (A)"}, {8, "Cos(X)"}, {9, "Cos(Y)"}, {10, "Cos(Z)"}}, 
+   key = {{1, "ionNo"}, {2, "AtomNo"}, {3, 
+      "energy at leaving (ev)"}, {4, "xPos when decl. BS(A)"}, {5, 
+      "lateralY (A)"}, {6, "lateralZ (A)"}, {7, "Cos(X)"}, {8, 
+      "Cos(Y)"}, {9, "Cos(Z)"}}];
+  Return[{dataFile, backscatPercentage, totalBackscat, key, 
+    numberIons}]]
 
 
 

@@ -51,6 +51,23 @@ cceModImsil[list_, gammaVal_: gammaVals[[2]], tauVal_: tauVals[[2]],
   Return[{list[[1]], cceTable}];
   ]
 
+avgEhpairDepthModImsil[list_, totalIons_] := 
+ Block[{maxBin, binWidth, binsX, binsY, pos, plotTable},
+  maxBin = Max[list[[All, 1]]];
+  binWidth = list[[1, 1, 2]] - list[[1, 1, 1]];
+  binsX = Table[i, {i, 0, maxBin, binWidth}];
+  binsY = Table[0, {i, 1, Length[binsX] - 1}];
+  Do[
+   Do[binsY[[j]] = binsY[[j]] + list[[i, 2, j]]
+    , {j, Length[list[[i, 2]]]}]
+   , {i, Length[list]}];
+  binsY = binsY/totalIons;
+  plotTable = 
+   Table[{(binsX[[i + 1]] + binsX[[i]])/2/10, binsY[[i]]}, {i, 
+     Length[binsY]}];
+  Return[{plotTable}]
+  ]
+
 histogramModImsil[list_, binSize_] := 
  Block[{histogramList, plotList, totalSignal},
   totalSignal = Table[Total[list[[i, 2]]], {i, Length[list]}];
