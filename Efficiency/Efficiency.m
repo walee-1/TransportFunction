@@ -79,18 +79,25 @@ histogramModImsil[list_, binSize_] :=
   ]
 
 effiencyModImsil[histoList_, noIons_: 50000] := 
- Block[{len, binsWoPedes, signalWoPedes, resBinX, resBinY, effRes, 
-   undetectRes},
-  binsWoPedes = histoList[[2 ;; All, 1]];
+ Block[{len, binsWoPedes, signalWoPedes, resBinX, resBinY, errBinY, 
+   effRes, effResErr, undetectRes, errSignal, resBinYwErr, 
+   undtctResWErr}, binsWoPedes = histoList[[2 ;; All, 1]];
   signalWoPedes = histoList[[2 ;; All, 2]];
+  errSignal = 
+   Table[Sqrt[signalWoPedes[[i]]], {i, Length[signalWoPedes]}];
   len = Length[signalWoPedes];
   resBinY = 
    Table[Sum[signalWoPedes[[j]], {j, i, len}]/noIons, {i, 1, len}];
+  errBinY = 
+   Sqrt[Table[Sum[errSignal[[j]]^2, {j, i, len}], {i, 1, len}]]/noIons;
   resBinX = binsWoPedes;
   effRes = Transpose[{resBinX, resBinY}];
+  resBinYwErr = 
+   Table[Around[resBinY[[i]], errBinY[[i]]], {i, Length[resBinY]}];
+  effResErr = Transpose[{resBinX, resBinYwErr}];
   undetectRes = Transpose[{resBinX, 100.*(1 - resBinY)}];
-  Return[{effRes, undetectRes}];
-  ]
+  undtctResWErr = Transpose[{resBinX, 100.*(1 - resBinYwErr)}];
+  Return[{effRes, undetectRes, effResErr, undtctResWErr, errBinY}];]
   
   imsilTrajWriterFunc[listName_, windowA_: 150] := 
  Block[{trajData, ionData, fileNameSplit, en, ang, runNo, 
@@ -147,3 +154,22 @@ another naming format"]]
   Return[data];
   ]
   
+  
+  totalWStatErr[list_] := 
+ Block[{var}, var = Total[list]; Return[{var, Sqrt[var]}]]
+
+histogramModImsilErr[list_, binSize_] := 
+ Block[{histogramList, plotList, totalSignal, hlErr, plotListErr}, 
+  totalSignal = 
+   Table[totalWStatErr[list[[i, 2]]], {i, Length[list]}];
+  histogramList = HistogramList[totalSignal[[All, 1]], {binSize}];
+  hlErr = 
+   Table[Sqrt[histogramList[[2, i]]], {i, Length[histogramList[[2]]]}];
+  plotList = 
+   Table[{(histogramList[[1, i]] + histogramList[[1, i + 1]])/2, 
+     histogramList[[2, i]]}, {i, Length[histogramList[[2]]]}];
+  plotListErr = 
+   Table[{(histogramList[[1, i]] + histogramList[[1, i + 1]])/2, 
+     Around[histogramList[[2, i]], hlErr[[i]]]}, {i, 
+     Length[histogramList[[2]]]}];
+  Return[{histogramList, plotList, plotListErr, totalSignal, hlErr}];]
