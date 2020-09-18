@@ -5,7 +5,8 @@ jet[u_?NumericQ] :=
       Yellow}, {47/63, Orange}, {55/63, Red}, {1, 
      RGBColor[1/2, 0, 0]}}, u] /; 0 <= u <= 1
 
-
+ClearAll[MPLColorMap]
+<< "http://pastebin.com/raw/pFsb4ZBS";
 
 viridis = 
   Module[{colorlist}, 
