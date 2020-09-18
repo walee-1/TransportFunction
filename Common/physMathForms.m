@@ -18,10 +18,39 @@ Arguments:
 	h, k, l = miller indices of the crystal
 	a = distance between two crystal planes, a is set to the default value of 0.543 nm (Si)"
 
+gamma[beta_] := 1/(Sqrt[1 - beta^2])
+
+gamma::usage = "calculates the gamma factor from beta
+Arguments:
+	Beta = beta factor"
+
 betaCalc[mass_,ke_]:=Sqrt[1-mass^2/(mass+ke)^2]
+
+etotProton[beta_]:=mp/Sqrt[1 - beta^2]
+
+etotProton::usage = "Calculates the total energy of a proton from a given beta
+Arguments:
+	beta = beta factor"
 
 betaCalc::usage = "betaCalc[mass_,ke_] calculates the beta factor for a given mass and ke."
 
+
+PofKEelectron[ke_] := Sqrt[(ke + me)^2 - me^2]*10^-6
+
+PofKEelectron::usage = "Gives the momentum of an electron from its kinetic energy
+Argument:
+	KE= Kinetic energy of an electron in keV"
+
+highlander[x_, X0_, b_, p_] := 
+ 13.6/(b*p)*Sqrt[x/X0]*(1 + 0.038 Log[x/X0])
+ 
+highlander::usage = "Gives the multiscattering angle of electron calculated from highlander formula
+Arguments:
+	x = Distance travelled by particle
+	X0 = Radiation Length
+	b = beta factor of  particle
+	p = momentum of particle
+"
 errorBarMod[prob_, totalN_] := 
  100/totalN*
   Sqrt[totalN*

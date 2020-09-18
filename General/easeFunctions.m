@@ -30,12 +30,16 @@ saveFile[] := NotebookSave@EvaluationNotebook[];
 
 
 SetAttributes[imageWrite, HoldFirst];
-imageWrite[var_, file_: 0 path_: imgDir] := 
+imageWrite[var_, file_: 0 ,path_: imgDir] := 
   Block[{varName, fileName}, varName = SymbolName[Unevaluated@var];
    If[Evaluate[file] == 0, fileName = varName,fileName=file];
    Export[path <> fileName <> ".png", ToExpression[varName]];
    Export[path <> fileName <> ".svg", ToExpression[varName]];];
-
+imageWrite::usage = "Writes images to the imgDir folder in svg and png formats
+Arguments:
+	var = Variable name (without strings)
+	file = File name, by default it is the variable name
+	path = if you want a different path than imgDir"
 
    
    texWrite[var_, path_: writeDir] := 
