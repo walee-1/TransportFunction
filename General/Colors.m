@@ -8,6 +8,11 @@ jet[u_?NumericQ] :=
 ClearAll[MPLColorMap]
 << "http://pastebin.com/raw/pFsb4ZBS";
 
+MPLColorMap::usage = "Color maps
+Usage: MPLColorMap[\"Argument\"]
+Arguments:
+Magma, Inferno, Plasma, Viridis, EricsRdBuGnYl, EricsRdBuGnYl2, EricsPuBuGnYl, FakeParula, JoesBluGrnPnk2"
+
 viridis = 
   Module[{colorlist}, 
    colorlist = {{0.26700401, 0.00487433, 0.32941519}, {0.26851048, 
