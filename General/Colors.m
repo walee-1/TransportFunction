@@ -4,6 +4,9 @@ jet[u_?NumericQ] :=
  Blend[{{0, RGBColor[0, 0, 9/16]}, {1/9, Blue}, {23/63, Cyan}, {13/21,
       Yellow}, {47/63, Orange}, {55/63, Red}, {1, 
      RGBColor[1/2, 0, 0]}}, u] /; 0 <= u <= 1
+     
+JetCM = With[{colorlist = RGBColor @@@ jetColors}, 
+   Blend[colorlist, #] &];
 
 ClearAll[MPLColorMap]
 << "http://pastebin.com/raw/pFsb4ZBS";

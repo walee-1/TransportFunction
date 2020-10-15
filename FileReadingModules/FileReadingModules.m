@@ -45,7 +45,35 @@ backscatteringReaderMod[fileName_, numberIons_] :=
   joinedList = {Join[list1[[1]], list2[[1]]], BSPercent, totalBS, 
     list1[[4]], totalIons};
   Return[joinedList]
+  ](*deprecated MOD, use srimMultiRunImporterInstead*)
+  
+  
+BSJoinerMod::usage="Deprecated Mod, please use srimMultiRunImporter instead as it can handle everything with far more ease"  
+
+srimMultiRunImporter[loc_] := 
+ Block[{runNo, runTable, totalIons, totalBs, BSPercent, finalList},
+  runNo = StringSplit[#, {"/"}][[-1]] & /@ FileNames["Run*", loc];
+  Which[Length[runNo] > 1,
+   runTable = 
+    Table[fileReadingModNew2[loc <> i <> "/BACKSCAT.txt"], {i, runNo}];
+   totalIons = Total[runTable[[All, 5]]];
+   totalBs = Total[runTable[[All, 3]]];
+   BSPercent = totalBs/totalIons;
+   finalList = {Flatten[runTable[[All, 1]], 1], BSPercent, 
+      totalBs, runTable[[1, 4]], totalIons};,
+   Length[runNo] == 1, 
+   finalList = 
+     fileReadingModNew2[loc <> runNo[[1]] <> "/BACKSCAT.txt"];,True,
+   Return[Print["There are no Run folders at the location"]];
+   ];
+  Return[finalList];
   ]
+
+srimMultiRunImporter::usage="srimMultiRunImporter[location] loads SRIM Backscattering files for all possible runs for a specific energy and angle and combines them.
+	Parameters:
+		Location is the location of the run folders. The folders have to start with Run*.
+	Also works for single runs, so just overall better SRIM backscattering file reader function"
+
 
 fileReadingModNew2[fileName_, numberIons_] := 
  Block[{dataFile, numberIons2, totalBackscat, backscatPercentage, len,
@@ -134,7 +162,10 @@ fileReadingModNew2[fileName_] :=
       "Cos(Y)"}, {9, "Cos(Z)"}}];
   Return[{dataFile, backscatPercentage, totalBackscat, key, 
     numberIons}]]
-
+fileReadingModNew2::usage="fileReadingModNew2[filename, totalIons] reads SRIM backscattering or transmitting files and gives the output with {dataFile, BSPercent, totalBS, key, totalIons}
+fileReadingModNew2[filename] reads SRIM backscattering or transmitting files and gives the output with {dataFile, BSPercent, totalBS, key, totalIons}.
+fileReadingModNew2[filename] is the better version but it required the existances of RANGE3D file, otherwise it can't work.
+fileReadingModNew2[filename, totalIons] rounds the ions in BACKSCAT.txt to the nearest 10000, so be careful if the total number of simulated ions were in a different range."
 
 
 transmissionFileReadingMod[fileName_, numberIons_] := 
@@ -151,7 +182,9 @@ transmissionFileReadingMod[fileName_, numberIons_] :=
      dataFile[[i, 4]]], {i, 1, len}];
   transmitPercentage = (dataFile // Length)/numberIons*100;
   totalTransmit = dataFile // Length;
-  Return[{dataFile, energy, depth, transmitPercentage, totalTransmit}]]
+  Return[{dataFile, energy, depth, transmitPercentage, totalTransmit, numberIons}]]
+  
+
 
 exyzReadingMod2[fileName_, germanGuard_: False] := 
  Module[{dataFile, file, data, fileStream}, 
@@ -179,6 +212,11 @@ exyzReadingMod[fileName_, germanGuard_: False] :=
      dataFile[[i, 7]]}, {i, dataFile // Length}];
   data = Gather[file, First[#1] === First[#2] &];
   Return[data]]
+  
+exyzReadingMod::usage = "Better to use exyzReadingMod2[fileName, germanGuard] instead as it uses lower level file handling and as a result less memory intensive"
+exyzReadingMod2::usage = "exyzReadingMod2[fileName, germanGuard] reads the EXYZ file from SRIM and gives it in the form of a list.
+Default value of germanGuard is False and should only be set to True if the delimiter for the numbers is a \",\"".
+
 
 mdRangeModule[fileName_] := Block[{list, listNormed},
   list = Import[fileName, "Table"];
