@@ -215,7 +215,7 @@ exyzReadingMod[fileName_, germanGuard_: False] :=
   
 exyzReadingMod::usage = "Better to use exyzReadingMod2[fileName, germanGuard] instead as it uses lower level file handling and as a result less memory intensive"
 exyzReadingMod2::usage = "exyzReadingMod2[fileName, germanGuard] reads the EXYZ file from SRIM and gives it in the form of a list.
-Default value of germanGuard is False and should only be set to True if the delimiter for the numbers is a \",\"".
+Default value of germanGuard is False and should only be set to True if the delimiter for the numbers is a \",\""
 
 
 mdRangeModule[fileName_] := Block[{list, listNormed},
