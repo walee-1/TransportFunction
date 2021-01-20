@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Wolfram Language Raw Program *)
 Get["FileReadingModules/FileReadingModules.m"]
 
@@ -121,12 +123,18 @@ effiencyModImsil[histoList_, noIons_: 50000] :=
   Clear[trajData, ionData];
   Return[outputFile];
   ]
-
+ClearAll[imsilTrajImportMod]
 imsilTrajImportMod[enSrchStr_, 
   dir_: FourTbDir <> "MD_Simulations/IMSIL/For_Paper/pLGAD_Paper/"] :=
   Block[{locFileLocation, fileNames}, If[StringQ[enSrchStr],
    locFileLocation = FileNames["*En" <> enSrchStr <> "p*.mx", dir];
+   
+   Which[$OperatingSystem=="Windows",
    fileNames = StringSplit[#, {"/", ".mx"}][[-1]] & /@ locFileLocation;
+   fileNames=StringSplit[#, {"\\", ".mx"}][[-1]] & /@ fileNames,
+   $OperatingSystem=="Unix",
+   fileNames = StringSplit[#, {"/", ".mx"}][[-1]] & /@ locFileLocation;
+   ];
    fileNames = StringDelete[#, "."] & /@ fileNames;
    Table[If[! ListQ[ToExpression[fileNames[[i]]]],
      With[{\[FormalS] = Symbol[fileNames[[i]]]}, \[FormalS] = 
