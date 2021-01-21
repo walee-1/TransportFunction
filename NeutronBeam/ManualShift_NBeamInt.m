@@ -1,14 +1,12 @@
 (* Wolfram Language package *)
-
-
-
-(* Wolfram Language package *)
 Get["Spectra/ElectronSpectrum.m"];
 Get["Bfield+Drift/Bfields.m"]
 Get["Bfield+Drift/Drifts.m"];
 Get["Common/CommonFunctions.m"];
 Get["NeutronBeam/NeutronBeamDefinition.m"];
 Get["Aperture/BooleApert.m"];
+   
+   
    
    
 charge= -1;   

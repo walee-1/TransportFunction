@@ -18,13 +18,13 @@ DYSimple[p_,alpha_,BRxB_,th0_,rRxB_,R_]:=2*D1stSimple[p, alpha, th0, BRxB, rRxB]
 D1stBPolyGrad[p_, alpha_, th0_, BRxB_, rRxB_, y0_, R_, G1_, G2_] := 
  p*alpha/c*fReduced[th0, rRxB]/BpolynomGrad[y0, BRxB, R, G1, G2]
 
-D1stBPolyGradwoR[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, G1_, G2_,YRxBShift_] = 
- p*alpha/c*fReduced[th0, rRxB]/BpolynomGradwoR[yRxBGC,YRxBShift, BRxB, G1, G2]
+D1stBPolyGradwoR[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, G1_, G2_,YRxBShift_] := 
+ p*alpha/c*fReduced[th0, rRxB]/BpolynomGradwoR[yRxBGC,YRxBShift, BRxB, G1, G2];
  
-DxBPolyGradRx[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] = 
+DxBPolyGradRx[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] := 
  (R+yRxBGC)*ArcTan[q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift]/(R+yRxBGC)]
 
-DxBPolyGradRxApprox[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] = 
+DxBPolyGradRxApprox[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] := 
  (
  q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift]
  -(q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift])^3/(R+yRxBGC)^2 /3.

@@ -7,7 +7,7 @@ BpolynomGrad[y0_, BRxB_, R_, G1_, G2_] :=
  BRxB - G1*BRxB/R*(y0) + G2*BRxB/R^2*(y0)^2
  
  
-BpolynomGradwoR[yRxBGC_, YRxBShift_, BRxB_, G1_, G2_] = 
+BpolynomGradwoR[yRxBGC_, YRxBShift_, BRxB_, G1_, G2_] := 
  BRxB* (1 - G1*(yRxBGC-YRxBShift) + G2*(yRxBGC-YRxBShift)^2 ) 
  
  
