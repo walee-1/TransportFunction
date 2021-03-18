@@ -1,5 +1,7 @@
 (* Wolfram Language package *)
 
+SetDirectory["~/eclipse-workspace/TransportProject/"];
+
 Get["NeutronBeam/ManualShift_NBeamInt.m"];
 
 {{MeanX, MeanY}, {ApertX, ApertY}, {BDV}, {BF}, {BA}, {BRxB}, {BDet}}={{0.0301277, 1.00623}, {0.01, 
@@ -83,6 +85,6 @@ BinwYShiftPrec44OriginalBinsb0NewBGrad =
      ]] &, XYBinBoundariesOriginal[[1 ;; 2]], 
   Method -> "FinestGrained"];
   
-Export["testTransferCluster.txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
+Export["ClusterScripts/testTransferCluster.txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
   
 

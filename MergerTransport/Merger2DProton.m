@@ -16,7 +16,8 @@ SetSystemOptions["CacheOptions" -> "Symbolic" -> "Cache" -> False];
 $HistoryLength=0;*)
 
 charge= 1;   
-(*BackScatterBoole = False;*)
+
+BackScatterBoole = False;
    
 xGCAShift[xDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, XAShift_] := (xDV - rG[p, th0, BRxB/rRxB]*Cos[phiDV])*Sqrt[1/rA] + XAShift
 yGCAShift[yDV_, phiDV_, p_, th0_, BRxB_, rRxB_, rA_, YAShift_] := (yDV - rG[p, th0, BRxB/rRxB]*Sin[phiDV])*Sqrt[1/rA] + YAShift
@@ -236,12 +237,12 @@ Block[
   {
   	pmin = Cases[
   	pminApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
-  	 _?( -2*pmax <= # <= 2*pmax &)]
+  	 _?( -2*ppmax <= # <= 2*ppmax &)]
   	 },
   Piecewise[
    {
     {Print["pmin >2"], Length[pmin] > 2},
-    {Which[#<0,0.,#>pmax,pmax,True,#]&/@pmin, Length[pmin] <= 2}(*,
+    {Which[#<0,0.,#>ppmax,ppmax,True,#]&/@pmin, Length[pmin] <= 2}(*,
     {
     	Print[
     		"pmin: Length > 2",
@@ -267,22 +268,22 @@ pmaxApertCasesShift[phiA_?NumericQ, yD_?NumericQ, xD_?NumericQ, th0_, alpha_, BR
 	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}] := 
 Block[
   {
-  	pmaxx =Cases[
+  	ppmaxx =Cases[
   		pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
-  		 _?(-2*pmax <= # <= 2*pmax &)]},
+  		 _?(-2*ppmax <= # <= 2*ppmax &)]},
   
   Piecewise[
    {
-   	{Print["pmax >2"], Length[pmaxx] > 2},
-    {Which[#<0,0.,#>pmax,pmax,True,#]&/@pmaxx, Length[pmaxx] <= 2}(*,
+   	{Print["ppmax >2"], Length[ppmaxx] > 2},
+    {Which[#<0,0.,#>ppmax,ppmax,True,#]&/@ppmaxx, Length[ppmaxx] <= 2}(*,
     {	
-    	Print["pmax: Length > 2",Length[pmaxx],pmaxx,phiA," ",th0," ",phiDet," ",
-    		pmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]
+    	Print["ppmax: Length > 2",Length[ppmaxx],ppmaxx,phiA," ",th0," ",phiDet," ",
+    		ppmaxApertShift[phiA, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]
     	],
-    	Length[pmaxx]>2(*Length[pmaxx]!=1 && Length[pmaxx]!=0*) 
+    	Length[ppmaxx]>2(*Length[ppmaxx]!=1 && Length[ppmaxx]!=0*) 
     }*)
     },
-    Print["pmax: other case"]
+    Print["ppmax: other case"]
    ]
 
   ]
@@ -295,11 +296,11 @@ Block[
   {
    pminXmPi = pminApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
    pminX0 = pminApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
-   pmaxXmPi = pmaxApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
-   pmaxX0 = pmaxApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+   ppmaxXmPi = pmaxApertCasesShift[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
+   ppmaxX0 = pmaxApertCasesShift[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}],
    plimitlist
    },
-	plimitlist=Union[Flatten[{pminXmPi, pminX0, pmaxXmPi, pmaxX0}]];
+	plimitlist=Union[Flatten[{pminXmPi, pminX0, ppmaxXmPi, ppmaxX0}]];
 	Which[
 		Length[plimitlist]==1,Join[plimitlist,plimitlist],
 		True,plimitlist
@@ -314,19 +315,19 @@ Block[
 (*pminApertY[phiA_, yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] =
  Module[{plocal}, Solve[yOff + yAA/2 == yA[phiA, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet], plocal, Reals][[1, 1, 2, 1]]]
  
-pmaxApertY[phiA_, yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] =
+ppmaxApertY[phiA_, yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] =
 Module[{plocal}, Solve[yOff - yAA/2 == yA[phiA, yD, plocal, th0, BRxB, rRxB, rA, rD, phiDet], plocal][[1, 1, 2]]]
 
 pminApertYCases[yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] := Module[
   {phiAlocal = If[yD > yAA/2 + yOff, -Pi/2, Pi/2], pminlocal},
   pminlocal = pminApertY[phiAlocal, yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA];
-  Piecewise[{{pminlocal, 0. < pminlocal < pmax}}, 0.]
+  Piecewise[{{pminlocal, 0. < pminlocal < ppmax}}, 0.]
   ]
 
-pmaxApertYCases[yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] := Module[
-  {phiAlocal = If[yD < -yAA/2 + yOff, Pi/2, -Pi/2], pmaxlocal},
-  pmaxlocal = pmaxApertY[phiAlocal, yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA];
-  Piecewise[{{pmaxlocal, 0. < pmaxlocal < pmax}}, 0.]
+ppmaxApertYCases[yD_, th0_, BRxB_, rRxB_, rA_, rD_, phiDet_, yOff_, yAA_] := Module[
+  {phiAlocal = If[yD < -yAA/2 + yOff, Pi/2, -Pi/2], ppmaxlocal},
+  ppmaxlocal = ppmaxApertY[phiAlocal, yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA];
+  Piecewise[{{ppmaxlocal, 0. < ppmaxlocal < ppmax}}, 0.]
   ]
 
 pLimitsApertAllList[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, R_, G1_, G2_, {xAA_, xOff_,yAA_, yOff_}] := 
@@ -334,12 +335,12 @@ Module[
   {
    pminXmPi = pminApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
    pminX0 = pminApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   pmaxXmPi = pmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
-   pmaxX0 = pmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   ppmaxXmPi = ppmaxApertCases[-Pi, yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
+   ppmaxX0 = ppmaxApertCases[0., yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, R, G1, G2, xOff, xAA],
    pminY = pminApertYCases[yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA],
-   pmaxY = pmaxApertYCases[yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]
+   ppmaxY = ppmaxApertYCases[yD, th0, BRxB, rRxB, rA, rD, phiDet, yOff, yAA]
    },
- 	Sort[{pminXmPi, pminX0, pmaxXmPi, pmaxX0,pminY,pmaxY}]
+ 	Sort[{pminXmPi, pminX0, ppmaxXmPi, ppmaxX0,pminY,ppmaxY}]
   ]*)
 
 
@@ -398,5 +399,19 @@ BinIntShift[a_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, G1_, G2_},{XA
 	]
 
 
-
+bin2DGen[xStart_, xEnd_, yStart_, yEnd_, binNoX_, binNoY_] := 
+ Block[{binLengthX, binLengthY, binList, binsX, binsY},
+  binLengthX = Round[(xEnd - xStart)/binNoX,10^-6.];
+  binLengthY = Round[(yEnd - yStart)/binNoY,10^-6.];
+  binsX = 
+   Table[{xStart + (i - 1)*binLengthX, xStart + i*binLengthX}, {i, 
+     binNoX}];
+  binsY = 
+   Table[{yStart + (i - 1)*binLengthY, yStart + i*binLengthY}, {i, 
+     binNoY}];
+  binList = 
+   Flatten[Table[{binsX[[i]], binsY[[j]]}, {i, Length[binsX]}, {j, 
+      Length[binsY]}], 1];
+  Return[binList];
+  ]
      

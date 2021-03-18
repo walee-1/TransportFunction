@@ -84,7 +84,7 @@ wmomPiecewise[\[Lambda]_,\[Kappa]_,p_] := Piecewise[{
   
 wmomNorm[\[Lambda]_,\[Kappa]_,b_] := 
  wmomNorm[\[Lambda],\[Kappa],b] = 
-  NIntegrate[(1 + b*me/Eofp[p])*wmom[\[Lambda],\[Kappa],p], {p, 0, pmax}, PrecisionGoal -> 6]
+  NIntegrate[(1 + b*me/Eofp[p])*wmom[\[Lambda],\[Kappa],p], {p, 0, pmax}, PrecisionGoal -> 8]
   
 wmomNormedWb[\[Lambda]_,\[Kappa]_,b_, p_] := (1 + b*me/Eofp[p])*
   wmomPiecewise[\[Lambda],\[Kappa],p]/wmomNorm[\[Lambda],\[Kappa],b]

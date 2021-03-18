@@ -2,8 +2,7 @@
 
 (* ::Section:: *)
 (* Energy *)
-Get["Common/Constants.m"];
-Get["Common/CommonFunctions.m"];
+Get["Common/CommonFunctions.m"]
 
 sigma[T_] := 1 - 2*T*mn/del^2;
 

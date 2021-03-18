@@ -1,0 +1,39 @@
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Set::wrsym: Symbol pmax is Protected.
+Modules loaded ...
+3 Kernels launched ...
+Run started at Mon 7 Sep 2020 10:52:52, Bins: {1, 110}
+b = 0e-4
+Time consumption: 11.530229386666667
+MaxMemUse :142.26309967041016 MB
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Set::wrsym: Symbol pmax is Protected.
+Modules loaded ...
+3 Kernels launched ...
+Run started at Mon 7 Sep 2020 22:24:44, Bins: {111, 128}
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 196, 1], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$56591, SubKernels`LocalKernels`Private`preemptive$56591]], Parallel`Kernels`Private`id$56597, Parallel`Kernels`Private`name$56597], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$56598, Parallel`Kernels`Private`pb$56598, Parallel`Kernels`Private`rd$56598], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$56599, Parallel`Kernels`Private`n0$56599, Parallel`Kernels`Private`n1$56599]]]
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {-0.0107794, 0.0421083}. NIntegrate obtained 0.116586 and 0.00916822 for the integral and error estimates.
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 198, 3], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$56593, SubKernels`LocalKernels`Private`preemptive$56593]], Parallel`Kernels`Private`id$56605, Parallel`Kernels`Private`name$56605], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$56606, Parallel`Kernels`Private`pb$56606, Parallel`Kernels`Private`rd$56606], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$56607, Parallel`Kernels`Private`n0$56607, Parallel`Kernels`Private`n1$56607]]]
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {-0.0153897, -0.00788969}. NIntegrate obtained 1.00675 and 0.00171343 for the integral and error estimates.
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 196, 1], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$56591, SubKernels`LocalKernels`Private`preemptive$56591]], Parallel`Kernels`Private`id$56597, Parallel`Kernels`Private`name$56597], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$56598, Parallel`Kernels`Private`pb$56598, Parallel`Kernels`Private`rd$56598], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$56599, Parallel`Kernels`Private`n0$56599, Parallel`Kernels`Private`n1$56599]]]
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {-0.0128897, 0.0271083}. NIntegrate obtained 0.96666 and 0.00224094 for the integral and error estimates.
+b = 0e-4
+Time consumption: 13.953506631944444
+MaxMemUse :142.89053344726562 MB
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Set::wrsym: Symbol pmax is Protected.
+Modules loaded ...
+3 Kernels launched ...
+Run started at Tue 8 Sep 2020 12:21:54, Bins: {129, 144}
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 198, 3], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$32797, SubKernels`LocalKernels`Private`preemptive$32797]], Parallel`Kernels`Private`id$32809, Parallel`Kernels`Private`name$32809], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$32810, Parallel`Kernels`Private`pb$32810, Parallel`Kernels`Private`rd$32810], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$32811, Parallel`Kernels`Private`n0$32811, Parallel`Kernels`Private`n1$32811]]]
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {-0.0107794, -0.0178897}. NIntegrate obtained 0.250318 and 0.00123559 for the integral and error estimates.
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 197, 2], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$32796, SubKernels`LocalKernels`Private`preemptive$32796]], Parallel`Kernels`Private`id$32805, Parallel`Kernels`Private`name$32805], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$32806, Parallel`Kernels`Private`pb$32806, Parallel`Kernels`Private`rd$32806], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$32807, Parallel`Kernels`Private`n0$32807, Parallel`Kernels`Private`n1$32807]]]
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {-0.00577938, 0.0271083}. NIntegrate obtained 1.09901 and 0.0037228 for the integral and error estimates.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4

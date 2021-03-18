@@ -1,0 +1,7 @@
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Set::wrsym: Symbol pmax is Protected.
+Modules loaded ...
+3 Kernels launched ...
+Run started at Fri 11 Sep 2020 10:47:57, Bins: {1, 110}

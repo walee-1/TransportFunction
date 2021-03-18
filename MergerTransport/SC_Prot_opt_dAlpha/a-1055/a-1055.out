@@ -1,0 +1,22 @@
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P0.m.
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P1.m.
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P2.m.
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P3.m.
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P4.m.
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P5.m.
+
+Get::noopen: Cannot open a-1055/Transfer_08-09-20_SC_Prot_opt_dAlpha_D_a-1055_P6.m.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Modules loaded ...
+6 Kernels launched ...
+Run started at Wed 3 Mar 2021 12:57:43, Bins: {1, 98}
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 218, 5], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$55075, SubKernels`LocalKernels`Private`preemptive$55075]], Parallel`Kernels`Private`id$55096, Parallel`Kernels`Private`name$55096], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$55097, Parallel`Kernels`Private`pb$55097, Parallel`Kernels`Private`rd$55097], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$55098, Parallel`Kernels`Private`n0$55098, Parallel`Kernels`Private`n1$55098]]]
+                                                                                                                                                                                                 -6
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {0.0273052, 0.0217733}. NIntegrate obtained 0.0000104937 and 1.05564 10   for the integral and error estimates.

@@ -7,9 +7,9 @@ SetDirectory["/home/dmoser/eclipse-workspace/TransportProject/"];
 Print["Configured Kernels: ",$ConfiguredKernels];
 Print["Processor Count: ",$ProcessorCount];
 
-b=0.;
+b=-0.00075;
 BackScatterBoole = True;
-Bins = {65 , 96};
+Bins = {161 , 176};
 
 Get["MergerTransport/Merger2D.m"];
 Print["Modules loaded ..."];
@@ -119,7 +119,7 @@ BinwYShiftPrec44OriginalBinsb0NewBGrad =
      {IntMethod, 4, 3, 0, 2}, {IntMethod, 4, 3, 0, 2}, {IntMethod, 3, 3, 0, 1}
      ]] &, XYBinBoundariesYHalf[[Bins[[1]] ;; Bins[[2]]]], 
   Method -> "FinestGrained"];
-  ToInteger
+
 Export["MergerTransport/TransferResult_28-08-20_NC_opt_D_BSOn_dB_b"<>ToString[IntegerPart[b*10000]]<>"_"<>ToString[Bins[[1]]]<>"-"<>ToString[Bins[[2]]]<>".txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
  
 Print["b = ",IntegerPart[b*10000],"e-4"];
