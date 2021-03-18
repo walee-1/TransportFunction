@@ -14,7 +14,6 @@ fi
 
 
 BASEDIR="/home/waleed/Documents/Wolfram_Mathematica/TransportFunction/MergerTransport"
-PARAMETER="a0"
 
 #Paths are cluster/C, work/D, Gertrud/G
 PATHC="/users/waleed.khalid/Mma/"
@@ -37,8 +36,8 @@ KERNELSG=6
 KERNELSC=8
 KERNELSH=4
 #bin array
-lowbins=(1 99 107 123 139 155 179)
-highbins=(98 106 122 138 154 178 264)
+lowbins=(1 50 99 107 123 139 155 179)
+highbins=(49 98 106 122 138 154 178 264)
 # a array
 a=( -0.106 -0.1055 -0.105 -0.1045 -0.104 )
 # filename basis
@@ -120,7 +119,7 @@ do
 	echo "#!/bin/bash" > $SCRIPTFILE
 	echo "#!/bin/bash" > $SLURMMASTERSCRIPT
 	# loop over bin parts
-	for i in {0..6}
+	for i in {0..7}
 	do
         writer_Function "D"
         writer_Function "G"
@@ -142,6 +141,8 @@ do
 	echo "jid6=\$(sbatch --dependency=afterany:\$jid4 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P5.sh)" >> $SLURMMASTERSCRIPT
 	echo "jid6=\`echo \$jid6 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
 	echo "jid7=\$(sbatch --dependency=afterany:\$jid5 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P6.sh)" >> $SLURMMASTERSCRIPT
+	echo "jid7=\`echo \$jid7 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	echo "jid8=\$(sbatch --dependency=afterany:\$jid6 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P7.sh)" >> $SLURMMASTERSCRIPT
 	
 	
 done

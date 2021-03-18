@@ -8,7 +8,7 @@ Print["Processor Count: ",$ProcessorCount];
 (*BackScatterBoole = True;*)
 
 a=-0.1055;
-Bins = {179, 264};
+Bins = {155, 178};
 
 Get["MergerTransport/Merger2DProton.m"];
 Print["Modules loaded ..."];
