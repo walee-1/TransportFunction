@@ -114,6 +114,9 @@ do
 	#create script file for this b
 	SCRIPTFILE="a"${ai[$bindex]}"/"$FILENAME"_a"${ai[$bindex]}"_script.sh"
 	SCRIPTFILEG="a"${ai[$bindex]}"/"$FILENAMEG"_a"${ai[$bindex]}"_script.ps1"
+	if [ -f $SCRIPTFILEG ]; then
+		rm $SCRIPTFILEG
+	fi
 	SCRIPTFILEH="a"${ai[$bindex]}"/"$FILENAMEH"_a"${ai[$bindex]}"_script.sh"
 	SLURMMASTERSCRIPT="a"${ai[$bindex]}"/SlurmMaster.sh"
 	echo "#!/bin/bash" > $SCRIPTFILE
