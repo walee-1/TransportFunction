@@ -75,8 +75,8 @@ writer_Function(){
     then
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEH"_a"${ai[$bindex]}"_P"$i".m"
         TEMPPATH=$PATHH
-        KERNELS=$KERNELSD
-		echo "math -script "$LOCALFILE" >> a"${ai[$bindex]}".out" >> $SCRIPTFILE
+        KERNELS=$KERNELSH
+		echo "math -script "$LOCALFILE" >> a"${ai[$bindex]}".out" >> $SCRIPTFILEH
     elif [[ $option == "G" ]] 
     then
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEG"_a"${ai[$bindex]}"_P"$i".m"
@@ -114,9 +114,10 @@ do
 	#create script file for this b
 	SCRIPTFILE="a"${ai[$bindex]}"/"$FILENAME"_a"${ai[$bindex]}"_script.sh"
 	SCRIPTFILEG="a"${ai[$bindex]}"/"$FILENAMEG"_a"${ai[$bindex]}"_script.ps1"
-#	SCRIPTFILEH="a"${ai[$bindex]}"/"$FILENAMEH"_a"${ai[$bindex]}"_script.ps1"
+	SCRIPTFILEH="a"${ai[$bindex]}"/"$FILENAMEH"_a"${ai[$bindex]}"_script.sh"
 	SLURMMASTERSCRIPT="a"${ai[$bindex]}"/SlurmMaster.sh"
 	echo "#!/bin/bash" > $SCRIPTFILE
+	echo "#!/bin/bash" > $SCRIPTFILEH
 	echo "#!/bin/bash" > $SLURMMASTERSCRIPT
 	# loop over bin parts
 	for i in {0..7}

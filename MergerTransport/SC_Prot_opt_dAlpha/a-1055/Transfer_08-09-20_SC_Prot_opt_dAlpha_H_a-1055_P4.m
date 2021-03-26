@@ -1,19 +1,21 @@
+(* ::Package:: *)
+
 (* Wolfram Language package *)
 t0=AbsoluteTime[];
-SetDirectory["/users/waleed.khalid/Mma/TransferProject/TransportFunction/"];
+SetDirectory["/home/dmoser/Waleed/"];
 
 Print["Configured Kernels: ",$ConfiguredKernels];
 Print["Processor Count: ",$ProcessorCount];
 
 (*BackScatterBoole = True;*)
 
-a=-0.00075;
-Bins = {129 , 128+32+16};
+a=-0.1055;
+Bins = {123, 138};
 
 Get["MergerTransport/Merger2DProton.m"];
 Print["Modules loaded ..."];
 
-kernels=8;
+kernels=4
 LaunchKernels[kernels];
 Print[kernels," Kernels launched ..."];
 
@@ -48,7 +50,7 @@ ky3SC=-0.9;
 xStart=0.025;
 xEnd=0.055;
 yStart=-0.02;
-yEnd=0.025;
+yEnd=0.03;
 xyBins=bin2DGen[xStart,xEnd,yStart,yEnd,24,11];
  
 IntMethod = {"GlobalAdaptive", Method -> "MultidimensionalRule"};
@@ -60,18 +62,17 @@ BinwYShiftPrec44OriginalBinsb0NewBGrad =
   AbsoluteTiming[
     BinIntShift[
      a, #, 
-     {alphaSC, bRxBSC, rFSC, rRxBSC, rASC, rDSC, g1SC, g2SC}, {xAShiftSC, yAShiftSC, yRxBShiftSC, xDShiftSC, yDShiftSC}, 
+     {alphaSC+alphaSC*5*10^-5, bRxBSC, rFSC, rRxBSC, rASC, rDSC, g1SC, g2SC}, {xAShiftSC, yAShiftSC, yRxBShiftSC, xDShiftSC, yDShiftSC}, 
      {wnxSC, pnxSC, kx1SC, kx2SC, kx3SC, wnySC, pnySC, ky1SC, ky2SC, ky3SC}, {xAASC, yAASC, xAOffSC, yAOffSC},
      {IntMethod, 4, 2, 0, 2}, {IntMethod, 4, 2, 0, 2}, {IntMethod, 3, 6, 0, 1}
      ]] &, xyBins[[Bins[[1]] ;; Bins[[2]]]], 
   Method -> "FinestGrained"];
 
-Export["MergerTransport/NC_opt_drF/b"<>ToString[IntegerPart[a*10000]]<>"/TransferResult_08-09-20_NC_opt_C_BSOn_drF_b"<>ToString[IntegerPart[a*10000]]<>"_"<>ToString[Bins[[1]]]<>"-"<>ToString[Bins[[2]]]<>".txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
+Export["MergerTransport/SC_Prot_opt_dAlpha/a"<>ToString[IntegerPart[a*10000]]<>"/TransferResult_08-09-20_SC_opt_H_dAlpha_a"<>ToString[IntegerPart[a*10000]]<>"_"<>ToString[Bins[[1]]]<>"-"<>ToString[Bins[[2]]]<>".txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
  
 Print["a = ",IntegerPart[a*10000],"e-4"];
 Print["Time consumption: ",(AbsoluteTime[]-t0)/3600.];
 Print["MaxMemUse :",MaxMemoryUsed[]/1024/1024.," MB"];
 CloseKernels[];
 Quit[];
-
 

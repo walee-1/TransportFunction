@@ -12,3 +12,5 @@ jid5=`echo $jid5 | cut -d' ' -f 4`
 jid6=$(sbatch --dependency=afterany:$jid4 Slurm_Transfer_08-09-20_SC_Prot_opt_dAlpha_C_a-1050_P5.sh)
 jid6=`echo $jid6 | cut -d' ' -f 4`
 jid7=$(sbatch --dependency=afterany:$jid5 Slurm_Transfer_08-09-20_SC_Prot_opt_dAlpha_C_a-1050_P6.sh)
+jid7=`echo $jid7 | cut -d' ' -f 4`
+jid8=$(sbatch --dependency=afterany:$jid6 Slurm_Transfer_08-09-20_SC_Prot_opt_dAlpha_C_a-1050_P7.sh)

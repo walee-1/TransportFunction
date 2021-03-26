@@ -1,19 +1,19 @@
 (* Wolfram Language package *)
 t0=AbsoluteTime[];
-SetDirectory["/users/waleed.khalid/Mma/TransferProject/TransportFunction/"];
+SetDirectory["/home/dmoser/Waleed/"];
 
 Print["Configured Kernels: ",$ConfiguredKernels];
 Print["Processor Count: ",$ProcessorCount];
 
 (*BackScatterBoole = True;*)
 
-a=-0.00075;
-Bins = {129 , 128+32+16};
+a=-0.106;
+Bins = {139, 154};
 
 Get["MergerTransport/Merger2DProton.m"];
 Print["Modules loaded ..."];
 
-kernels=6;
+kernels=6
 LaunchKernels[kernels];
 Print[kernels," Kernels launched ..."];
 
@@ -66,12 +66,11 @@ BinwYShiftPrec44OriginalBinsb0NewBGrad =
      ]] &, xyBins[[Bins[[1]] ;; Bins[[2]]]], 
   Method -> "FinestGrained"];
 
-Export["MergerTransport/NC_opt_drF/b"<>ToString[IntegerPart[a*10000]]<>"/TransferResult_08-09-20_NC_opt_C_BSOn_drF_b"<>ToString[IntegerPart[a*10000]]<>"_"<>ToString[Bins[[1]]]<>"-"<>ToString[Bins[[2]]]<>".txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
+Export["MergerTransport/SC_Prot_opt_da0/a"<>ToString[IntegerPart[a*10000]]<>"/TransferResult_08-09-20_SC_opt_H_da0_a"<>ToString[IntegerPart[a*10000]]<>"_"<>ToString[Bins[[1]]]<>"-"<>ToString[Bins[[2]]]<>".txt",BinwYShiftPrec44OriginalBinsb0NewBGrad,"Table"];
  
 Print["a = ",IntegerPart[a*10000],"e-4"];
 Print["Time consumption: ",(AbsoluteTime[]-t0)/3600.];
 Print["MaxMemUse :",MaxMemoryUsed[]/1024/1024.," MB"];
 CloseKernels[];
 Quit[];
-
 

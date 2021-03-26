@@ -10,7 +10,7 @@ Print["Processor Count: ",$ProcessorCount];
 (*BackScatterBoole = True;*)
 
 a=-0.1055;
-Bins = {155, 178};
+Bins = {139, 154};
 
 Get["MergerTransport/Merger2DProton.m"];
 Print["Modules loaded ..."];
@@ -50,7 +50,7 @@ ky3SC=-0.9;
 xStart=0.025;
 xEnd=0.055;
 yStart=-0.02;
-yEnd=0.025;
+yEnd=0.03;
 xyBins=bin2DGen[xStart,xEnd,yStart,yEnd,24,11];
  
 IntMethod = {"GlobalAdaptive", Method -> "MultidimensionalRule"};
