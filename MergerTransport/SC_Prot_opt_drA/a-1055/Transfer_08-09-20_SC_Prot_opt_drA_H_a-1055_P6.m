@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Wolfram Language package *)
 t0=AbsoluteTime[];
 SetDirectory["/home/dmoser/Waleed/"];
@@ -13,7 +15,7 @@ Bins = {155, 178};
 Get["MergerTransport/Merger2DProton.m"];
 Print["Modules loaded ..."];
 
-kernels=6
+kernels=4
 LaunchKernels[kernels];
 Print[kernels," Kernels launched ..."];
 
@@ -48,7 +50,7 @@ ky3SC=-0.9;
 xStart=0.025;
 xEnd=0.055;
 yStart=-0.02;
-yEnd=0.025;
+yEnd=0.03;
 xyBins=bin2DGen[xStart,xEnd,yStart,yEnd,24,11];
  
 IntMethod = {"GlobalAdaptive", Method -> "MultidimensionalRule"};

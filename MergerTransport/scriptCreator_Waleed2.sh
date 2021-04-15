@@ -76,7 +76,8 @@ writer_Function(){
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEH"_a"${ai[$bindex]}"_P"$i".m"
         TEMPPATH=$PATHH
         KERNELS=$KERNELSH
-		echo "math -script "$LOCALFILE" >> a"${ai[$bindex]}".out" >> $SCRIPTFILEH
+		LOCALFILEHBACK=$FILENAMEH"_a"${ai[$bindex]}"_P"$i".m"
+		echo "math -script "$LOCALFILEHBACK" >> a"${ai[$bindex]}".out" >> $SCRIPTFILEH
     elif [[ $option == "G" ]] 
     then
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEG"_a"${ai[$bindex]}"_P"$i".m"
