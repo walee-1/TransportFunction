@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Wolfram Language package *)
 
 Get["Spectra/ElectronSpectrum.m"];

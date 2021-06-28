@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Wolfram Language package *)
 Get["General/PathSettings.m"]
 Get["General/Colors.m"]
@@ -46,6 +48,11 @@ Arguments:
   Export[path <> var <> ".tex", ToExpression[var]];
 
 SetOptions[ListPlot, ImageSize -> 800, Frame -> True, 
+  GridLines -> Automatic, 
+  LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
+  FrameStyle -> Thick, FrameTicksStyle -> Thick];
+
+SetOptions[ListLinePlot, ImageSize -> 800, Frame -> True, 
   GridLines -> Automatic, 
   LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
   FrameStyle -> Thick, FrameTicksStyle -> Thick];
