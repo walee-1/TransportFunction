@@ -1,0 +1,144 @@
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:30:49, Bins: {1, 49}
+
+Part::take: Cannot take positions 1 through 49 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_1-49.txt.
+a = -1045e-4
+Time consumption: 0.0005962183333333334
+MaxMemUse :81.98663330078125 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:30:52, Bins: {50, 98}
+
+Part::take: Cannot take positions 50 through 98 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_50-98.txt.
+a = -1045e-4
+Time consumption: 0.0005679880555555556
+MaxMemUse :81.98675537109375 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:30:54, Bins: {99, 106}
+
+Part::take: Cannot take positions 99 through 106 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_99-106.txt.
+a = -1045e-4
+Time consumption: 0.0005306772222222222
+MaxMemUse :81.98674774169922 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:30:57, Bins: {107, 122}
+
+Part::take: Cannot take positions 107 through 122 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_107-122.txt.
+a = -1045e-4
+Time consumption: 0.0005514719444444444
+MaxMemUse :80.54464721679688 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:31:00, Bins: {123, 138}
+
+Part::take: Cannot take positions 123 through 138 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_123-138.txt.
+a = -1045e-4
+Time consumption: 0.0005259575
+MaxMemUse :81.98661804199219 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:31:02, Bins: {139, 154}
+
+Part::take: Cannot take positions 139 through 154 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_139-154.txt.
+a = -1045e-4
+Time consumption: 0.0005887463888888889
+MaxMemUse :81.9867172241211 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:31:05, Bins: {155, 178}
+
+Part::take: Cannot take positions 155 through 178 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_155-178.txt.
+a = -1045e-4
+Time consumption: 0.0005202905555555555
+MaxMemUse :81.98628997802734 MB
+
+SetDirectory::cdir: Cannot set current directory to /home/waleed/Documents/Wolfram_Mathematica/TransportFunction.
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[4, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 4
+
+Get::noopen: Cannot open MergerTransport/Merger2DProton.m.
+Modules loaded ...
+4 Kernels launched ...
+Run started at Mon 21 Jun 2021 17:31:08, Bins: {179, 264}
+
+Part::take: Cannot take positions 179 through 264 in bin2DGen[0.02, 0.14, -0.03, 0.04, 24, 11].
+
+Export::nodir: Directory /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/ does not exist.
+
+OpenWrite::noopen: Cannot open /home/dmoser/Waleed/MergerTransport/NC_Prot_opt_drA/a-1045/MergerTransport/NC_Prot_opt_drA/a-1045/TransferResult_08-09-20_NC_opt_D_drA_a-1045_179-264.txt.
+a = -1045e-4
+Time consumption: 0.000551135
+MaxMemUse :81.9865493774414 MB
