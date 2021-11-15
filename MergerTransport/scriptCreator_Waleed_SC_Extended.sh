@@ -39,7 +39,7 @@ KERNELSH=4
 lowbins=(1 50 99 107 123 139 155 179)
 highbins=(49 98 106 122 138 154 178 264)
 # a array
-a=( -0.106 -0.1055 -0.105 -0.1045 -0.104 )
+a=( -0.106 -0.1055 -0.105 -0.1045 -0.104 -0.1035 -0.103 -0.102 )
 # filename basis
 for i in ${!a[@]}
 do
@@ -104,7 +104,7 @@ writer_Function(){
     sed -i "s+^SetDirectory.*$+SetDirectory[\"$TEMPPATH\"];+" $LOCALFILE
     sed -i "s+^a=.*$+a=${a[$bindex]};+" $LOCALFILE
     sed -i "s+^Bins .*$+Bins = {${lowbins[$i]}, ${highbins[$i]}};+" $LOCALFILE
-    sed -i "s+^Export.*$+Export[\"MergerTransport/SC_Prot_opt_d$PARAMETER/a\"<>ToString[IntegerPart[a*10000]]<>\"/TransferResult_08-09-20_SC_opt_$option\_d$PARAMETER\_a\"<>ToString[IntegerPart[a*10000]]<>\"_\"<>ToString[Bins[[1]]]<>\"-\"<>ToString[Bins[[2]]]<>\".txt\",BinwYShiftPrec44OriginalBinsb0NewBGrad,\"Table\"];+" $LOCALFILE
+    sed -i "s+^Export.*$+Export[\"MergerTransport/SC_Prot_opt_d$PARAMETER/a\"<>StringSplit[ToString[a*10000], \".\"][[1]]<>\"/TransferResult_08-09-20_SC_opt_$option\_d$PARAMETER\_a\"<>ToString[IntegerPart[a*10000]]<>\"_\"<>ToString[Bins[[1]]]<>\"-\"<>ToString[Bins[[2]]]<>\".txt\",BinwYShiftPrec44OriginalBinsb0NewBGrad,\"Table\"];+" $LOCALFILE
 
 }
 

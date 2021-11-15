@@ -121,7 +121,26 @@ effiencyModImsil[histoList_, noIons_: 50000] :=
   Export[FourTbDir <> 
     "MD_Simulations/IMSIL/For_Paper/pLGAD_Paper/"<>outputFile, ionData];
   Clear[trajData, ionData];
-  Return[outputFile];
+  ]
+ imsilTrajWriterFuncCluster[listName_, windowA_: 150] := 
+ Block[{trajData, ionData, fileNameSplit, en, ang, runNo, 
+   outputFile},
+  $HistoryLength = 1;
+  fileNameSplit = 
+   StringSplit[StringTrim[StringSplit[listName, "/"][[-1]], ".tra"], 
+    "_"];
+  runNo = fileNameSplit[[2]];
+  en = StringTrim[fileNameSplit[[3]], "en"];
+  ang = StringTrim[fileNameSplit[[4]], "ang"];
+  trajData = trajReaderMod[listName];
+  ionData = 
+   Table[trajSorterModImsil[trajData[[i]], windowA], {i, 
+     Length[trajData]}];
+  outputFile = 
+   "ImsilPlgadDataEn" <> en <> "p" <> runNo <> "ang" <> ang <> 
+    "IonList.mx";
+  Export["/users/waleed.khalid/plgad_results/"<>outputFile, ionData];
+  Clear[trajData, ionData];
   ]
 ClearAll[imsilTrajImportMod]
 imsilTrajImportMod[enSrchStr_, 
@@ -142,11 +161,25 @@ imsilTrajImportMod[enSrchStr_,
    Return[fileNames];
    , Print["Error: Enter a search string"]; Return[]]
   ]
-  
-  imsilTrajFileJoinerMod[fileNames_, ang_] := Block[{selFiles, data},
+ 
+ imsilTrajImportModCluster[enSrchStr_, 
+  dir_:"/users/waleed.khalid/plgad_results/"] :=
+  Block[{locFileLocation, fileNames}, If[StringQ[enSrchStr],
+   locFileLocation = FileNames["*En" <> enSrchStr <> "p*.mx", dir];
+   fileNames = StringSplit[#, {"/", ".mx"}][[-1]] & /@ locFileLocation;
+   fileNames = StringDelete[#, "."] & /@ fileNames;
+   Table[If[! ListQ[ToExpression[fileNames[[i]]]],
+     With[{\[FormalS] = Symbol[fileNames[[i]]]}, \[FormalS] = 
+       Import[locFileLocation[[i]]]]], {i, Length[fileNames]}];
+   Return[fileNames];
+   , Print["Error: Enter a search string"]; Return[]]
+  ]
+ 
+ 
+  imsilTrajFileJoinerMod[fileNames_, ang_] := Block[{selFiles, data,dupTest},
   selFiles = 
    Select[fileNames, 
-    StringMatchQ[#, "*ang" <> ToString[ang] <> "*"] &];
+    StringMatchQ[#, "*ang" <> ToString[ang] <> "Ion*"] &];
   If[selFiles == {},
    selFiles = 
     Select[fileNames, 
@@ -157,8 +190,10 @@ imsilTrajImportMod[enSrchStr_,
 another naming format"]]
     ](*end of second if*)
    ];(*end of first if*)
-  
-  data = Flatten[DeleteDuplicates[ToExpression[#] & /@ selFiles], 1];
+  Print["Length for this angle="<>ToString[ang]<>" files chosen are: "<>ToString[Length[selFiles]]];
+  dupTest=DuplicateFreeQ[selFiles];
+  Print["Duplicate Status: "<>ToString[dupTest]];
+  data = Flatten[ToExpression[selFiles], 1];
   Return[data];
   ]
   

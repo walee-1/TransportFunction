@@ -3,7 +3,7 @@
 (* Wolfram Language package *)
 Get["General/PathSettings.m"]
 Get["General/Colors.m"]
-
+Get["General/PlottingOptions.m"]
   rebinningMod[list_, binsRebin_] := 
  Block[{binLength, retList, remainderBins, remainderList}, 
   binLength = list[[2, 1]] - list[[1, 1]];
@@ -47,31 +47,7 @@ Arguments:
    texWrite[var_, path_: writeDir] := 
   Export[path <> var <> ".tex", ToExpression[var]];
 
-SetOptions[ListPlot, ImageSize -> 800, Frame -> True, 
-  GridLines -> Automatic, 
-  LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
-  FrameStyle -> Thick, FrameTicksStyle -> Thick];
-
-SetOptions[ListLinePlot, ImageSize -> 800, Frame -> True, 
-  GridLines -> Automatic, 
-  LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
-  FrameStyle -> Thick, FrameTicksStyle -> Thick];
-
-SetOptions[Plot, ImageSize -> 800, Frame -> True, 
-  GridLines -> Automatic, 
-  LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
-  FrameStyle -> Thick, FrameTicksStyle -> Thick];
-
-SetOptions[ListLogPlot, ImageSize -> 800, Frame -> True, 
-  GridLines -> Automatic, 
-  LabelStyle -> Directive[FontSize -> 20, Bold, Black], 
-  FrameStyle -> Thick, FrameTicksStyle -> Thick];
-  
-  
-scTicks[start_, end_, step_, power_] := 
- Table[{i*10^power, 
-   Style[ToString[i] <> "\[Times]\!\(\*SuperscriptBox[\(10\), \(" <> 
-     ToString[power] <> "\)]\)"]}, {i, start, end, step}]
+LogarithmicScaling[x_, min_, max_] := Log[x/min]/Log[max/min]
 
 texWrite[var_, path_: writeDir] := 
   Export[path <> var <> ".tex", ToExpression[var]];
