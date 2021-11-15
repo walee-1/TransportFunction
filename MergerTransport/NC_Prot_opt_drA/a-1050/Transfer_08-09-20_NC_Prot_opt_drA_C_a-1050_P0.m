@@ -62,7 +62,7 @@ BinwYShiftPrec44OriginalBinsb0NewBGrad =
  ParallelMap[
   AbsoluteTiming[
     BinIntShift[
-     b, #, 
+     a, #, 
      {AlphaFromBlinesCorr, BfromCentralBline, rF, rRxB, rA+rA*10^-4, rDet, BlinefitG1, BlinefitG2}, {XAShift, YAShift, YRxBShift, XDetShift, YDetShift}, 
      {0.06, 0.059, 0.9, 0., -0.9, 0.1, 0.099, 0.9, 0., -0.9}, {ApertX, ApertY, ApertXOff, ApertYOff},
      {IntMethod, 4, 2, 0, 2}, {IntMethod, 4, 2, 0, 2}, {IntMethod, 3, 6, 0, 1}

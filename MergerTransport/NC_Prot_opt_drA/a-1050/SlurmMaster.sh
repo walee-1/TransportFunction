@@ -1,9 +1,7 @@
 #!/bin/bash
-jid1=$(sbatch Slurm_Transfer_08-09-20_NC_Prot_opt_drA_C_a-1050_P0.sh)
-jid1=`echo $jid1 | cut -d' ' -f 4`
 jid2=$(sbatch Slurm_Transfer_08-09-20_NC_Prot_opt_drA_C_a-1050_P1.sh)
 jid2=`echo $jid2 | cut -d' ' -f 4`
-jid3=$(sbatch --dependency=afterany:$jid1 Slurm_Transfer_08-09-20_NC_Prot_opt_drA_C_a-1050_P2.sh)
+jid3=$(sbatch Slurm_Transfer_08-09-20_NC_Prot_opt_drA_C_a-1050_P2.sh)
 jid3=`echo $jid3 | cut -d' ' -f 4`
 jid4=$(sbatch --dependency=afterany:$jid2 Slurm_Transfer_08-09-20_NC_Prot_opt_drA_C_a-1050_P3.sh)
 jid4=`echo $jid4 | cut -d' ' -f 4`
