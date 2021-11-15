@@ -4,3 +4,5 @@
 *.pdf
 *.project
 .project
+/MergerTransport/SC*/
+/MergerTransport/NC*/
