@@ -1,5 +1,6 @@
 (* Wolfram Language package *)
 ClearAll[jet,viridis];
+Get["https://pastebin.com/raw/gN4wGqxe"]
 jet[u_?NumericQ] := 
  Blend[{{0, RGBColor[0, 0, 9/16]}, {1/9, Blue}, {23/63, Cyan}, {13/21,
       Yellow}, {47/63, Orange}, {55/63, Red}, {1, 

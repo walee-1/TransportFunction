@@ -51,6 +51,17 @@ Arguments:
 	b = beta factor of  particle
 	p = momentum of particle
 "
+
+fitChiSqCalc[dataSet_, weights_, fit_] := 
+ Block[{nObs, nParams, r, chiSq}, nObs = Length[dataSet]; 
+  nParams = Length[fit["BestFitParameters"]]; 
+  r = fit["FitResiduals"];
+  chiSq = r.Inverse[DiagonalMatrix[weights^2]].r/(nObs - nParams)
+  ]
+  
+ fitChiSqCalc::usage="fitChiSqCalc[dataSet, weights, fit] gives the chiSq for a certain dataset, the sigma around the data and the fit. Note: Weights do
+ not mean Weights but are rather really the sigma around the data!"
+
 errorBarMod[prob_, totalN_] := 
  100/totalN*
   Sqrt[totalN*

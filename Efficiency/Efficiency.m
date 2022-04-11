@@ -53,8 +53,11 @@ cceModImsil[list_, gammaVal_: gammaVals[[2]], tauVal_: tauVals[[2]],
   Return[{list[[1]], cceTable}];
   ]
 
-avgEhpairDepthModImsil[list_, totalIons_] := 
- Block[{maxBin, binWidth, binsX, binsY, pos, plotTable},
+avgEhpairDepthModImsil[list_] := 
+ Block[{maxBin, binWidth, binsX, binsY, pos, plotTable,totalIons},
+ 	totalIons=Length[list];
+ If[totalIons==0,
+ 	Print["Total Ions = 0, check lenght of lists"],
   maxBin = Max[list[[All, 1]]];
   binWidth = list[[1, 1, 2]] - list[[1, 1, 1]];
   binsX = Table[i, {i, 0, maxBin, binWidth}];
@@ -67,8 +70,30 @@ avgEhpairDepthModImsil[list_, totalIons_] :=
   plotTable = 
    Table[{(binsX[[i + 1]] + binsX[[i]])/2/10, binsY[[i]]}, {i, 
      Length[binsY]}];
-  Return[{plotTable}]
+  Return[{plotTable}];
+ ]
   ]
+avgEhpairDepthModImsil::usage="avgEhpairDepthModImsil[[list]
+Takes a list of depth bins and deposited e/hpair and returns a ready to plot list of deposited e/hpairs (y) vs depth (x).
+Works for both imsil cce list and track list
+result[[1]] is the plot table. Only one output table"
+  
+maxDepthModImsil[list_]:=
+Block[{len,max,maxHisto,binWidth,plotTable},
+	binWidth=list[[1, 1, 2]]-list[[1, 1, 1]];
+	len=Length[list];
+	max=Table[Max[list[[i,1]]],{i,len}];
+	maxHisto=HistogramList[max,{binWidth}];
+	plotTable=Table[{(maxHisto[[1,i+1]]+maxHisto[[1,i]])/2/10,maxHisto[[2,i]]},{i,Length[maxHisto[[2]]]}];
+	Return[{plotTable,maxHisto}];
+]
+
+maxDepthModImsil::usage="maxDepthModImsil[list]
+Takes a list of depth bins and deposited e/hpair and returns a ready to plot list of depth histogram and histogramlist.
+Works for both imsil cce list and track list
+result[[1]] is the plot table.
+result[[2]] is the histogram List
+"
 
 histogramModImsil[list_, binSize_] := 
  Block[{histogramList, plotList, totalSignal},
