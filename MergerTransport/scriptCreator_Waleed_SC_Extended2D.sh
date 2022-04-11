@@ -13,7 +13,7 @@ then
 fi
 
 #offset
-offset=( -0.00015 0.00005 0.00015 )
+offset=( -0.00025 -0.00005 0.00001 )
 
 BASEDIR="/home/waleed/Documents/Wolfram_Mathematica/TransportFunction/MergerTransport"
 
@@ -109,7 +109,7 @@ writer_Function(){
 	    echo "date" >> $LOCALSCRIPTFILEC 
     fi
     cat $TEMPLATEFILE>$LOCALFILE
-    sed -i "s+^kernels=.*$+kernels=$KERNELS+" $LOCALFILE
+    sed -i "s+^kernels=.*$+kernels=$KERNELS;+" $LOCALFILE
     sed -i "s+^SetDirectory.*$+SetDirectory[\"$TEMPPATH\"];+" $LOCALFILE
     sed -i "s+^a=.*$+a=${a[$bindex]};+" $LOCALFILE
     sed -i "s+^offset=.*$+offset=${offset[$bindex2]};+" $LOCALFILE
@@ -147,24 +147,48 @@ do
             writer_Function "C"
             writer_Function "H"
         done
+
+
+	binNum=${#lowbins[@]}
+	remJIDs="$((binNum-2))"
+
 	# MASTER SCRIPT for Cluster. we write per localscript file a line, but manually because we want to include dependency stuff
-	echo "jid1=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P0.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid1=\`echo \$jid1 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid2=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P1.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid2=\`echo \$jid2 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid3=\$(sbatch --dependency=afterany:\$jid1 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P2.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid3=\`echo \$jid3 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid4=\$(sbatch --dependency=afterany:\$jid2 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P3.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid4=\`echo \$jid4 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid5=\$(sbatch --dependency=afterany:\$jid3 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P4.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid5=\`echo \$jid5 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid6=\$(sbatch --dependency=afterany:\$jid4 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P5.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid6=\`echo \$jid6 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid7=\$(sbatch --dependency=afterany:\$jid5 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P6.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid7=\`echo \$jid7 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid8=\$(sbatch --dependency=afterany:\$jid6 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P7.sh)" >> $SLURMMASTERSCRIPT
-	
+	for(( i=1;i<=$binNum;i++ ));
+	do
+        pNo="$((i-1))"
+        prevJID="$((i-2))"
+        if [[ $i -le 2 ]]
+        then
+		    echo "jid"${i}"=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"${pNo}".sh)" >> $SLURMMASTERSCRIPT
+		    echo "jid"${i}"=\`echo \$jid"${i}" | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+        elif [[ $i -lt $binNum ]]
+        then
+            echo "jid"${i}"=\$(sbatch --dependency=afterany:\$jid"${prevJID}" Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"${pNo}".sh)" >> $SLURMMASTERSCRIPT
+	        echo "jid"${i}"=\`echo \$jid"${i}" | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+        else
+            echo "jid"${i}"=\$(sbatch --dependency=afterany:\$jid"${prevJID}" Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"${pNo}".sh)" >> $SLURMMASTERSCRIPT
+        fi
+            
 	done
+
+	# # MASTER SCRIPT for Cluster. we write per localscript file a line, but manually because we want to include dependency stuff
+	# echo "jid1=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P0.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid1=\`echo \$jid1 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid2=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P1.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid2=\`echo \$jid2 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid3=\$(sbatch --dependency=afterany:\$jid1 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P2.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid3=\`echo \$jid3 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid4=\$(sbatch --dependency=afterany:\$jid2 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P3.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid4=\`echo \$jid4 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid5=\$(sbatch --dependency=afterany:\$jid3 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P4.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid5=\`echo \$jid5 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid6=\$(sbatch --dependency=afterany:\$jid4 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P5.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid6=\`echo \$jid6 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid7=\$(sbatch --dependency=afterany:\$jid5 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P6.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid7=\`echo \$jid7 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid8=\$(sbatch --dependency=afterany:\$jid6 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_"${offseti[$bindex2]}"_P7.sh)" >> $SLURMMASTERSCRIPT
+	
+	# done
 done
 
 echo "Process Completed. Please check folder: $FOLDER"

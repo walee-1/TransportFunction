@@ -407,7 +407,7 @@ bin2DGen[xStart_, xEnd_, yStart_, yEnd_, binNoX_, binNoY_] :=
    Table[{xStart + (i - 1)*binLengthX, xStart + i*binLengthX}, {i, 
      binNoX}];
   binsY = 
-   Table[{yStart + (i - 1)*binLengthY, yStart + i*binLengthY}, {i, 
+   Table[{yStart + i*binLengthY,yStart + (i - 1)*binLengthY}, {i, 
      binNoY}];
   binList = 
    Flatten[Table[{binsX[[i]], binsY[[j]]}, {i, Length[binsX]}, {j, 

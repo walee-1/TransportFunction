@@ -39,7 +39,7 @@ KERNELSH=4
 lowbins=(1 50 99 107 123 139 155 179)
 highbins=(49 98 106 122 138 154 178 264)
 # a array
-a=( -0.106 -0.1055 -0.105 -0.1045 -0.104 -0.1035 -0.103 -0.102 )
+a=( 0.105 )
 # filename basis
 for i in ${!a[@]}
 do
@@ -100,7 +100,7 @@ writer_Function(){
 	    echo "date" >> $LOCALSCRIPTFILEC 
     fi
     cat $TEMPLATEFILE>$LOCALFILE
-    sed -i "s+^kernels=.*$+kernels=$KERNELS+" $LOCALFILE
+    sed -i "s+^kernels=.*$+kernels=$KERNELS;+" $LOCALFILE
     sed -i "s+^SetDirectory.*$+SetDirectory[\"$TEMPPATH\"];+" $LOCALFILE
     sed -i "s+^a=.*$+a=${a[$bindex]};+" $LOCALFILE
     sed -i "s+^Bins .*$+Bins = {${lowbins[$i]}, ${highbins[$i]}};+" $LOCALFILE
@@ -133,22 +133,45 @@ do
 		writer_Function "H"
 	done
 
+
+	binNum=${#lowbins[@]}
+	remJIDs="$((binNum-2))"
+
 	# MASTER SCRIPT for Cluster. we write per localscript file a line, but manually because we want to include dependency stuff
-	echo "jid1=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P0.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid1=\`echo \$jid1 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid2=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P1.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid2=\`echo \$jid2 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid3=\$(sbatch --dependency=afterany:\$jid1 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P2.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid3=\`echo \$jid3 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid4=\$(sbatch --dependency=afterany:\$jid2 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P3.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid4=\`echo \$jid4 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid5=\$(sbatch --dependency=afterany:\$jid3 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P4.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid5=\`echo \$jid5 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid6=\$(sbatch --dependency=afterany:\$jid4 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P5.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid6=\`echo \$jid6 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid7=\$(sbatch --dependency=afterany:\$jid5 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P6.sh)" >> $SLURMMASTERSCRIPT
-	echo "jid7=\`echo \$jid7 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
-	echo "jid8=\$(sbatch --dependency=afterany:\$jid6 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P7.sh)" >> $SLURMMASTERSCRIPT
+	for(( i=1;i<=$binNum;i++ ));
+	do
+        pNo="$((i-1))"
+        prevJID="$((i-2))"
+        if [[ $i -le 2 ]]
+        then
+		    echo "jid"${i}"=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"${pNo}".sh)" >> $SLURMMASTERSCRIPT
+		    echo "jid"${i}"=\`echo \$jid"${i}" | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+        elif [[ $i -lt $binNum ]]
+        then
+            echo "jid"${i}"=\$(sbatch --dependency=afterany:\$jid"${prevJID}" Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"${pNo}".sh)" >> $SLURMMASTERSCRIPT
+	        echo "jid"${i}"=\`echo \$jid"${i}" | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+        else
+            echo "jid"${i}"=\$(sbatch --dependency=afterany:\$jid"${prevJID}" Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"${pNo}".sh)" >> $SLURMMASTERSCRIPT
+        fi
+            
+	done
+
+	# MASTER SCRIPT for Cluster. we write per localscript file a line, but manually because we want to include dependency stuff
+	# echo "jid1=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P0.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid1=\`echo \$jid1 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid2=\$(sbatch Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P1.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid2=\`echo \$jid2 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid3=\$(sbatch --dependency=afterany:\$jid1 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P2.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid3=\`echo \$jid3 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid4=\$(sbatch --dependency=afterany:\$jid2 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P3.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid4=\`echo \$jid4 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid5=\$(sbatch --dependency=afterany:\$jid3 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P4.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid5=\`echo \$jid5 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid6=\$(sbatch --dependency=afterany:\$jid4 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P5.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid6=\`echo \$jid6 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid7=\$(sbatch --dependency=afterany:\$jid5 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P6.sh)" >> $SLURMMASTERSCRIPT
+	# echo "jid7=\`echo \$jid7 | cut -d' ' -f 4\`" >> $SLURMMASTERSCRIPT
+	# echo "jid8=\$(sbatch --dependency=afterany:\$jid6 Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P7.sh)" >> $SLURMMASTERSCRIPT
 	
 	
 done

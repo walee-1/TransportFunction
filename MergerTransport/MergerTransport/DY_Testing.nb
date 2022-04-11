@@ -1,0 +1,1227 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     49711,       1219]
+NotebookOptionsPosition[     47504,       1171]
+NotebookOutlinePosition[     47838,       1186]
+CellTagsIndexPosition[     47795,       1183]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"Get", "[", "\"\<MergerTransport/ManualShift_NBeamInt_DY.m\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.8060700966534433`*^9, 3.806070137936028*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"3db702be-66d4-4ad5-b112-0e58137ad6cb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Set","wrsym","\"Symbol \\!\\(\\*RowBox[{\\\"pmax\\\"}]\\) is Protected.\"",
+   2,0,1,33099662776436307515,"Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.806070183902746*^9, 3.806071019498323*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"02f176be-36ed-4150-8ede-5f18825ddd90"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "phiAminApertfromYShift"}]], "Input",
+ CellChangeTimes->{{3.806070225790822*^9, 3.806070249648452*^9}},
+ CellLabel->"In[8]:=",ExpressionUUID->"6f83b702-9e76-4324-bc5b-f384ef61f690"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = True, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"Global`phiAminApertfromYShift\"\>", 
+             "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Definitions\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Definitions\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Definitions", "Tooltip"]& ], GridBox[{
+                    {
+                    RowBox[{
+                    RowBox[{"phiAminApertfromYShift", "[", 
+                    RowBox[{
+                    "yD_", ",", "plocal_", ",", "alpha_", ",", "th0_", ",", 
+                    "BRxB_", ",", "rRxB_", ",", "rA_", ",", "rD_", ",", 
+                    "phiDet_", ",", "yOff_", ",", "yAA_", ",", "YAShift_", 
+                    ",", "YDetShift_", ",", "R_"}], "]"}], "=", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"\[Pi]", "-", 
+                    RowBox[{"ArcSin", "[", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"plocal", " ", "rRxB"}]], 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    "149896229", " ", "BRxB", " ", "rA", " ", "yAA", " ", 
+                    RowBox[{"Csc", "[", "th0", "]"}]}], "-", 
+                    RowBox[{
+                    "299792458", " ", "BRxB", " ", "rA", " ", "YAShift", " ", 
+                    
+                    RowBox[{"Csc", "[", "th0", "]"}]}], "+", 
+                    RowBox[{
+                    "299792458", " ", "BRxB", " ", "rA", " ", "yOff", " ", 
+                    RowBox[{"Csc", "[", "th0", "]"}]}], "-", 
+                    FractionBox[
+                    RowBox[{"299792458", " ", "BRxB", " ", 
+                    RowBox[{"Csc", "[", "th0", "]"}], " ", 
+                    RowBox[{"DeltayDVShift", "[", 
+                    RowBox[{
+                    "phiDV", ",", "yD", ",", "plocal", ",", "alpha", ",", 
+                    "th0", ",", "BRxB", ",", "rRxB", ",", "rD", ",", "phiDet",
+                     ",", "YDetShift", ",", "R"}], "]"}]}], 
+                    SqrtBox[
+                    FractionBox["1", "rA"]]], "+", 
+                    FractionBox[
+                    RowBox[{"plocal", " ", "rRxB", " ", 
+                    RowBox[{"Sin", "[", "phiDV", "]"}]}], 
+                    SqrtBox[
+                    FractionBox["1", "rA"]]]}], ")"}]}], "]"}]}], ",", 
+                    RowBox[{"ArcSin", "[", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"plocal", " ", "rRxB"}]], 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    "149896229", " ", "BRxB", " ", "rA", " ", "yAA", " ", 
+                    RowBox[{"Csc", "[", "th0", "]"}]}], "-", 
+                    RowBox[{
+                    "299792458", " ", "BRxB", " ", "rA", " ", "YAShift", " ", 
+                    
+                    RowBox[{"Csc", "[", "th0", "]"}]}], "+", 
+                    RowBox[{
+                    "299792458", " ", "BRxB", " ", "rA", " ", "yOff", " ", 
+                    RowBox[{"Csc", "[", "th0", "]"}]}], "-", 
+                    FractionBox[
+                    RowBox[{"299792458", " ", "BRxB", " ", 
+                    RowBox[{"Csc", "[", "th0", "]"}], " ", 
+                    RowBox[{"DeltayDVShift", "[", 
+                    RowBox[{
+                    "phiDV", ",", "yD", ",", "plocal", ",", "alpha", ",", 
+                    "th0", ",", "BRxB", ",", "rRxB", ",", "rD", ",", "phiDet",
+                     ",", "YDetShift", ",", "R"}], "]"}]}], 
+                    SqrtBox[
+                    FractionBox["1", "rA"]]], "+", 
+                    FractionBox[
+                    RowBox[{"plocal", " ", "rRxB", " ", 
+                    RowBox[{"Sin", "[", "phiDV", "]"}]}], 
+                    SqrtBox[
+                    FractionBox["1", "rA"]]]}], ")"}]}], "]"}]}], "}"}]}]}
+                    },
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+                    
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], "\<\"Global`phiAminApertfromYShift\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"],
+               ImageSizeCache->{10., {2., 8.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"Global`phiAminApertfromYShift\"\>", 
+             "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"]], True->
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> "Global`phiAminApertfromYShift", 
+    "Documentation" -> None, "OwnValues" -> None, "UpValues" -> None, 
+    "DownValues" -> 
+    Information`InformationValueForm[
+     DownValues, $CellContext`phiAminApertfromYShift, \
+{$CellContext`phiAminApertfromYShift[
+         Pattern[$CellContext`yD, 
+          Blank[]], 
+         Pattern[$CellContext`plocal, 
+          Blank[]], 
+         Pattern[$CellContext`alpha, 
+          Blank[]], 
+         Pattern[$CellContext`th0, 
+          Blank[]], 
+         Pattern[$CellContext`BRxB, 
+          Blank[]], 
+         Pattern[$CellContext`rRxB, 
+          Blank[]], 
+         Pattern[$CellContext`rA, 
+          Blank[]], 
+         Pattern[$CellContext`rD, 
+          Blank[]], 
+         Pattern[$CellContext`phiDet, 
+          Blank[]], 
+         Pattern[$CellContext`yOff, 
+          Blank[]], 
+         Pattern[$CellContext`yAA, 
+          Blank[]], 
+         Pattern[$CellContext`YAShift, 
+          Blank[]], 
+         Pattern[$CellContext`YDetShift, 
+          Blank[]], 
+         Pattern[$CellContext`R, 
+          Blank[]]] -> {
+        Pi - ArcSin[$CellContext`plocal^(-1) $CellContext`rRxB^(-1) (
+           149896229 $CellContext`BRxB $CellContext`rA $CellContext`yAA 
+            Csc[$CellContext`th0] - 
+           299792458 $CellContext`BRxB $CellContext`rA $CellContext`YAShift 
+           Csc[$CellContext`th0] + 
+           299792458 $CellContext`BRxB $CellContext`rA $CellContext`yOff 
+            Csc[$CellContext`th0] - 
+           299792458 $CellContext`BRxB ($CellContext`rA^(-1))^Rational[-1, 2] 
+           Csc[$CellContext`th0] \
+$CellContext`DeltayDVShift[$CellContext`phiDV, $CellContext`yD, \
+$CellContext`plocal, $CellContext`alpha, $CellContext`th0, $CellContext`BRxB, \
+$CellContext`rRxB, $CellContext`rD, $CellContext`phiDet, \
+$CellContext`YDetShift, $CellContext`R] + $CellContext`plocal \
+($CellContext`rA^(-1))^Rational[-1, 2] $CellContext`rRxB 
+            Sin[$CellContext`phiDV])], 
+         ArcSin[$CellContext`plocal^(-1) $CellContext`rRxB^(-1) (
+           149896229 $CellContext`BRxB $CellContext`rA $CellContext`yAA 
+            Csc[$CellContext`th0] - 
+           299792458 $CellContext`BRxB $CellContext`rA $CellContext`YAShift 
+           Csc[$CellContext`th0] + 
+           299792458 $CellContext`BRxB $CellContext`rA $CellContext`yOff 
+            Csc[$CellContext`th0] - 
+           299792458 $CellContext`BRxB ($CellContext`rA^(-1))^Rational[-1, 2] 
+           
+           Csc[$CellContext`th0] \
+$CellContext`DeltayDVShift[$CellContext`phiDV, $CellContext`yD, \
+$CellContext`plocal, $CellContext`alpha, $CellContext`th0, $CellContext`BRxB, \
+$CellContext`rRxB, $CellContext`rD, $CellContext`phiDet, \
+$CellContext`YDetShift, $CellContext`R] + $CellContext`plocal \
+($CellContext`rA^(-1))^Rational[-1, 2] $CellContext`rRxB 
+            Sin[$CellContext`phiDV])]}}], "SubValues" -> None, 
+    "DefaultValues" -> None, "NValues" -> None, "FormatValues" -> None, 
+    "Options" -> None, "Attributes" -> {}, "FullName" -> 
+    "Global`phiAminApertfromYShift"], False]]], "Output",
+ CellChangeTimes->{3.806070250207059*^9},
+ CellLabel->"Out[8]=",ExpressionUUID->"b6be616c-d38e-4385-bba1-4dd2ee31f04c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"phiAminApertfromYShift", "[", 
+  RowBox[{"0.", ",", "700000", ",", "Pi", ",", 
+   RowBox[{"Pi", "/", "4"}], ",", "0.2", ",", "1.", ",", "1.", ",", "1.", ",",
+    "0.", ",", "0.", ",", "0.035", ",", "0.007", ",", "0.015", ",", "1"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.80607026863846*^9, 3.806070323820183*^9}, {
+  3.8060703853372097`*^9, 3.806070387607545*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"e69fa7be-a65a-45f4-9a55-15a33be51ad4"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"1.5707963267948966`", "\[VeryThinSpace]", "-", 
+    RowBox[{"1.7944085030575336`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"1.5707963267948966`", "\[VeryThinSpace]", "+", 
+    RowBox[{"1.7944085030575336`", " ", "\[ImaginaryI]"}]}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.806070314164125*^9, 3.806070324077825*^9}, 
+   3.8060703879390583`*^9, 3.806071047664111*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"12619d9c-809e-4ad5-8542-d153e5224119"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"yAShift", "[", 
+  RowBox[{"0.", ",", "0.", ",", "700000", ",", "Pi", ",", 
+   RowBox[{"Pi", "/", "4"}], ",", "0.2", ",", "1.", ",", "1.", ",", "1.", ",",
+    "0.", ",", "0.007", ",", "0.015", ",", "1"}], "]"}]], "Input",
+ CellChangeTimes->{{3.806070367618655*^9, 3.806070372668696*^9}, {
+  3.806070522086244*^9, 3.806070536798387*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"853677c5-6d9e-475c-b5d2-42e349e849b0"],
+
+Cell[BoxData[
+ RowBox[{"0.007`", "\[VeryThinSpace]", "+", 
+  RowBox[{"1.`", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"DeltayDVShift", "[", 
+      RowBox[{"phiDV", ",", "0.`", ",", "700000", ",", "\[Pi]", ",", 
+       FractionBox["\[Pi]", "4"], ",", "0.2`", ",", "1.`", ",", "1.`", ",", 
+       "0.`", ",", "0.015`", ",", "1"}], "]"}], "-", 
+     RowBox[{"0.008255290178623894`", " ", 
+      RowBox[{"Sin", "[", "phiDV", "]"}]}]}], ")"}]}]}]], "Output",
+ CellChangeTimes->{3.806070537119781*^9},
+ CellLabel->"Out[12]=",ExpressionUUID->"a7947371-139f-449f-8cf0-70ea2a9f7bf1"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DeltayDVShift", "[", 
+  RowBox[{"0.", ",", "0.`", ",", "700000", ",", "\[Pi]", ",", 
+   FractionBox["\[Pi]", "4"], ",", "0.2`", ",", "1.`", ",", "1.`", ",", "0.`",
+    ",", "0.015`", ",", "1"}], "]"}]], "Input",
+ CellChangeTimes->{{3.806070934969378*^9, 3.8060709365736217`*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"732afbc6-b927-4dce-9eaf-da93da0eae83"],
+
+Cell[BoxData[
+ RowBox[{"DeltayDVShift", "[", 
+  RowBox[{"0.`", ",", "0.`", ",", "700000", ",", "\[Pi]", ",", 
+   FractionBox["\[Pi]", "4"], ",", "0.2`", ",", "1.`", ",", "1.`", ",", "0.`",
+    ",", "0.015`", ",", "1"}], "]"}]], "Output",
+ CellChangeTimes->{{3.80607091193686*^9, 3.806070936885635*^9}},
+ CellLabel->"Out[17]=",ExpressionUUID->"229638b3-e941-42e2-8274-3223d4921904"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "DeltayDVShift"}]], "Input",
+ CellChangeTimes->{{3.8060709182932796`*^9, 3.806070918644414*^9}},
+ CellLabel->"In[16]:=",ExpressionUUID->"fd94f3a5-6dc7-4c29-9176-5887e61128e8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = True, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\"Global`DeltayDVShift\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Definitions\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Definitions\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Definitions", "Tooltip"]& ], GridBox[{
+                    {
+                    RowBox[{
+                    RowBox[{"DeltayDVShift", "[", 
+                    RowBox[{"phiDV_", ",", "yD_", ",", "p_", ",", 
+                    RowBox[{"alpha_", " ", "th0_"}], ",", "BRxB_", ",", 
+                    "rRxB_", ",", "rD_", ",", "phiDet_", ",", "YDetShift_", 
+                    ",", "R_"}], "]"}], ":=", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"yD", "-", 
+                    RowBox[{
+                    RowBox[{"rG", "[", 
+                    RowBox[{"p", ",", "th0", ",", 
+                    FractionBox[
+                    RowBox[{"rD", " ", "BRxB"}], "rRxB"]}], "]"}], " ", 
+                    RowBox[{"Sin", "[", "phiDet", "]"}]}], "-", "YDetShift"}],
+                     ")"}], " ", 
+                    SqrtBox[
+                    FractionBox["rD", "rRxB"]]}], "-", 
+                    RowBox[{"DY", "[", 
+                    RowBox[{
+                    "p", ",", "alpha", ",", "BRxB", ",", "th0", ",", "rRxB", 
+                    ",", "R"}], "]"}]}], ")"}], " ", 
+                    SqrtBox["rRxB"]}], "+", 
+                    RowBox[{
+                    RowBox[{"rG", "[", 
+                    RowBox[{"p", ",", "th0", ",", 
+                    FractionBox["BRxB", "rRxB"]}], "]"}], " ", 
+                    RowBox[{"Sin", "[", "phiDV", "]"}]}]}]}]}
+                    },
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+                    
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], "\<\"Global`DeltayDVShift\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"],
+               ImageSizeCache->{10., {2., 8.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\"Global`DeltayDVShift\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"]], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> "Global`DeltayDVShift", 
+    "Documentation" -> None, "OwnValues" -> None, "UpValues" -> None, 
+    "DownValues" -> 
+    Information`InformationValueForm[
+     DownValues, $CellContext`DeltayDVShift, {$CellContext`DeltayDVShift[
+         Pattern[$CellContext`phiDV, 
+          Blank[]], 
+         Pattern[$CellContext`yD, 
+          Blank[]], 
+         Pattern[$CellContext`p, 
+          Blank[]], Pattern[$CellContext`alpha, 
+           Blank[]] Pattern[$CellContext`th0, 
+           Blank[]], 
+         Pattern[$CellContext`BRxB, 
+          Blank[]], 
+         Pattern[$CellContext`rRxB, 
+          Blank[]], 
+         Pattern[$CellContext`rD, 
+          Blank[]], 
+         Pattern[$CellContext`phiDet, 
+          Blank[]], 
+         Pattern[$CellContext`YDetShift, 
+          Blank[]], 
+         Pattern[$CellContext`R, 
+          
+          Blank[]]] :> (($CellContext`yD - $CellContext`rG[$CellContext`p, \
+$CellContext`th0, $CellContext`rD $CellContext`BRxB/$CellContext`rRxB] 
+            Sin[$CellContext`phiDet] - $CellContext`YDetShift) 
+           Sqrt[$CellContext`rD/$CellContext`rRxB] - \
+$CellContext`DY[$CellContext`p, $CellContext`alpha, $CellContext`BRxB, \
+$CellContext`th0, $CellContext`rRxB, $CellContext`R]) 
+         Sqrt[$CellContext`rRxB] + $CellContext`rG[$CellContext`p, \
+$CellContext`th0, $CellContext`BRxB/$CellContext`rRxB] 
+         Sin[$CellContext`phiDV]}], "SubValues" -> None, "DefaultValues" -> 
+    None, "NValues" -> None, "FormatValues" -> None, "Options" -> None, 
+    "Attributes" -> {}, "FullName" -> "Global`DeltayDVShift"], 
+   False]]], "Output",
+ CellChangeTimes->{3.806070919419725*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"50e474d4-4432-4c74-ba5c-28e160284af3"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "xAShift"}]], "Input",
+ CellChangeTimes->{{3.8060705500734158`*^9, 3.806070554977756*^9}},
+ CellLabel->"In[13]:=",ExpressionUUID->"9a4baea4-c4f8-4966-8635-8dc6d82dc3a1"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = True, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\"Global`xAShift\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Definitions\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Definitions\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Definitions", "Tooltip"]& ], GridBox[{
+                    {
+                    RowBox[{
+                    RowBox[{"xAShift", "[", 
+                    RowBox[{
+                    "phiA_", ",", "yD_", ",", "xD_", ",", "p_", ",", "th0_", 
+                    ",", "alpha_", ",", "BRxB_", ",", "rRxB_", ",", "rA_", 
+                    ",", "rD_", ",", "phiDet_", ",", "R_", ",", "G1_", ",", 
+                    "G2_", ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "XAShift_", ",", "YRxBShift_", ",", "XDetShift_", ",", 
+                    "YDetShift_"}], "}"}]}], "]"}], ":=", 
+                    RowBox[{
+                    RowBox[{"xGCAShift", "[", 
+                    RowBox[{
+                    RowBox[{"DeltaxDV2Shift", "[", 
+                    RowBox[{
+                    "phiDV", ",", "yD", ",", "xD", ",", "p", ",", "th0", ",", 
+                    "alpha", ",", "BRxB", ",", "rRxB", ",", "rD", ",", 
+                    "phiDet", ",", "R", ",", "G1", ",", "G2", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"YRxBShift", ",", "XDetShift", ",", "YDetShift"}],
+                     "}"}]}], "]"}], ",", "phiDV", ",", "p", ",", "th0", ",", 
+                    "BRxB", ",", "rRxB", ",", "rA", ",", "XAShift"}], "]"}], 
+                    "+", 
+                    RowBox[{
+                    RowBox[{"rG", "[", 
+                    RowBox[{"p", ",", "th0", ",", 
+                    FractionBox[
+                    RowBox[{"rA", " ", "BRxB"}], "rRxB"]}], "]"}], " ", 
+                    RowBox[{"Cos", "[", "phiA", "]"}]}]}]}]}
+                    },
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+                    
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], "\<\"Global`xAShift\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"],
+               ImageSizeCache->{10., {2., 8.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\"Global`xAShift\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"]], True->
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> "Global`xAShift", "Documentation" -> 
+    None, "OwnValues" -> None, "UpValues" -> None, "DownValues" -> 
+    Information`InformationValueForm[
+     DownValues, $CellContext`xAShift, {$CellContext`xAShift[
+         Pattern[$CellContext`phiA, 
+          Blank[]], 
+         Pattern[$CellContext`yD, 
+          Blank[]], 
+         Pattern[$CellContext`xD, 
+          Blank[]], 
+         Pattern[$CellContext`p, 
+          Blank[]], 
+         Pattern[$CellContext`th0, 
+          Blank[]], 
+         Pattern[$CellContext`alpha, 
+          Blank[]], 
+         Pattern[$CellContext`BRxB, 
+          Blank[]], 
+         Pattern[$CellContext`rRxB, 
+          Blank[]], 
+         Pattern[$CellContext`rA, 
+          Blank[]], 
+         Pattern[$CellContext`rD, 
+          Blank[]], 
+         Pattern[$CellContext`phiDet, 
+          Blank[]], 
+         Pattern[$CellContext`R, 
+          Blank[]], 
+         Pattern[$CellContext`G1, 
+          Blank[]], 
+         Pattern[$CellContext`G2, 
+          Blank[]], {
+          Pattern[$CellContext`XAShift, 
+           Blank[]], 
+          Pattern[$CellContext`YRxBShift, 
+           Blank[]], 
+          Pattern[$CellContext`XDetShift, 
+           Blank[]], 
+          Pattern[$CellContext`YDetShift, 
+           Blank[]]}] :> $CellContext`xGCAShift[
+          $CellContext`DeltaxDV2Shift[$CellContext`phiDV, $CellContext`yD, \
+$CellContext`xD, $CellContext`p, $CellContext`th0, $CellContext`alpha, \
+$CellContext`BRxB, $CellContext`rRxB, $CellContext`rD, $CellContext`phiDet, \
+$CellContext`R, $CellContext`G1, $CellContext`G2, {$CellContext`YRxBShift, \
+$CellContext`XDetShift, $CellContext`YDetShift}], $CellContext`phiDV, \
+$CellContext`p, $CellContext`th0, $CellContext`BRxB, $CellContext`rRxB, \
+$CellContext`rA, $CellContext`XAShift] + $CellContext`rG[$CellContext`p, \
+$CellContext`th0, $CellContext`rA $CellContext`BRxB/$CellContext`rRxB] 
+         Cos[$CellContext`phiA]}], "SubValues" -> None, "DefaultValues" -> 
+    None, "NValues" -> None, "FormatValues" -> None, "Options" -> None, 
+    "Attributes" -> {}, "FullName" -> "Global`xAShift"], False]]], "Output",
+ CellChangeTimes->{3.806070555468192*^9},
+ CellLabel->"Out[13]=",ExpressionUUID->"0fcac1c8-da61-4504-ab2e-d4a26a15eff3"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"xAShift", "[", 
+  RowBox[{"0.", ",", "0.", ",", "0.", ",", "700000", ",", 
+   RowBox[{"Pi", "/", "4"}], ",", "Pi", ",", "0.2", ",", "1.", ",", "1.", ",",
+    "1.", ",", "0.", ",", "1", ",", "1", ",", "1", ",", 
+   RowBox[{"{", 
+    RowBox[{"0.", ",", "0.006", ",", "0.", ",", "0.015"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.806070546920823*^9, 3.8060706135604897`*^9}},
+ CellLabel->"In[14]:=",ExpressionUUID->"bb552991-efb8-457d-aac9-419911902998"],
+
+Cell[BoxData[
+ RowBox[{"0.008255290178623894`", "\[VeryThinSpace]", "+", 
+  RowBox[{"1.`", " ", 
+   RowBox[{"(", 
+    RowBox[{"0.`", "\[VeryThinSpace]", "+", 
+     RowBox[{"1.`", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "0.008255290178623894`"}], "+", 
+        RowBox[{"0.007780427693525039`", "/", 
+         RowBox[{"(", 
+          RowBox[{"0.2`", "\[VeryThinSpace]", "-", 
+           RowBox[{"0.2`", " ", 
+            RowBox[{"(", 
+             RowBox[{"0.006`", "\[VeryThinSpace]", "+", 
+              RowBox[{"1.`", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"DeltayDVShift", "[", 
+                  RowBox[{
+                  "phiDV", ",", "0.`", ",", "700000", ",", "\[Pi]", ",", 
+                   FractionBox["\[Pi]", "4"], ",", "0.2`", ",", "1.`", ",", 
+                   "1.`", ",", "0.`", ",", "0.015`", ",", "1"}], "]"}], "-", 
+                 RowBox[{"0.008255290178623894`", " ", 
+                  RowBox[{"Sin", "[", "phiDV", "]"}]}]}], ")"}]}]}], ")"}]}], 
+           "+", 
+           RowBox[{"0.2`", " ", 
+            SuperscriptBox[
+             RowBox[{"(", 
+              RowBox[{"0.006`", "\[VeryThinSpace]", "+", 
+               RowBox[{"1.`", " ", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"DeltayDVShift", "[", 
+                   RowBox[{
+                   "phiDV", ",", "0.`", ",", "700000", ",", "\[Pi]", ",", 
+                    FractionBox["\[Pi]", "4"], ",", "0.2`", ",", "1.`", ",", 
+                    "1.`", ",", "0.`", ",", "0.015`", ",", "1"}], "]"}], "-", 
+                  
+                  RowBox[{"0.008255290178623894`", " ", 
+                   RowBox[{"Sin", "[", "phiDV", "]"}]}]}], ")"}]}]}], ")"}], 
+             "2"]}]}], ")"}]}]}], ")"}]}]}], ")"}]}]}]], "Output",
+ CellChangeTimes->{3.806070616814925*^9},
+ CellLabel->"Out[14]=",ExpressionUUID->"142d0dab-322f-4ea0-98e3-9401325c9481"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Step1IntShift", "[", 
+  RowBox[{"0.", ",", "0.", ",", "0.", ",", 
+   RowBox[{"{", 
+    RowBox[{"0.", ",", 
+     RowBox[{"Pi", "/", "4"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "Pi", ",", "0.2", ",", "1.", ",", "1.", ",", "1.", ",", "1", ",", "1", 
+     ",", "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.", ",", "0.", ",", "0.", ",", "0.", ",", "0."}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.1", ",", "0.99", ",", "0.9", ",", "0.", ",", 
+     RowBox[{"-", "0.9"}], ",", "0.1", ",", "0.99", ",", "0.9", ",", "0.", 
+     ",", 
+     RowBox[{"-", "0.9"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.01", ",", "0.035", ",", "0.03", ",", "0."}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\"\<GlobalAdaptive\>\"", ",", 
+     RowBox[{"Method", "\[Rule]", "\"\<MultidimensionalRule\>\""}]}], "}"}], 
+   ",", "4", ",", "4", ",", "1", ",", "2"}], "]"}]], "Input",
+ CellChangeTimes->{{3.80607109669588*^9, 3.8060712407307663`*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"cc0fe013-361a-4437-9047-6742a050527f"],
+
+Cell[BoxData["853.995610258335`"], "Output",
+ CellChangeTimes->{{3.806071210588018*^9, 3.806071244800371*^9}},
+ CellLabel->"Out[4]=",ExpressionUUID->"1c665c56-b5bf-4a4c-b72c-d1ee7f96f9d1"]
+}, Open  ]]
+},
+WindowSize->{1857, 1016},
+WindowMargins->{{Automatic, 0}, {0, Automatic}},
+FrontEndVersion->"12.0 for Linux x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 253, 4, 31, "Input",ExpressionUUID->"3db702be-66d4-4ad5-b112-0e58137ad6cb"],
+Cell[836, 28, 356, 8, 23, "Message",ExpressionUUID->"02f176be-36ed-4150-8ede-5f18825ddd90"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1229, 41, 209, 3, 31, "Input",ExpressionUUID->"6f83b702-9e76-4324-bc5b-f384ef61f690"],
+Cell[1441, 46, 15220, 359, 306, "Output",ExpressionUUID->"b6be616c-d38e-4385-bba1-4dd2ee31f04c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16698, 410, 470, 8, 31, "Input",ExpressionUUID->"e69fa7be-a65a-45f4-9a55-15a33be51ad4"],
+Cell[17171, 420, 504, 10, 35, "Output",ExpressionUUID->"12619d9c-809e-4ad5-8542-d153e5224119"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17712, 435, 438, 7, 31, "Input",ExpressionUUID->"853677c5-6d9e-475c-b5d2-42e349e849b0"],
+Cell[18153, 444, 581, 12, 50, "Output",ExpressionUUID->"a7947371-139f-449f-8cf0-70ea2a9f7bf1"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18771, 461, 382, 6, 46, "Input",ExpressionUUID->"732afbc6-b927-4dce-9eaf-da93da0eae83"],
+Cell[19156, 469, 381, 6, 50, "Output",ExpressionUUID->"229638b3-e941-42e2-8274-3223d4921904"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19574, 480, 203, 3, 31, "Input",ExpressionUUID->"fd94f3a5-6dc7-4c29-9176-5887e61128e8"],
+Cell[19780, 485, 11584, 285, 168, "Output",ExpressionUUID->"50e474d4-4432-4c74-ba5c-28e160284af3"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31401, 775, 197, 3, 31, "Input",ExpressionUUID->"9a4baea4-c4f8-4966-8635-8dc6d82dc3a1"],
+Cell[31601, 780, 12138, 296, 178, "Output",ExpressionUUID->"0fcac1c8-da61-4504-ab2e-d4a26a15eff3"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[43776, 1081, 486, 9, 31, "Input",ExpressionUUID->"bb552991-efb8-457d-aac9-419911902998"],
+Cell[44265, 1092, 1946, 43, 90, "Output",ExpressionUUID->"142d0dab-322f-4ea0-98e3-9401325c9481"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[46248, 1140, 1049, 24, 55, "Input",ExpressionUUID->"cc0fe013-361a-4437-9047-6742a050527f"],
+Cell[47300, 1166, 188, 2, 35, "Output",ExpressionUUID->"1c665c56-b5bf-4a4c-b72c-d1ee7f96f9d1"]
+}, Open  ]]
+}
+]
+*)
+
