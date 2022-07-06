@@ -348,6 +348,7 @@ Module[
 (* ::Section:: *)
 (* 2 step-Integration *)
 
+
 pXDomainShift[yD_?NumericQ, xD_?NumericQ, th0_?NumericQ, alpha_, BRxB_, rRxB_, rA_, rD_, phiDet_?NumericQ, G1_, G2_, xOff_, xAA_,
 	{XAShift_, YRxBShift_, XDetShift_, YDetShift_}]:=
 {p,Sequence@@pLimitsApertXListShift[yD, xD, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, xOff, xAA, {XAShift, YRxBShift, XDetShift, YDetShift}]}
@@ -379,8 +380,11 @@ Step2IntShift[a_, xD_?NumericQ,yD_?NumericQ, {alpha_, BRxB_, rF_, rRxB_, rA_, rD
 		]
 		
 		
+
+
 (* ::Section:: *)
 (* Add xD and yD integration *)
+
 
 BinIntShift[a_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, G1_, G2_},{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_},
@@ -407,7 +411,7 @@ bin2DGen[xStart_, xEnd_, yStart_, yEnd_, binNoX_, binNoY_] :=
    Table[{xStart + (i - 1)*binLengthX, xStart + i*binLengthX}, {i, 
      binNoX}];
   binsY = 
-   Table[{yStart + i*binLengthY,yStart + (i - 1)*binLengthY}, {i, 
+   Table[{yStart + (i - 1)*binLengthY, yStart + i*binLengthY}, {i, 
      binNoY}];
   binList = 
    Flatten[Table[{binsX[[i]], binsY[[j]]}, {i, Length[binsX]}, {j, 

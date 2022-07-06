@@ -39,7 +39,7 @@ KERNELSH=4
 lowbins=(1 9 17 25 33 41 49 57)
 highbins=(8 16 24 32 40 48 56 64)
 # a array
-a=( 0.105 -0.106 -0.1055 -0.105 -0.1045 -0.104 )
+a=( 0.105 -0.1075 -0.106 -0.1055 -0.105 -0.1045 -0.104 )
 # filename basis
 for i in ${!a[@]}
 do
@@ -72,6 +72,7 @@ writer_Function(){
         KERNELS=$KERNELSD
 		LOCALFILEDBACK=$FILENAME"_a"${ai[$bindex]}"_P"$i".m"
 		echo "math -script "$LOCALFILEDBACK" >> a"${ai[$bindex]}".out" >> $SCRIPTFILE
+		echo "echo Finished: $LOCALFILEDBACK $(date)" >> $SCRIPTFILE
 	elif [[ $option == "H" ]] 
     then
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEH"_a"${ai[$bindex]}"_P"$i".m"
@@ -79,6 +80,7 @@ writer_Function(){
         KERNELS=$KERNELSH
 		LOCALFILEHBACK=$FILENAMEH"_a"${ai[$bindex]}"_P"$i".m"
 		echo "math -script "$LOCALFILEHBACK" >> a"${ai[$bindex]}".out" >> $SCRIPTFILEH
+		echo "echo Finished: $LOCALFILEHBACK $(date)" >> $SCRIPTFILEH
     elif [[ $option == "G" ]] 
     then
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEG"_a"${ai[$bindex]}"_P"$i".m"
@@ -86,6 +88,7 @@ writer_Function(){
         KERNELS=$KERNELSG
         LOCALFILEGBACK=$FILENAMEG"_a"${ai[$bindex]}"_P"$i".m"
 		echo $EXEDIRG"math -script "$LOCALFILEGBACK" >> a"${ai[$bindex]}".out" >> $SCRIPTFILEG
+		echo "echo Finished: $LOCALFILEGBACK $(date)" >> $SCRIPTFILEG
     elif [[ $option == "C" ]] 
     then
         LOCALFILE="a"${ai[$bindex]}"/"$FILENAMEC"_a"${ai[$bindex]}"_P"$i".m"
@@ -94,6 +97,7 @@ writer_Function(){
 		 # SLURM file for Cluster
 	    LOCALSCRIPTFILEC="a"${ai[$bindex]}"/Slurm_"$FILENAMEC"_a"${ai[$bindex]}"_P"$i".sh"
 	    head -n 15 $SLURMTEMPLATE > $LOCALSCRIPTFILEC
+		sed -i "s+#SBATCH --job-name=Mma_TransP1+#SBATCH --job-name=${PARAMETER}_P$i+" $LOCALSCRIPTFILEC
 	    echo "PLACEHOLDERPATH="${FOLDER}"/a"${ai[$bindex]}"/" >> $LOCALSCRIPTFILEC
 	    tail -n +17 $SLURMTEMPLATE | head -n 4 >> $LOCALSCRIPTFILEC
 	    echo "math -script "$FILENAMEC"_a"${ai[$bindex]}"_P"$i".m" >> $LOCALSCRIPTFILEC
