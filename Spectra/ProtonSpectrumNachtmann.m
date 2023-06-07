@@ -46,4 +46,30 @@ pmomNormed[p_, a_] := pmom[p, a]/pmomNorm[a]
 
 
 
+momPrimeCalc[T_, workEv_] := Sqrt[2 mp*(T + workEv (1 + T/tpMax))]
 
+TPrimeForT[T_, workEv_] := T + workEv (1 + T/tpMax)
+
+TforTPrime[TPrime_, 
+  workEv_] := ((TPrime - workEv)*tpMax)/(tpMax + workEv)
+
+TPrimeMom[momPrime_] := momPrime^2/(2 mp)
+
+
+wmomPrime[pPrime_, a_, workEv_] := 
+ dwdt[TforTPrime[TPrimeMom[pPrime], workEv], a]*pPrime*
+  tpMax/(mp*(tpMax + workEv))
+
+pnormPrime[a_, workEv_, pPrimeMin_, pPrimeMax_] := 
+ pnormPrime[a, workEv, pPrimeMin, pPrimeMax] = 
+  NIntegrate[wmomPrime[p, a, workEv], {p, pPrimeMin, pPrimeMax}]
+
+wmomGenPrime[a_?NumericQ, pe_?NumericQ, workEv_?NumericQ, 
+   pPrimeMin_?NumericQ, 
+   pPrimeMax_?NumericQ] := (wmomPrime[pe, a, workEv]/
+    pnormPrime[a, workEv, pPrimeMin, pPrimeMax]);
+
+wmomGenPiecePrime[a_?NumericQ, pe_?NumericQ, workEv_?NumericQ, 
+  pPrimeMin_?NumericQ, pPrimeMax_?NumericQ] := 
+ Piecewise[{{wmomGenPrime[a, pe, workEv, pPrimeMin, pPrimeMax], 
+    pPrimeMin <= pe <= pPrimeMax}}]

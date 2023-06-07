@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Wolfram Language package *)
 
 Get["Bfield+Drift/Bfields.m"];
@@ -24,11 +26,11 @@ D1stBPolyGradwoR[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, G1_, G2_,YRxBShift_] :
 DxBPolyGradRx[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] := 
  (R+yRxBGC)*ArcTan[q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift]/(R+yRxBGC)]
 
-DxBPolyGradRxApprox[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] := 
+(*DxBPolyGradRxApprox[p_, alpha_, th0_, BRxB_, rRxB_, yRxBGC_, R_, G1_, G2_, q_, YRxBShift_] := 
  (
  q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift]
- -(q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift])^3/(R+yRxBGC)^2 /3.
- )
+ -(q*D1stBPolyGradwoR[p, alpha, th0, BRxB, rRxB, yRxBGC, G1, G2, YRxBShift])^3/(R+yRxBGC)^(2 /3)
+ )*)
  
 (*old stuff*) 
  (*DriftPolywrGWg[p_?NumericQ, alpha_?NumericQ, th0_?NumericQ, 

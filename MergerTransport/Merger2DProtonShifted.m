@@ -97,7 +97,7 @@ If[BackScatterBoole,
 	{XAShift_, YAShift_, YRxBShift_, XDetShift_, YDetShift_}, 
 	{twx_, plx_, k1x_, k2x_, k3x_, twy_, ply_, k1y_, k2y_, k3y_}, {xAA_, yAA_, xOff_, yOff_}] :=
  
- pmomNormed[p,a]*Sin[th0]*(1-bsFuncElectron2Compiled[p, th0, rD])*(*Change the backscattering description correctly*)
+ pmomNormed[p,a]*Sin[th0]*(1)*(*Change the backscattering description correctly*)
   
   ApertBooleCompiled[
    xAShift[phiA, yD, xD, p, th0, alpha, BRxB, rRxB, rA, rD, phiDet, G1, G2, {XAShift, YRxBShift, XDetShift, YDetShift}], 
@@ -394,8 +394,8 @@ BinIntShift[a_, OneBinList_, {alpha_, BRxB_, rF_, rRxB_, rA_, rD_, G1_, G2_},{XA
 
 bin2DGen[xStart_, xEnd_, yStart_, yEnd_, binNoX_, binNoY_] := 
  Block[{binLengthX, binLengthY, binList, binsX, binsY},
-  binLengthX = Round[(xEnd - xStart)/binNoX,10^-6.];
-  binLengthY = Round[(yEnd - yStart)/binNoY,10^-6.];
+  binLengthX = Round[(xEnd - xStart)/binNoX,10^-20.];
+  binLengthY = Round[(yEnd - yStart)/binNoY,10^-20.];
   binsX = 
    Table[{xStart + (i - 1)*binLengthX, xStart + i*binLengthX}, {i, 
      binNoX}];
@@ -407,4 +407,18 @@ bin2DGen[xStart_, xEnd_, yStart_, yEnd_, binNoX_, binNoY_] :=
       Length[binsY]}], 1];
   Return[binList];
   ]
-     
+  
+bin2DGen2[xStart_, xEnd_, yStart_, yEnd_, binLengthX_, binNoY_] := 
+ Block[{binNoX, binLengthY, binList, binsX, binsY}, 
+  binNoX = Round[(xEnd - xStart)/binLengthX];
+  binLengthY = Round[(yEnd - yStart)/binNoY, 10^-20.];
+  binsX = 
+   Table[{xStart + (i - 1)*binLengthX, xStart + i*binLengthX}, {i, 
+     binNoX}];
+  binsY = 
+   Table[{yStart + (i - 1)*binLengthY, yStart + i*binLengthY}, {i, 
+     binNoY}];
+  binList = 
+   Flatten[Table[{binsX[[i]], binsY[[j]]}, {i, Length[binsX]}, {j, 
+      Length[binsY]}], 1];
+  Return[binList];]

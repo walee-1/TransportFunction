@@ -147,7 +147,7 @@ effiencyModImsil[histoList_, noIons_: 50000] :=
     "MD_Simulations/IMSIL/For_Paper/pLGAD_Paper/"<>outputFile, ionData];
   Clear[trajData, ionData];
   ]
- imsilTrajWriterFuncCluster[listName_, windowA_: 150] := 
+ imsilTrajWriterFuncCluster[listName_, folderName_:"",windowA_: 150] := 
  Block[{trajData, ionData, fileNameSplit, en, ang, runNo, 
    outputFile},
   $HistoryLength = 1;
@@ -161,9 +161,12 @@ effiencyModImsil[histoList_, noIons_: 50000] :=
   ionData = 
    Table[trajSorterModImsil[trajData[[i]], windowA], {i, 
      Length[trajData]}];
-  outputFile = 
+     If[folderName=="",  outputFile = 
    "ImsilPlgadDataEn" <> en <> "p" <> runNo <> "ang" <> ang <> 
-    "IonList.mx";
+    "IonList.mx",  outputFile = 
+   folderName<>"_ImsilPlgadDataEn" <> en <> "p" <> runNo <> "ang" <> ang <> 
+    "IonList.mx"];
+
   Export["/users/waleed.khalid/plgad_results/"<>outputFile, ionData];
   Clear[trajData, ionData];
   ]
@@ -187,10 +190,10 @@ imsilTrajImportMod[enSrchStr_,
    , Print["Error: Enter a search string"]; Return[]]
   ]
  
- imsilTrajImportModCluster[enSrchStr_, 
+ imsilTrajImportModCluster[enSrchStr_, folderName_,
   dir_:"/users/waleed.khalid/plgad_results/"] :=
   Block[{locFileLocation, fileNames}, If[StringQ[enSrchStr],
-   locFileLocation = FileNames["*En" <> enSrchStr <> "p*.mx", dir];
+   locFileLocation = FileNames[folderName<>"*En" <> enSrchStr <> "p*.mx", dir];
    fileNames = StringSplit[#, {"/", ".mx"}][[-1]] & /@ locFileLocation;
    fileNames = StringDelete[#, "."] & /@ fileNames;
    Table[If[! ListQ[ToExpression[fileNames[[i]]]],

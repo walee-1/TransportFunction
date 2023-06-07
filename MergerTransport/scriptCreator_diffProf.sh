@@ -2,16 +2,25 @@
 
 if [[ $# -eq 0 ]]
 then
-	echo "Please provide Parameter name"
+	echo "Please provide Parameter name, optional: noBins (def:64)"
 	exit 1
 fi
 
-if [[ $# -ge 1 ]]
+if [[ $# -eq 1 ]]
 then
 	PARAMETER=$1
 	echo "Parameter set to $PARAMETER" 
-fi
+	binEnd=64
 
+elif [[ $# -eq 2 ]]
+then
+	PARAMETER=$1
+	echo "Parameter set to $PARAMETER" 
+	binEnd=$2
+else
+	echo "more parameters than needed provided, please recheck"
+	exit 1
+fi
 
 BASEDIR="/home/waleed/Documents/Wolfram_Mathematica/TransportFunction/MergerTransport"
 
@@ -36,10 +45,29 @@ KERNELSG=6
 KERNELSC=8
 KERNELSH=4
 #bin array
-lowbins=(1 9 17 25 33 41 49 57)
-highbins=(8 16 24 32 40 48 56 64)
+#lowbins=(1 9 17 25 33 41 49 57 65 73 81 89 97 105 113 121)
+#highbins=(8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128)
+
+
+n=$(($binEnd%8))
+if [[ n -eq 0 ]]
+then
+	lowbins=($(seq 1 8 $binEnd))
+	highbins=($(seq 8 8 $binEnd))
+else
+	lowbins=($(seq 1 8 $binEnd))
+	highbins=($(seq 8 8 $binEnd))
+	highInd=${#highbins[@]}
+	highbins[$highInd]=$binEnd
+fi
+
+# lowbins=(1 9 17 25 33 41 49 57)
+# highbins=(8 16 24 32 40 48 56 64)
+
+#-0.103 -0.1025 -0.102 -0.101 -0.1005 -0.09 -0.08
 # a array
-a=( 0.105 -0.106 -0.1055 -0.105 -0.1045 -0.104 )
+a=( 0.105 -0.106 -0.1058 -0.1055 -0.1048 -0.105 -0.1051 -0.1045 -0.104 -0.1035 )
+#a=( -0.105001 )
 # filename basis
 for i in ${!a[@]}
 do
@@ -108,7 +136,7 @@ writer_Function(){
     sed -i "s+^SetDirectory.*$+SetDirectory[\"$TEMPPATH\"];+" $LOCALFILE
     sed -i "s+^a=.*$+a=${a[$bindex]};+" $LOCALFILE
     sed -i "s+^Bins .*$+Bins = {${lowbins[$i]}, ${highbins[$i]}};+" $LOCALFILE
-    sed -i "s+^Export.*$+Export[\"MergerTransport/SC_Prot_diffProf_d$PARAMETER/a\"<>ToString[IntegerPart[a*10000]]<>\"/TransferResult_08-09-20_SC_diffProf_$option\_d$PARAMETER\_a\"<>ToString[IntegerPart[a*10000]]<>\"_\"<>ToString[Bins[[1]]]<>\"-\"<>ToString[Bins[[2]]]<>\".txt\",BinwYShiftPrec44OriginalBinsb0NewBGrad,\"Table\"];+" $LOCALFILE
+    sed -i "s+^Export.*$+Export[\"MergerTransport/SC_Prot_diffProf_d$PARAMETER/a\"<>ToString[IntegerPart[Round[a*10000]]]<>\"/TransferResult_08-09-20_SC_diffProf_$option\_d$PARAMETER\_a\"<>ToString[IntegerPart[Round[a*10000]]]<>\"_\"<>ToString[Bins[[1]]]<>\"-\"<>ToString[Bins[[2]]]<>\".txt\",BinwYShiftPrec44OriginalBinsb0NewBGrad,\"Table\"];+" $LOCALFILE
 
 }
 

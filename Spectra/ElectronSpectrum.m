@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Wolfram Language package *)
 
 Get["Common/Constants.m"];
@@ -8,6 +10,7 @@ Get["Common/CommonFunctions.m"];
 
 (* ::Section:: *)
 (* electron energy *)
+
 
 \[Beta][Ee_] := Sqrt[1 - me^2/Ee^2];
 
@@ -64,9 +67,10 @@ weNorm[\[Lambda]_,\[Kappa]_,b_] := weNorm[\[Lambda],\[Kappa],b] = NIntegrate[(1 
 
 weNormed[\[Lambda]_,\[Kappa]_,b_,Ee_]:=(1+b*me/Ee)*we[\[Lambda],\[Kappa],Ee]/weNorm[\[Lambda],\[Kappa],b];
 
+
+
 (* ::Section:: *)
 (* Electron Momentum *)
-
 
 
 pmax = Solve[Eofp[p] == E0, p][[2, 1, 2]];

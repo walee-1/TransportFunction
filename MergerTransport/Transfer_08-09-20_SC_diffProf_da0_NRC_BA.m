@@ -56,8 +56,8 @@ xAOffSC=-10/1000;
 yAOffSC=0;
 {wnxSC, pnxSC, kx1SC, kx2SC, kx3SC, wnySC, pnySC, ky1SC, ky2SC, ky3SC}={0.001, 0.0009, 0.9, 0., -0.9, 0.001, 0.0009, 0.9, 0., -0.9}
 
-xStart=-0.012;
-xEnd=0.012;
+xStart=-0.011;
+xEnd=0.010;
 yStart=-0.022;
 yEnd=0.025;
 xyBins=bin2DGen[xStart,xEnd,yStart,yEnd,64,1];

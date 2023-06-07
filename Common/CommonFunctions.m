@@ -183,7 +183,49 @@ TransferToRefParableFit[RefTransfer_, TransferDataList_, ParaList_, Prec_] :=
   ]
   
  
-
+ TransferToRefParableFitForProtons0Del[RefTransfer_, TransferDataList_, ParaList_, Prec_] := 
+ Module[
+  {RefNorm, NonZeroPos, RefNormed, Sigma, TransferDataListNormed,TransferDataListDel,RefTransferDel, Chi2List, dChi2List, errorplotdata, fitresult, fitfunc,bMin,bMax},
+  NonZeroPos=Position[RefTransfer,0.];
+  RefTransferDel=Delete[RefTransfer,NonZeroPos];
+  RefNorm=Total[RefTransferDel];
+  TransferDataListDel=Table[Delete[TransferDataList[[para]],NonZeroPos],{para,Length[ParaList]}];
+  bMin=Min[ParaList]-0.0005;
+  bMax=Max[ParaList]+0.0005;
+  RefNormed = RefTransferDel/RefNorm;
+  Sigma = If[# ==0, 10000, 10^-Prec*#]&/@RefNormed;
+  TransferDataListNormed = (#/Total[#]) &/@ TransferDataListDel;
+  Chi2List = Table[
+  	Total[(RefNormed - TransferDataListNormed[[b]])^2], 
+  		{b, 1, Length[ParaList]}];
+  dChi2List = Table[
+  	10^-Prec*Sqrt[
+  		Total[(RefNormed - TransferDataListNormed[[b]])^2*(RefNormed^2 + TransferDataListNormed[[b]]^2)]
+  		], 
+  		{b, 1, Length[ParaList]}];
+  errorplotdata = Transpose[{
+  	ParaList, 
+  	Table[10^9*Around[Chi2List[[b]], dChi2List[[b]]], {b, 1, Length[ParaList]}]
+  }];
+  fitfunc[x_, x0_, f_, g_] := f + g*(x - x0)^2; 
+  fitresult = 
+   NonlinearModelFit[
+    Transpose[{ParaList, Chi2List}],
+    {fitfunc[b, b0, yoffset, scale], bMin < b0 < bMax && 0. < scale < 1*10^-1 && 0. < yoffset <= Min[Chi2List]}, 
+    {{b0, -0.1051}, {scale, 5*10^-4}, {yoffset, Min[Chi2List]}}, b,
+    Method -> "NMinimize", Weights -> 1/dChi2List^2, VarianceEstimatorFunction -> (1 &),PrecisionGoal->10];
+  {
+  	{Chi2List,dChi2List},
+   {{"a0 = ", fitresult["BestFitParameters"][[1, 2]]}, fitresult, 
+     fitresult["ParameterTable"], fitresult["ANOVATable"]} // 
+    TableForm,
+   Show[
+     ListPlot[errorplotdata,PlotRange->{{bMin,bMax},Automatic}],
+     Plot[10^9*fitresult[b], {b, bMin, bMax}, PlotStyle -> Red]
+    ]
+   }
+  ]
+  
   
  TransferToRefParableFitForProtonsUnlimited[RefTransfer_, TransferDataList_, ParaList_, Prec_] := 
  Module[

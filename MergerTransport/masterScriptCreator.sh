@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-binNum=17
+binNum=8
 if [[ $# -lt 2 ]]
 then
 	echo "Usage: DirName a-array"
@@ -52,3 +52,5 @@ do
         done
 
 done
+cd ../
+./PCServer_CopyScript.sh $dirName

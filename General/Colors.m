@@ -128,7 +128,7 @@ DivergentColorFunc[col1_?ColorQ, col2_?ColorQ] := DivergentColorFunc @@ List @@@
 DivergentColorScheme[scheme_String] := 
   DivergentColorFunc @@ ColorData[scheme] /@ {0, 1};
 
-
+hexToRGB = RGBColor @@ (IntegerDigits[# ~StringDrop~ 1 ~FromDigits~ 16, 256, 3]/255.) &hex
 
 
 CoolToWarm = DivergentColorFunc[{0.23, 0.299, 0.754}, {0.706, 0.016, 0.150}];

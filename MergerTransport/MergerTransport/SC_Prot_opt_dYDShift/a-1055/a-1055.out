@@ -1,0 +1,31 @@
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Modules loaded ...
+4 Kernels launched ...
+Run started at Tue 7 Dec 2021 10:43:48, Bins: {1, 49}
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 215, 2], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$55113, SubKernels`LocalKernels`Private`preemptive$55113]], Parallel`Kernels`Private`id$55123, Parallel`Kernels`Private`name$55123], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$55124, Parallel`Kernels`Private`pb$55124, Parallel`Kernels`Private`rd$55124], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$55125, Parallel`Kernels`Private`n0$55125, Parallel`Kernels`Private`n1$55125]]]
+                                                                                                                                                                                                -6
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {0.0272077, 0.022255}. NIntegrate obtained 0.0000106437 and 2.67742 10   for the integral and error estimates.
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 216, 3], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$55114, SubKernels`LocalKernels`Private`preemptive$55114]], Parallel`Kernels`Private`id$55127, Parallel`Kernels`Private`name$55127], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$55128, Parallel`Kernels`Private`pb$55128, Parallel`Kernels`Private`rd$55128], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$55129, Parallel`Kernels`Private`n0$55129, Parallel`Kernels`Private`n1$55129]]]
+                                                                                                                                                                                                -6
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {0.0272077, -0.014338}. NIntegrate obtained 0.000114482 and 1.37701 10   for the integral and error estimates.
+StringForm[From `1`:, Parallel`Kernels`kernel[Parallel`Kernels`Private`bk[SubKernels`LocalKernels`localKernel[SubKernels`LocalKernels`Private`lk[LinkObject[/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp, 214, 1], {/usr/local/Wolfram/Mathematica/12.0/Executables/wolfram -subkernel -noinit -nopaclet -wstp}, SubKernels`LocalKernels`Private`speed$55112, SubKernels`LocalKernels`Private`preemptive$55112]], Parallel`Kernels`Private`id$55119, Parallel`Kernels`Private`name$55119], Parallel`Kernels`Private`ek[Parallel`Kernels`Private`nev$55120, Parallel`Kernels`Private`pb$55120, Parallel`Kernels`Private`rd$55120], Parallel`Kernels`Private`sk[Parallel`Kernels`Private`q$55121, Parallel`Kernels`Private`n0$55121, Parallel`Kernels`Private`n1$55121]]]
+NIntegrate::ncvb: NIntegrate failed to converge to prescribed accuracy after 2 recursive bisections in yD near {xD, yD} = {0.0290827, -0.014338}. NIntegrate obtained 0.00208261 and 0.0000304889 for the integral and error estimates.
+a = -1055e-4
+Time consumption: 1.2829790205555553
+MaxMemUse :146.3452606201172 MB
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Modules loaded ...
+4 Kernels launched ...
+Run started at Tue 7 Dec 2021 12:00:47, Bins: {50, 98}
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6
+Configured Kernels: {SubKernels`LocalKernels`LocalMachine[6, SubKernels`LocalKernels`LowerPriority -> True]}
+Processor Count: 6

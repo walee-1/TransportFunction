@@ -187,17 +187,14 @@ transmissionFileReadingMod[fileName_, numberIons_] :=
 
 
 exyzReadingMod2[fileName_, germanGuard_: False] := 
- Module[{dataFile, file, data, fileStream}, 
+ Module[{dataFile, data, fileStream}, 
   fileStream = OpenRead[fileName];
   Table[ReadLine[fileStream], {i, 15}];
   dataFile = 
    ReadList[
     fileStream, {Number, Number, Number, Number, Number, Number, 
      Number}];
-  file = Table[{dataFile[[i, 1]], dataFile[[i, 2]], dataFile [[i, 3]],
-      dataFile[[i, 4]], dataFile[[i, 5]], dataFile[[i, 6]], 
-     dataFile[[i, 7]]}, {i, dataFile // Length}];
-  data = Gather[file, First[#1] === First[#2] &];
+  data = Gather[dataFile, First[#1] === First[#2] &];
   Return[data]]
 
 exyzReadingMod[fileName_, germanGuard_: False] := 
@@ -265,6 +262,38 @@ imsilHistogramReaderMod[fileName_] :=
   Clear[file];
   Return[{backscatteredNo, backscatteredErr}];
   ]
+  
+imsilHistogramReaderMod2[fileName_, simIons_: 500000] := 
+ Block[{importedFile, bsIons, bsInfo, indexInfo = {1}, i, j = 1, 
+   k = 0, mainTable}, importedFile = Import[fileName, "Table"]; 
+  i = importedFile[[1, 2]] + 2; 
+  While[j < Length[importedFile], j = j + i + k; 
+   If[j < Length[importedFile], i = importedFile[[j, 2]]]; k = 2; 
+   AppendTo[indexInfo, j]]; 
+  mainTable = 
+   Table[importedFile[[
+     indexInfo[[i]] + 2 ;; indexInfo[[i + 1]] - 1]], {i, 
+     Length[indexInfo] - 1}];
+  bsInfo = 
+   imsilBackReader[
+     StringSplit[fileName, ".his"][[1]] <> ".out"][[1]];
+  bsIons = bsInfo*simIons;
+  mainTable = Append[mainTable, bsIons];
+  Return[mainTable]]
+
+histoFixerMod[list_, bsIons_, simIons_: 500000] := 
+ Block[{val, calcIons, retHisto, noIons}, 
+  val = Table[{list[[i - 1, 1]], 
+     list[[i, 2]] (list[[i, 1]] - list[[i - 1, 1]])}, {i, 3, 
+     Length[list] - 1, 2}];
+  noIons = Floor[Total[val[[All, 2]]*simIons]];
+  If[noIons != bsIons, Print["ERROR"]; Return[0]];
+  retHisto = 
+   Transpose[{val[[All, 1]], val[[All, 2]]*simIons/noIons}];
+  Return[retHisto];
+  ]
+  
+  
   
   imsilRangeReader[fileName_] := 
  Block[{RangeNo, RangeErr, file}, file = OpenRead[fileName];
@@ -418,4 +447,121 @@ imsilHistogramReaderMod[fileName_] :=
          1 - list1[[en, th, 2]]/list2[[en, th, 2]], {2, 2}]]}, {en, 
        Length[list1]}, {th, Length[list1[[en]]]}]; Return[diffList], 
     Print["Dimensions of Lists are not equal"]; Return[0]]];
+    
+    
+    cceWeightingModulePerIon[list_, binSize_: 100, 
+  gammaVal_: gammaVals[[2]], tauVal_: tauVals[[2]]] := 
+ Block[{len = Length[list], ehPairRaw, ehPairWeighted, totalehPair, 
+   initDepth, finalDepth, dummy}, 
+  If[list[[1, 2]] != 0, ehPairRaw = (1/3.6*#) & /@ list[[All, 2]];
+    dummy = list[[All, 3]][[All]];
+    initDepth = Table[dummy[[i]], {i, 1, Length[dummy]}];
+    finalDepth = 
+     Table[initDepth[[i + 1]], {i, 1, Length[initDepth] - 1}];
+    If[Length[finalDepth] != 0, 
+     AppendTo[finalDepth, finalDepth[[Length[finalDepth]]] + binSize];
+      PrependTo[finalDepth, 0], AppendTo[finalDepth, 0 + binSize]; 
+     PrependTo[finalDepth, 0]];
+    ehPairWeighted = 
+     Table[ehPairRaw[[i]]*
+       cceWeightFunc[initDepth[[i]], finalDepth[[i]], gammaVal, 
+        tauVal], {i, len}];
+    totalehPair = Total[ehPairWeighted];
+    Return[{list[[1, 1]], totalehPair, ehPairWeighted, finalDepth}], 
+    Return[{list[[1, 1]], 0, {0}, {0}}]];
+  ]
 
+vecCalc[x1_, y1_, z1_, x2_, y2_, z2_] := {x2 - x1, y2 - y1, z2 - z1}
+
+firstPointCalc[x1_, y1_, z1_, x2_, y2_, z2_] := 
+ Block[{res1, x3 = 100, y3, z3, XDummy, percentX}, 
+  res1 = vecCalc[x1, y1, z1, x2, y2, z2]; 
+  percentX = (x2 - x3)/res1[[1]]; XDummy = percentX*res1; 
+  Return[XDummy]]
+
+(*THIS IS THE BETTER MODULE AND FASTER*)
+depthModAll2[list_, window_, binSize_] := 
+ Block[{vectorMag, vector, depth, ionizEn, totalIonizEn, maxDepth, 
+   resList = {}, dummyBins, start = 0, maxList, i},
+  maxList = Ceiling[Max[list[[All, 3]]] - window];
+  totalIonizEn = Table[0, {i, 0, maxList, binSize}];
+  maxDepth = 
+   Table[i, {i, 0, Ceiling[Max[list[[All, 3]]] - window, binSize], 
+     binSize}];
+  Do[If[list[[j, 3]] >= window,
+    If[j == 2, 
+     vector = 
+      firstPointCalc[list[[j - 1, 3]], list[[j - 1, 4]], 
+       list[[j - 1, 5]], list[[j, 3]], list[[j, 4]], list[[j, 5]]],
+     vector = 
+      vecCalc[list[[j - 1, 3]], list[[j - 1, 4]], list[[j - 1, 5]], 
+       list[[j, 3]], list[[j, 4]], list[[j, 5]]]];
+    vectorMag = Norm[vector];
+    depth = list[[j, 3]] - window;
+    ionizEn = vectorMag*list[[j, 6]];
+    i = Ceiling[depth/binSize];
+    totalIonizEn[[i]] += ionizEn;
+    ],
+   {j, 2, Length[list]}];
+  resList = 
+   Table[{list[[1, 1]], totalIonizEn[[j]], maxDepth[[j]]}, {j, 
+     Length[totalIonizEn]}];
+  Return[resList];
+  ]
+
+mainMod[enList_, ionNo_, window_, binSize_: 100] := 
+ Block[{start, list, temp, tempList2}, 
+  tempList2 = enList[[ionNo]]; 
+  start = FirstPosition[tempList2[[All, 3]], _?(# >= window &)][[
+    1]](*finds the first position of where depth>dead area*); 
+  If[start==1,start=2];
+  If[start == "NotFound", Return[{{tempList2[[1, 1]], 0, 0, 0}}], 
+   list = Table[
+     tempList2[[i]], {i, (start - 1), 
+      Length[tempList2]}];(*starts from active silicon - 1 depth*)
+   temp = depthModAll2[list, window, binSize]; Return[temp];
+   ]
+  ]
+  
+  
+  (*THERE IS AN ERROR IN THE CODE BELOW! RUN WITH 1 bin size otherwise \
+electron hole pairs are a factor of binlength lower!*)
+
+histogramMod2[list_, binSize_, flag_: 0] := 
+ Block[{max, len, bins, result, result2}, 
+  max = Round[Max[list[[All, 2]]], binSize];
+  bins = Table[i, {i, 1, max, binSize}];
+  len = Length[bins];
+  If[bins[[len]] < max, AppendTo[bins, bins[[len]] + binSize]];
+  PrependTo[bins, 0];
+  result = HistogramList[list[[All, 2]], {bins}];
+  result2 = 
+   Table[{(result[[1, i]] + result[[1, i + 1]])/2, 
+     result[[2, i]]}, {i, Length[result[[2]]]}];
+  Return[result2];
+  ]
+  
+  efficiencyMod[histoList_, noIons_: 50000] := 
+ Block[{len, binsWoPedes, signalWoPedes, resBinX, resBinY, effRes, 
+   undetectRes}, binsWoPedes = histoList[[2 ;; All, 1]];
+  signalWoPedes = histoList[[2 ;; All, 2]];
+  len = Length[signalWoPedes];
+  resBinY = 
+   Table[Sum[signalWoPedes[[j]], {j, i, len}]/noIons, {i, 1, len}];
+  resBinX = binsWoPedes;
+  effRes = Transpose[{resBinX, resBinY}];
+  undetectRes = Transpose[{resBinX, 100.*(1 - resBinY)}];
+  Return[{effRes, undetectRes}];]
+  
+  cceWeightFunc[initDepth_, finalDepth_, gammaVal_, tauVal_] := 
+ Block[{initDepthnm, finalDepthnm, depthnm, normVal, normValPos, 
+   weight}, initDepthnm = initDepth/10;
+  finalDepthnm = finalDepth/10;
+  If[initDepthnm > 400, weight = 1,
+   weight = (cceFormula[initDepthnm, gammaVal, tauVal] + 
+       cceFormula[finalDepthnm, gammaVal, tauVal])/2];
+  Return[weight];]
+  
+  
+  
+  
